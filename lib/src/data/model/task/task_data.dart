@@ -1,0 +1,104 @@
+class TaskData {
+  String? id;
+  String? creatorId;
+  String? assignTo;
+  String? imageAssigner;
+  String? usernameAssigner;
+  String? title;
+  String? description;
+  String? status;
+  String? priority;
+  String? createdAt;
+  String? dueAt;
+  int? commentCount;
+  int? reportCount;
+
+  TaskData({
+    this.id,
+    this.creatorId,
+    this.assignTo,
+    this.imageAssigner,
+    this.usernameAssigner,
+    this.title,
+    this.description,
+    this.status,
+    this.priority,
+    this.createdAt,
+    this.dueAt,
+  });
+
+  TaskData copyWith({
+    String? id,
+    String? creatorId,
+    String? assignTo,
+    String? imageAssigner,
+    String? usernameAssigner,
+    String? title,
+    String? description,
+    String? status,
+    String? priority,
+    String? createdAt,
+    String? dueAt,
+    int? commentCount,
+    int? reportCount,
+  }) {
+    return TaskData(
+      id: id ?? this.id,
+      creatorId: creatorId,
+      assignTo: assignTo ?? this.assignTo,
+      imageAssigner: imageAssigner ?? this.imageAssigner,
+      usernameAssigner: usernameAssigner ?? this.usernameAssigner,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      status: status ?? this.status,
+      priority: priority ?? this.priority,
+      createdAt: this.createdAt,
+      dueAt: dueAt ?? this.dueAt,
+    );
+  }
+
+  TaskData.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    creatorId = json['user_id'];
+    assignTo = json['assign_to'];
+    imageAssigner = json['imageAssigner'];
+    usernameAssigner = json['usernameAssigner'];
+    title = json['title'];
+    description = json['description'];
+    status = json['status'];
+    priority = json['priority'];
+    createdAt = json['created_at'];
+    dueAt = json['due_at'];
+    commentCount = json['commentCount'];
+    reportCount = json['reportCount'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final data = <String, dynamic>{};
+
+    if (creatorId != null) {
+      data['creatorId'] = creatorId;
+    }
+
+    if (title != null) {
+      data['title'] = title;
+    }
+
+    if (description != null) {
+      data['description'] = description;
+    }
+
+    if (priority != null) {
+      data['priority'] = priority;
+    }
+
+    if (status != null) {
+      data['status'] = status;
+    }
+
+    if (dueAt != null) {
+      data['due_at'] = dueAt;
+    }
+    return data;
+  }
+}

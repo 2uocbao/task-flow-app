@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:logger/logger.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path/path.dart';
 import 'package:taskflow/src/data/api/api.dart';
@@ -51,18 +51,22 @@ class TaskDetailBloc extends Bloc<TaskDetailEvent, TaskDetailState> {
   ) async {
     await _repository.getTaskDetail(PrefUtils().getUser()!.id!, event.id).then(
       (value) async {
-        ResponseData<TaskData> taskData =
-            ResponseData.fromJson(value.data, TaskData.fromJson);
-        emit(
-          state.copyWith(
-            taskDetailModel: state.taskDetailModel.copyWith(
-              taskData: taskData.data,
+        if (value.statusCode == 200) {
+          ResponseData<TaskData> taskData =
+              ResponseData.fromJson(value.data, TaskData.fromJson);
+          emit(
+            state.copyWith(
+              taskDetailModel: state.taskDetailModel.copyWith(
+                taskData: taskData.data,
+              ),
             ),
-          ),
-        );
+          );
+          add(FetchReportEvent(taskId: event.id));
+        } else {
+          emit(FetchTaskFailure(taskDetailModel: state.taskDetailModel));
+        }
       },
-    ).onError((error, stackTrace) {});
-    add(FetchReportEvent(taskId: event.id));
+    );
   }
 
   _onUpdateTask(
@@ -98,6 +102,8 @@ class TaskDetailBloc extends Bloc<TaskDetailEvent, TaskDetailState> {
             )),
           ),
         );
+      } else {
+        NavigatorService.showError("lbl_error".tr());
       }
     });
   }
@@ -131,6 +137,8 @@ class TaskDetailBloc extends Bloc<TaskDetailEvent, TaskDetailState> {
             ),
           ),
         );
+      } else {
+        NavigatorService.showError("lbl_error".tr());
       }
     });
   }
@@ -261,28 +269,33 @@ class TaskDetailBloc extends Bloc<TaskDetailEvent, TaskDetailState> {
             state.taskDetailModel.taskData.id!, PrefUtils().getUser()!.id!,
             requestData: requestData.toJson())
         .then((value) async {
-      ResponseData<CommentData> responseData =
-          ResponseData.fromJson(value.data, CommentData.fromJson);
-      emit(
-        state.copyWith(
-          taskDetailModel: state.taskDetailModel.copyWith(
-            commentDatas: [
-              responseData.data!.copyWith(
-                id: responseData.data!.id,
-                username: userData.firstName! + userData.lastName!,
-                creatorId: userData.id,
-                image: userData.imagePath,
-              ),
-              ...state.taskDetailModel.commentDatas
-            ],
-            commentKeys: {
-              ...(state.taskDetailModel.commentKeys),
-              responseData.data!.id!: GlobalKey(),
-            },
+      if (value.statusCode == 200) {
+        ResponseData<CommentData> responseData =
+            ResponseData.fromJson(value.data, CommentData.fromJson);
+
+        emit(
+          state.copyWith(
+            taskDetailModel: state.taskDetailModel.copyWith(
+              commentDatas: [
+                responseData.data!.copyWith(
+                  id: responseData.data!.id,
+                  username: userData.firstName! + userData.lastName!,
+                  creatorId: userData.id,
+                  image: userData.imagePath,
+                ),
+                ...state.taskDetailModel.commentDatas
+              ],
+              commentKeys: {
+                ...(state.taskDetailModel.commentKeys),
+                responseData.data!.id!: GlobalKey(),
+              },
+            ),
           ),
-        ),
-      );
-      emit(AddCommentSuccess(taskDetailModel: state.taskDetailModel));
+        );
+        emit(AddCommentSuccess(taskDetailModel: state.taskDetailModel));
+      } else {
+        NavigatorService.showError("lbl_error".tr());
+      }
     });
   }
 
@@ -305,6 +318,8 @@ class TaskDetailBloc extends Bloc<TaskDetailEvent, TaskDetailState> {
         NavigatorService.pushNamedAndRemoveUtil(AppRoutes.taskDetailScreen,
             arguments:
                 TaskDetailArguments(taskId: state.taskDetailModel.taskData.id));
+      } else {
+        NavigatorService.showError("lbl_error".tr());
       }
     });
   }
@@ -323,6 +338,8 @@ class TaskDetailBloc extends Bloc<TaskDetailEvent, TaskDetailState> {
         NavigatorService.pushNamedAndRemoveUtil(AppRoutes.taskDetailScreen,
             arguments:
                 TaskDetailArguments(taskId: state.taskDetailModel.taskData.id));
+      } else {
+        NavigatorService.showError("lbl_error".tr());
       }
     });
   }
@@ -404,6 +421,8 @@ class TaskDetailBloc extends Bloc<TaskDetailEvent, TaskDetailState> {
           ),
         );
         logger.i(state.taskDetailModel.taskData.assignTo);
+      } else {
+        NavigatorService.showError("lbl_error".tr());
       }
     });
   }
@@ -428,6 +447,8 @@ class TaskDetailBloc extends Bloc<TaskDetailEvent, TaskDetailState> {
             ),
           ),
         );
+      } else {
+        NavigatorService.showError("lbl_error".tr());
       }
     });
   }
@@ -454,6 +475,8 @@ class TaskDetailBloc extends Bloc<TaskDetailEvent, TaskDetailState> {
             ),
           ),
         );
+      } else {
+        NavigatorService.showError("lbl_error".tr());
       }
     });
   }
@@ -480,28 +503,9 @@ class TaskDetailBloc extends Bloc<TaskDetailEvent, TaskDetailState> {
             ),
           ),
         );
+      } else {
+        NavigatorService.showError("lbl_error".tr());
       }
     });
   }
-  // _onSearchContact(
-  //   SearchContactEvent event,
-  //   Emitter<TaskDetailState> emit,
-  // ) async {
-  //   Map<String, dynamic> queryParam = {
-  //     'search': event.keySearch,
-  //   };
-  //   await _repository
-  //       .searchContact(PrefUtils().getUser()!.id!, queryParam: queryParam)
-  //       .then(
-  //     (value) async {
-  //       ResponseList<UserData> contactResult =
-  //           ResponseList.fromJson(value.data, UserData.fromJson);
-  //       emit(
-  //         state.copyWith(
-  //           contactResult: contactResult.data,
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
 }

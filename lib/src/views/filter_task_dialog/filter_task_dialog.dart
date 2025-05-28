@@ -1,7 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:logger/logger.dart';
 import 'package:taskflow/src/theme/custom_button_style.dart';
-import 'package:taskflow/src/utils/utils.dart';
 import 'package:taskflow/src/views/filter_task_dialog/bloc/filter_task_bloc.dart';
 import 'package:taskflow/src/views/filter_task_dialog/bloc/filter_task_event.dart';
 import 'package:taskflow/src/views/filter_task_dialog/bloc/filter_task_state.dart';

@@ -1,9 +1,5 @@
-// import 'package:android_intent_plus/android_intent.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
-import 'package:logger/logger.dart';
-import 'package:path/path.dart';
-import 'package:taskflow/main.dart';
 import 'package:taskflow/src/data/model/response/response_data.dart';
 import 'package:taskflow/src/data/model/user/user_data.dart';
 import 'package:taskflow/src/data/repository/repository.dart';

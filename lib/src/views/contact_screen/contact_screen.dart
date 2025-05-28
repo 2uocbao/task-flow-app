@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:taskflow/src/data/model/contact/contact_data.dart';
 import 'package:taskflow/src/data/model/user/user_data.dart';
 import 'package:taskflow/src/utils/app_export.dart';
-import 'package:taskflow/src/utils/utils.dart';
 import 'package:taskflow/src/views/contact_screen/bloc/contact_bloc.dart';
 import 'package:taskflow/src/views/contact_screen/bloc/contact_event.dart';
 import 'package:taskflow/src/views/contact_screen/bloc/contact_state.dart';
@@ -166,13 +165,13 @@ class _ConTactScreenState extends State<ConTactScreen> {
         Expanded(
           child: ListView.builder(
             controller: _scrollController,
-            itemCount: _showSearch ? userData.length : contactData.length,
+            itemCount: isUserOrContact() ? userData.length : contactData.length,
             itemBuilder: (context, index) {
               return ContactItemWidget(
-                contactData: !_showSearch ? contactData[index] : null,
-                isUser: _showSearch,
+                contactData: !isUserOrContact() ? contactData[index] : null,
+                isUser: isUserOrContact(),
                 contactScreen: true,
-                userData: _showSearch ? userData[index] : null,
+                userData: isUserOrContact() ? userData[index] : null,
                 onTapRow: () {},
                 onAccepted: () {
                   context
@@ -212,5 +211,12 @@ class _ConTactScreenState extends State<ConTactScreen> {
         context.read<ContactBloc>().add(ChangeOptionEvent(indexValue));
       },
     );
+  }
+
+  bool isUserOrContact() {
+    if (PrefUtils().getOptionsContact() == 'REQUESTED' && _showSearch) {
+      return true;
+    }
+    return false;
   }
 }

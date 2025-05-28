@@ -8,23 +8,9 @@ class ImagePageScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.onSurface,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.onSurface,
-        foregroundColor: Colors.white,
-        // actions: [
-        //   Transform.rotate(
-        //     angle: 90 * 3.1415926535 / 180,
-        //     child: CustomIconButton(
-        //       padding: EdgeInsets.only(top: 10.w),
-        //       child: Icon(
-        //         Icons.keyboard_control_sharp,
-        //         size: 25.sp,
-        //         color: Colors.white,
-        //       ),
-        //     ),
-        //   ),
-        // ],
+        backgroundColor: Theme.of(context).colorScheme.surface,
       ),
       body: Center(
         child: InteractiveViewer(

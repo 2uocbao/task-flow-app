@@ -2,15 +2,10 @@ import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_mentions/flutter_mentions.dart';
-import 'package:logger/logger.dart';
 import 'package:taskflow/src/data/api/api.dart';
 import 'package:taskflow/src/data/model/report/report_data.dart';
-import 'package:taskflow/src/data/model/response/response_data.dart';
 import 'package:taskflow/src/data/model/task/task_data.dart';
-import 'package:taskflow/src/data/model/user/user_data.dart';
-import 'package:taskflow/src/data/repository/repository.dart';
 import 'package:taskflow/src/utils/app_export.dart';
-import 'package:taskflow/src/utils/utils.dart';
 import 'package:taskflow/src/views/confirm_delete_dialog/model/custom_id.dart';
 import 'package:taskflow/src/views/task_detail_screen/bloc/task_detail_bloc.dart';
 import 'package:taskflow/src/views/task_detail_screen/bloc/task_detail_event.dart';
@@ -157,6 +152,9 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
       child: SafeArea(
         child: BlocBuilder<TaskDetailBloc, TaskDetailState>(
           builder: (context, state) {
+            if (state is FetchTaskFailure) {
+              NavigatorService.showErrorAndGoBack("lbl_error".tr());
+            }
             if (state.taskDetailModel.taskData.id == null) {
               return Container(
                 height: double.maxFinite,
@@ -201,7 +199,7 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
                 },
                 child: Scaffold(
                   appBar: _buildAppBar(context, taskData),
-                  body: _buildBody(context, taskData, state.taskDetailModel),
+                  body: _buildBody(context, state.taskDetailModel),
                 ),
               );
             }
@@ -241,12 +239,11 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
     );
   }
 
-  Widget _buildBody(BuildContext context, TaskData taskData,
-      TaskDetailModel taskDetailModel) {
+  Widget _buildBody(BuildContext context, TaskDetailModel taskDetailModel) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildDisplayTitle(context, taskData.title!),
+        _buildDisplayTitle(context, taskDetailModel.taskData.title!),
         Expanded(
           child: SizedBox(
             height: double.maxFinite,
@@ -258,7 +255,7 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
                   SizedBox(
                     height: 10.h,
                   ),
-                  _buildPriorityAndStatus(context, taskData),
+                  _buildPriorityAndStatus(context, taskDetailModel.taskData),
                   SizedBox(height: 5.h),
                   _buildLineSpace(),
                   SizedBox(height: 5.h),
@@ -270,7 +267,7 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
                   ]),
                   _buildDescription(context),
                   _buildLineSpace(),
-                  _buildDateTask(context, taskData),
+                  _buildDateTask(context, taskDetailModel.taskData),
                   _buildLineSpace(),
                   Row(children: [
                     SizedBox(width: 10.w),
@@ -278,11 +275,12 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
                     Text("lbl_member".tr(),
                         style: Theme.of(context).textTheme.bodyMedium)
                   ]),
-                  _buildAssign(context, taskData),
+                  _buildAssign(context, taskDetailModel.taskData),
                   _buildLineSpace(),
                   _buildAttachments(context),
                   _buildLineSpace(),
-                  _buildDisplayDrop(context, taskDetailModel, taskData),
+                  _buildDisplayDrop(
+                      context, taskDetailModel, taskDetailModel.taskData),
                   Padding(
                     padding:
                         EdgeInsets.symmetric(vertical: 5.w, horizontal: 10.h),
@@ -298,7 +296,7 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
         if (_showOptionUpdate)
           _buildOptionUpdate(context, isUpdateComment, taskDetailModel),
         _showOptionAddFile == false
-            ? _buildAddComment(context, taskData)
+            ? _buildAddComment(context, taskDetailModel.taskData)
             : _buildOptionAddFile(context),
         SizedBox(height: 5.h),
       ],
@@ -351,7 +349,7 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
           width: 5.w,
         ),
         readOnly
-            ? _buildDrop(context, Utils().statusItems, taskData, 120.w, false)
+            ? _buildDrop(context, Utils().statusItems, taskData, 140.w, false)
             : _buildDrop(
                 context,
                 [

@@ -1,10 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:taskflow/src/data/api/api.dart';
 import 'package:taskflow/src/data/model/notification/notification_data.dart';
 import 'package:taskflow/src/data/model/response/response_list.dart';
 import 'package:taskflow/src/data/repository/repository.dart';
 import 'package:taskflow/src/views/notification_screen/bloc/notification_event.dart';
 import 'package:taskflow/src/views/notification_screen/bloc/notification_state.dart';
-import 'package:taskflow/src/views/task_detail_screen/models/task_detail_arguments.dart';
 
 class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   NotificationBloc(super.initialState) {
@@ -58,7 +58,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     add(FetchNotificationEvent());
   }
 
-  Future<void> _onFetchNotification(
+  _onFetchNotification(
     FetchNotificationEvent event,
     Emitter<NotificationState> emit,
   ) async {
@@ -119,6 +119,8 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
             notificationModel: state.notificationModel.copyWith(
           notificationData: updateNotifi,
         )));
+      } else {
+        NavigatorService.showErrorAndGoBack("lbl_error".tr());
       }
     });
   }
@@ -140,6 +142,8 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
             notificationModel: state.notificationModel.copyWith(
           notificationData: updateNotifi,
         )));
+      } else {
+        NavigatorService.showErrorAndGoBack("lbl_error".tr());
       }
     });
   }
@@ -183,10 +187,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
           }
           return notifi;
         }).toList();
-        NotificationData notificationData =
-            state.notificationModel.notificationData.firstWhere(
-          (element) => element.id == event.notifiId,
-        );
+
         emit(
           state.copyWith(
             notificationModel: state.notificationModel.copyWith(
@@ -194,12 +195,6 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
             ),
           ),
         );
-        if (notificationData.type == 'TASK' ||
-            notificationData.type == 'COMMENT') {
-          NavigatorService.pushNamed(AppRoutes.taskDetailScreen,
-              arguments:
-                  TaskDetailArguments(taskId: notificationData.contentId));
-        }
       }
     });
   }

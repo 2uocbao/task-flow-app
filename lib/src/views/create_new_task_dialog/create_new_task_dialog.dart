@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:taskflow/src/utils/utils.dart';
 import 'package:taskflow/src/utils/validation_functions.dart';
 import 'package:taskflow/src/views/create_new_task_dialog/bloc/create_new_task_bloc.dart';
 import 'package:taskflow/src/views/create_new_task_dialog/bloc/create_new_task_event.dart';
@@ -29,6 +28,8 @@ class CreateNewTaskDialog extends StatelessWidget {
           if (state.isSuccess) {
             NavigatorService.pushNamedAndRemoveUtil(AppRoutes.homeScreen);
           }
+        } else if (state is CreateNewTaskErrorState) {
+          NavigatorService.showErrorAndGoBack("lbl_error".tr());
         }
       },
       child: Form(

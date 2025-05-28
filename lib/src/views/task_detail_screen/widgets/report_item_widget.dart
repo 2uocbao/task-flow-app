@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:logger/logger.dart';
 import 'package:taskflow/src/data/model/report/report_data.dart';
 import 'package:taskflow/src/data/model/task/task_data.dart';
 import 'package:taskflow/src/utils/app_export.dart';

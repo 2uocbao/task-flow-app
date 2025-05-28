@@ -1,6 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:logger/logger.dart';
 import 'package:taskflow/src/data/api/api.dart';
 import 'package:taskflow/src/views/filter_task_dialog/bloc/filter_task_event.dart';
 import 'package:taskflow/src/views/filter_task_dialog/bloc/filter_task_state.dart';

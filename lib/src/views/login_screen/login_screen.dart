@@ -1,6 +1,5 @@
 import 'package:app_links/app_links.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:logger/logger.dart';
 import 'package:taskflow/src/utils/token_storage.dart';
 import 'package:taskflow/src/views/login_screen/bloc/login_screen_bloc.dart';
 import 'package:taskflow/src/views/login_screen/bloc/login_screen_event.dart';

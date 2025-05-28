@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:taskflow/src/data/model/notification/notification_data.dart';
 import 'package:taskflow/src/theme/custom_button_style.dart';
 import 'package:taskflow/src/utils/app_export.dart';
+import 'package:taskflow/src/views/task_detail_screen/models/task_detail_arguments.dart';
 import 'package:taskflow/src/widgets/custom_circle_avatar.dart';
 import 'package:taskflow/src/widgets/custom_text_button.dart';
 
@@ -84,6 +85,12 @@ class NotificationItemWidget extends StatelessWidget {
       ),
       onTap: () async {
         updateIsRead(notificationData.id!);
+        if (notificationData.type == 'TASK' ||
+            notificationData.type == 'COMMENT') {
+          NavigatorService.pushNamed(AppRoutes.taskDetailScreen,
+              arguments:
+                  TaskDetailArguments(taskId: notificationData.contentId));
+        }
       },
     );
   }

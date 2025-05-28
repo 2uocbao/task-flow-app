@@ -57,7 +57,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         return Container(
           height: 30.h,
           width: double.maxFinite,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               // color: theme.colorScheme.onPrimaryContainer.withOpacity(1),
               ),
         );

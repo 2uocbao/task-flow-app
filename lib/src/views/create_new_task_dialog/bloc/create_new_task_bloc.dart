@@ -1,4 +1,3 @@
-import 'package:logger/logger.dart';
 import 'package:taskflow/src/data/api/api.dart';
 import 'package:taskflow/src/data/model/response/response_data.dart';
 import 'package:taskflow/src/data/model/task/task_data.dart';

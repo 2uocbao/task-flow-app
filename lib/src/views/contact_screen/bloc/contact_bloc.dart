@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:taskflow/src/data/model/contact/contact_data.dart';
 import 'package:taskflow/src/data/model/response/response_list.dart';
 import 'package:taskflow/src/data/model/user/user_data.dart';
@@ -29,6 +30,7 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
         currentOptions: event.options,
         hasMore: false,
         userResult: [],
+        contactResult: [],
         contactModel: state.contactModel.copyWith(contactData: [])));
     currentPage = 0;
     add(FetchContactEvent());
@@ -128,6 +130,8 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
             userResult: updateList,
           ),
         );
+      } else {
+        NavigatorService.showError("lbl_error".tr());
       }
     });
   }
@@ -159,6 +163,8 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
             ),
           ),
         );
+      } else {
+        NavigatorService.showError("lbl_error".tr());
       }
     });
   }
@@ -186,6 +192,8 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
             ),
           ),
         );
+      } else {
+        NavigatorService.showError("lbl_error".tr());
       }
     });
   }

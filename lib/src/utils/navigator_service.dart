@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taskflow/src/utils/app_export.dart';
 
 class NavigatorService {
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -11,7 +12,7 @@ class NavigatorService {
         ?.pushNamed(routeName, arguments: arguments);
   }
 
-  static void goBack() async {
+  static void goBack() {
     return navigatorKey.currentState?.pop();
   }
 
@@ -31,5 +32,48 @@ class NavigatorService {
   }) async {
     return navigatorKey.currentState
         ?.popAndPushNamed(routeName, arguments: arguments);
+  }
+
+  static void showErrorAndGoBack(String message) {
+    final context = navigatorKey.currentContext;
+    if (context != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              message,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            duration: const Duration(milliseconds: 1500),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Theme.of(context).colorScheme.surface,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+          ),
+        );
+        navigatorKey.currentState?.pop();
+      });
+    }
+  }
+
+  static void showError(String message) {
+    final context = navigatorKey.currentContext;
+    if (context != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              message,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            duration: const Duration(milliseconds: 1500),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Theme.of(context).colorScheme.surface,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+          ),
+        );
+      });
+    }
   }
 }

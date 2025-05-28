@@ -1,4 +1,3 @@
-import 'package:logger/logger.dart';
 import 'package:taskflow/src/data/api/api.dart';
 import 'package:taskflow/src/data/model/contact/contact_data.dart';
 import 'package:taskflow/src/data/model/response/response_list.dart';
@@ -137,6 +136,7 @@ class AssignCustomFieldState extends State<AssignCustomField>
     // Tạo Overlay mới
     _overlayEntry = _createOverlay();
 
+    // ignore: use_build_context_synchronously
     Overlay.of(context).insert(_overlayEntry!);
   }
 

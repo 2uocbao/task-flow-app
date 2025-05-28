@@ -2,7 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 const String dateTimeFormatPattern = 'dd/MM/yyyy';
+// ignore: constant_identifier_names
 const String D_M_Y_HH_mm = 'yyyy-MM-dd HH:mm';
+// ignore: constant_identifier_names
 const String D_M_Y = 'yyyy-MM-dd';
 
 extension DateTimeUtils on DateTime {

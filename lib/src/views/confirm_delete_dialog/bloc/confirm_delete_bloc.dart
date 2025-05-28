@@ -1,8 +1,6 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:taskflow/routes/app_routes.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:taskflow/src/data/api/api.dart';
 import 'package:taskflow/src/data/repository/repository.dart';
-import 'package:taskflow/src/utils/navigator_service.dart';
 import 'package:taskflow/src/views/confirm_delete_dialog/bloc/confirm_delete_event.dart';
 import 'package:taskflow/src/views/confirm_delete_dialog/bloc/confirm_delete_state.dart';
 import 'package:taskflow/src/views/task_detail_screen/models/task_detail_arguments.dart';
@@ -25,6 +23,8 @@ class ConfirmDeleteBloc extends Bloc<ConfirmDeleteEvent, ConfirmDeleteState> {
         .then((value) {
       if (value.statusCode == 200) {
         NavigatorService.pushNamedAndRemoveUtil(AppRoutes.homeScreen);
+      } else {
+        NavigatorService.showErrorAndGoBack("lbl_error".tr());
       }
     }).onError((error, stackTrace) {});
   }
@@ -40,6 +40,8 @@ class ConfirmDeleteBloc extends Bloc<ConfirmDeleteEvent, ConfirmDeleteState> {
       if (value.statusCode == 200) {
         NavigatorService.pushNamedAndRemoveUtil(AppRoutes.taskDetailScreen,
             arguments: TaskDetailArguments(taskId: state.customId!.taskId));
+      } else {
+        NavigatorService.showErrorAndGoBack("lbl_error".tr());
       }
     });
   }
@@ -55,6 +57,8 @@ class ConfirmDeleteBloc extends Bloc<ConfirmDeleteEvent, ConfirmDeleteState> {
       if (value.statusCode == 200) {
         NavigatorService.pushNamedAndRemoveUtil(AppRoutes.taskDetailScreen,
             arguments: TaskDetailArguments(taskId: state.customId!.taskId));
+      } else {
+        NavigatorService.showErrorAndGoBack("lbl_error".tr());
       }
     });
   }

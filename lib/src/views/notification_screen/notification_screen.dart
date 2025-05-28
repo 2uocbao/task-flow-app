@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:taskflow/src/data/model/notification/notification_data.dart';
 import 'package:taskflow/src/theme/custom_button_style.dart';
-import 'package:taskflow/src/utils/utils.dart';
 import 'package:taskflow/src/views/notification_screen/bloc/notification_bloc.dart';
 import 'package:taskflow/src/views/notification_screen/bloc/notification_event.dart';
 import 'package:taskflow/src/views/notification_screen/bloc/notification_state.dart';

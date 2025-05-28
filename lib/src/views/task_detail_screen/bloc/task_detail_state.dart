@@ -34,3 +34,8 @@ class TaskDetailState extends Equatable {
 class AddCommentSuccess extends TaskDetailState {
   AddCommentSuccess({required super.taskDetailModel});
 }
+
+// ignore: must_be_immutable
+class FetchTaskFailure extends TaskDetailState {
+  FetchTaskFailure({required super.taskDetailModel});
+}

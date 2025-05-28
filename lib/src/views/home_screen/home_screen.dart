@@ -1,9 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:logger/logger.dart';
 import 'package:taskflow/src/data/model/task/task_data.dart';
 import 'package:taskflow/src/data/model/user/user_data.dart';
 import 'package:taskflow/src/utils/token_storage.dart';
-import 'package:taskflow/src/utils/utils.dart';
 import 'package:taskflow/src/views/create_new_task_dialog/create_new_task_dialog.dart';
 import 'package:taskflow/src/views/filter_task_dialog/filter_task_dialog.dart';
 import 'package:taskflow/src/views/home_screen/bloc/home_bloc.dart';
@@ -283,6 +281,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Text(userData.mention!,
                   style: Theme.of(context).textTheme.titleSmall),
               Text(userData.email!,
+                  overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.titleSmall),
             ],
           )),

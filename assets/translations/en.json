@@ -42,6 +42,7 @@
     "lbl_member": "Member",
     "lbl_startDate": "Start date",
     "lbl_endDate": "End date",
+    "lbl_error": "Somethings went wrong!!! Please try again",
     "ACCEPTED": "Friends",
     "REQUESTED": "Requested",
     "RECEIVED": "Received",

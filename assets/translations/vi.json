@@ -29,7 +29,7 @@
     "lbl_subtitle": " sẽ bị xóa vĩnh viễn",
     "lbl_card_members": "Liên hệ",
     "lbl_setting": "Cài đặt",
-    "lbl_theme": "Theme",
+    "lbl_theme": "Chủ đề",
     "lbl_language": "Ngôn ngữ",
     "lbl_appPermissions": "Quyền ứng dụng",
     "lbl_app_info": "Thông tin ứng dụng",
@@ -39,6 +39,9 @@
     "lbl_at": " lúc ",
     "lbl_month": "Tháng",
     "lbl_year": "Năm",
+    "lbl_member": "Thành viên",
+    "lbl_startDate": "Ngày bắt đầu",
+    "lbl_endDate": "Ngày kết thúc",
     "ACCEPTED": "Bạn bè",
     "REQUESTED": "Đã yêu cầu",
     "RECEIVED": "Yêu cầu đã nhận",
@@ -80,7 +83,10 @@
     "NotifiAddTask": "đã thêm bạn vào nhiệm vụ",
     "NotifiRequest": "đã gửi cho bạn lời mời kết bạn",
     "NotifiAccepted": "đã chấp nhận lời mời kết bạn của bạn",
-    "NotifiComment": "đã nhắc đến bạn trong",
+    "NotifiComment": "đã nhắc đến bạn trong nhiệm vụ",
     "NotifiDueAt": "sắp đến hạn",
-    "friendRequest": "Lời mời kết bạn"
+    "friendRequest": "Lời mời kết bạn",
+    "error_api": "Yêu cầu không thành công!!!",
+    "attachLink": "Đính kèm liên kết",
+    "new_report": "đã thêm đính kèm trong"
 }

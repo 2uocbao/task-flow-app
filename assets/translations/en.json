@@ -39,6 +39,9 @@
     "lbl_at": " at ",
     "lbl_month": "Month",
     "lbl_year": "Year",
+    "lbl_member": "Member",
+    "lbl_startDate": "Start date",
+    "lbl_endDate": "End date",
     "ACCEPTED": "Friends",
     "REQUESTED": "Requested",
     "RECEIVED": "Received",
@@ -82,5 +85,8 @@
     "NotifiAccepted": "accepted your friend request",
     "NotifiComment": "mentioned you in the task",
     "NotifiDueAt": "due date at",
-    "friendRequest": "Friend request"
+    "friendRequest": "Friend request",
+    "error_api": "Requested Failure!!!",
+    "attachLink": "Attach a link",
+    "new_report": "added attachment in"
 }

@@ -137,6 +137,10 @@ class Repository {
     return await _api.put('/users/$userId/notifications/$notificationId');
   }
 
+  Future<Response> haveUnRead(String userId) async {
+    return await _api.get('/users/$userId/notifications/unread');
+  }
+
 //CONTACT
   Future<Response> addContact({Map requestData = const {}}) async {
     return await _api.post('/contacts', requestData: requestData);

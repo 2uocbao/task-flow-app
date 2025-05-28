@@ -44,3 +44,9 @@ class UpdateStatusNotifi extends NotificationEvent {
   final String notifiId;
   UpdateStatusNotifi(this.notifiId);
 }
+
+class HaveNotifiUnReadEvent extends NotificationEvent {}
+
+class MaskNotificationReadEvent extends NotificationEvent {}
+
+class HaveRequestEvent extends NotificationEvent {}

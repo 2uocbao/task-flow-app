@@ -15,6 +15,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     on<DenyContactEvent>(_onDenyContact);
     on<UpdateStatusAllNotifi>(_onUpdateStatusAll);
     on<UpdateStatusNotifi>(_onUpdateStatus);
+    on<HaveNotifiUnReadEvent>(_onExistUnReadNotifi);
   }
 
   int currentPage = 0;
@@ -75,20 +76,22 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
           .getNotification(PrefUtils().getUser()!.id!, queryParam: requestParam)
           .then(
         (value) async {
-          ResponseList<NotificationData> responseList =
-              ResponseList.fromJson(value.data, NotificationData.fromJson);
-          emit(
-            state.copyWith(
-              notificationModel: state.notificationModel.copyWith(
-                notificationData: [
-                  ...state.notificationModel.notificationData,
-                  ...responseList.data!
-                ],
+          if (value.statusCode == 200) {
+            ResponseList<NotificationData> responseList =
+                ResponseList.fromJson(value.data, NotificationData.fromJson);
+            emit(
+              state.copyWith(
+                notificationModel: state.notificationModel.copyWith(
+                  notificationData: [
+                    ...state.notificationModel.notificationData,
+                    ...responseList.data!
+                  ],
+                ),
+                hasMore: responseList.pagination!.currentPage! ==
+                    responseList.pagination!.totalPages! - 1,
               ),
-              hasMore: responseList.pagination!.currentPage! ==
-                  responseList.pagination!.totalPages! - 1,
-            ),
-          );
+            );
+          }
         },
       );
       currentPage++;
@@ -193,6 +196,23 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
             notificationModel: state.notificationModel.copyWith(
               notificationData: updateNotifi,
             ),
+          ),
+        );
+      }
+    });
+  }
+
+  _onExistUnReadNotifi(
+    HaveNotifiUnReadEvent event,
+    Emitter<NotificationState> emit,
+  ) async {
+    await _repository
+        .haveUnRead(PrefUtils().getUser()!.id!)
+        .then((value) async {
+      if (value.statusCode == 200) {
+        emit(
+          state.copyWith(
+            hasUnRead: value.data['data'],
           ),
         );
       }

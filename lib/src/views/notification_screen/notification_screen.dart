@@ -153,6 +153,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         NotificationModel?>(
       selector: (state) => state.notificationModel,
       builder: (context, state) {
+        state?.selectedStatus = PrefUtils().getReadNotifi();
         return SizedBox(
           child: CustomTextButton(
             text: "bt_unread".tr(),

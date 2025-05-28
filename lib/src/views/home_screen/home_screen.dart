@@ -10,6 +10,10 @@ import 'package:taskflow/src/views/home_screen/bloc/home_state.dart';
 import 'package:taskflow/src/views/home_screen/models/home_initial_model.dart';
 import 'package:taskflow/src/views/home_screen/widgets/custom_search_appbar.dart';
 import 'package:taskflow/src/views/home_screen/widgets/task_item_widget.dart';
+import 'package:taskflow/src/views/notification_screen/bloc/notification_bloc.dart';
+import 'package:taskflow/src/views/notification_screen/bloc/notification_event.dart';
+import 'package:taskflow/src/views/notification_screen/bloc/notification_state.dart';
+import 'package:taskflow/src/views/notification_screen/model/notification_model.dart';
 import 'package:taskflow/src/views/task_detail_screen/models/task_detail_arguments.dart';
 import 'package:taskflow/src/utils/app_export.dart';
 import 'package:taskflow/src/widgets/custom_circle_avatar.dart';
@@ -20,11 +24,22 @@ class HomeScreen extends StatefulWidget {
   @override
   State<HomeScreen> createState() => _HomeScreenState();
   static Widget builder(BuildContext context) {
-    return BlocProvider(
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => HomeBloc(
+            HomeState(homeInitialModel: HomeInitialModel()),
+          )..add(FetchDataEvent()),
+        ),
+        BlocProvider(
+          create: (context) => NotificationBloc(
+            NotificationState(
+              notificationModel: NotificationModel(),
+            ),
+          )..add(HaveNotifiUnReadEvent()),
+        )
+      ],
       child: const HomeScreen(),
-      create: (context) => HomeBloc(
-        HomeState(homeInitialModel: HomeInitialModel()),
-      )..add(FetchDataEvent()),
     );
   }
 }
@@ -151,14 +166,19 @@ class _HomeScreenState extends State<HomeScreen> {
             size: 25.sp,
           ),
         ),
-        IconButton(
-          onPressed: () {
-            NavigatorService.pushNamed(AppRoutes.notificationScreen);
+        BlocBuilder<NotificationBloc, NotificationState>(
+          builder: (context, state) {
+            return IconButton(
+              color: state.hasUnRead ? Colors.redAccent : null,
+              onPressed: () {
+                NavigatorService.pushNamed(AppRoutes.notificationScreen);
+              },
+              icon: Icon(
+                Icons.notifications_none,
+                size: 25.sp,
+              ),
+            );
           },
-          icon: Icon(
-            Icons.notifications_none,
-            size: 25.sp,
-          ),
         ),
       ],
     );

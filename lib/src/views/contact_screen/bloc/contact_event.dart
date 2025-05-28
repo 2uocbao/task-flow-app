@@ -28,11 +28,11 @@ class SendRequestEvent extends ContactEvent {
 }
 
 class AcceptRequestEvent extends ContactEvent {
-  final int id;
+  final String id;
   AcceptRequestEvent(this.id);
 }
 
 class DenyRequestEvent extends ContactEvent {
-  final int id;
+  final String id;
   DenyRequestEvent(this.id);
 }

@@ -18,6 +18,8 @@ class ContactItemWidget extends StatelessWidget {
 
   bool? isUser = false;
 
+  bool? contactScreen = false;
+
   ContactItemWidget(
       {super.key,
       this.contactData,
@@ -26,6 +28,7 @@ class ContactItemWidget extends StatelessWidget {
       this.onAccepted,
       this.onDeny,
       this.isUser,
+      this.contactScreen,
       this.onRequest});
 
   @override
@@ -116,13 +119,13 @@ class ContactItemWidget extends StatelessWidget {
           ),
         ],
       );
-    } else if (contactData.status == 'REQUESTED') {
+    } else if (contactData.status == 'ACCEPTED' &&
+        contactData.userId != PrefUtils().getUser()!.id &&
+        contactScreen == true) {
       return Transform.rotate(
         angle: 50 * 3.1415926535 / 70,
         child: CustomIconButton(
-          onTap: () {
-            NavigatorService.goBack();
-          },
+          onTap: onDeny,
           child: Icon(
             Icons.add,
             color: Colors.red,

@@ -3,8 +3,12 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_mentions/flutter_mentions.dart';
 import 'package:logger/logger.dart';
+import 'package:taskflow/src/data/api/api.dart';
 import 'package:taskflow/src/data/model/report/report_data.dart';
+import 'package:taskflow/src/data/model/response/response_data.dart';
 import 'package:taskflow/src/data/model/task/task_data.dart';
+import 'package:taskflow/src/data/model/user/user_data.dart';
+import 'package:taskflow/src/data/repository/repository.dart';
 import 'package:taskflow/src/utils/app_export.dart';
 import 'package:taskflow/src/utils/utils.dart';
 import 'package:taskflow/src/views/confirm_delete_dialog/model/custom_id.dart';
@@ -46,7 +50,7 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
   final GlobalKey<AssignCustomFieldState> _assignGlobal = GlobalKey();
   final GlobalKey<FlutterMentionsState> _mentionKey =
       GlobalKey<FlutterMentionsState>();
-  List<Map<String, dynamic>> get mentionData => [];
+  late List<Map<String, dynamic>> mentionData = [];
 
   bool _showOptionUpdate = false;
   bool _showOptionAddFile = false;
@@ -60,7 +64,6 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
   late String originalTitle;
   late TextEditingController _title;
   int? _editingCommentId;
-  late TextEditingController _commentController;
 
   late bool isSelected;
 
@@ -95,26 +98,53 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
     }
   }
 
-  void _requestFocusAddComment(String text) async {
-    _commentController = TextEditingController(text: text);
+  void _requestFocusAddComment(String id) async {
+    final controller = _mentionKey.currentState?.controller;
+    String diplay = mentionData.firstWhere((e) => e['id'] == id)['display'];
+    final mentionText = '@$diplay ';
+
+    final text = controller!.text;
+    final selection = controller.selection;
+
+    if (selection.start >= 0 && selection.end >= 0) {
+      final newText = text.replaceRange(
+        selection.start,
+        selection.end,
+        mentionText,
+      );
+
+      controller.value = TextEditingValue(
+        text: newText,
+        selection: TextSelection.collapsed(
+            offset: selection.start + mentionText.length),
+      );
+    } else {
+      controller.text += mentionText;
+      controller.selection = TextSelection.fromPosition(
+        TextPosition(offset: controller.text.length),
+      );
+    }
     _focusAddComments.requestFocus();
   }
 
-  // void _candelUpdateComment(TaskDetailState state) async {
-  //   setState(() {
-  //     isUpdateComment = false;
-  //   });
-  //   state.taskDetailModel.commentKeys[_editingCommentId]?.currentState
-  //       ?.resetText();
-  // }
-
+  late String id;
   void _sendComment() {
-    final text = _mentionKey.currentState?.controller?.markupText ?? '';
+    final text = _mentionKey.currentState?.controller?.markupText ?? ' ';
     if (text.isNotEmpty) {
-      context.read<TaskDetailBloc>().add(AddCommentEvent(text));
+      final pattern = RegExp(r'@\[\_\_(.*?)\_\_\]\(\_\_(.*?)\_\_\)');
+      final matches = pattern.firstMatch(text);
+      String? id;
+      String? display;
+      if (matches != null) {
+        id = matches.group(1);
+        display = matches.group(2);
+        context.read<TaskDetailBloc>().add(AddCommentEvent(
+            '@$display ${text.substring(text.indexOf(')') + 1)}', id!));
+      } else {
+        context.read<TaskDetailBloc>().add(AddCommentEvent(text, id));
+      }
       _mentionKey.currentState?.controller?.clear();
     }
-    _focusAddComments.requestFocus();
   }
 
   void _removeAssignCallBack() async {
@@ -135,17 +165,37 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
               );
             } else {
               final taskData = state.taskDetailModel.taskData;
+              if (PrefUtils().getUser()!.id! == taskData.creatorId &&
+                  taskData.assignTo != null) {
+                final newItem = {
+                  'id': taskData.assignTo,
+                  'display': taskData.usernameAssigner,
+                  'full_name': taskData.usernameAssigner,
+                  'image': taskData.imageAssigner,
+                };
+                checkItemMentionExist(newItem);
+              }
               originalStatus = taskData.status!;
               originalPriority = taskData.priority!;
               originalDescription = taskData.description ?? '';
               _description = TextEditingController(text: originalDescription);
               originalTitle = taskData.title ?? '';
               _title = TextEditingController(text: originalTitle);
-              // _commentController = TextEditingController(text: '');
               readOnly = taskData.creatorId == PrefUtils().getUser()!.id;
               return GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onTap: () async {
+                  _mentionKey.currentState?.controller!.clear();
+                  if (isUpdateComment) {
+                    state.taskDetailModel.commentKeys[_editingCommentId]
+                        ?.currentState
+                        ?.resetText();
+                  }
+                  setState(() {
+                    isUpdateComment = false;
+                    _showOptionUpdate = false;
+                  });
+
                   FocusManager.instance.primaryFocus?.unfocus();
                   _assignGlobal.currentState?.reset();
                 },
@@ -222,6 +272,12 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
                   _buildLineSpace(),
                   _buildDateTask(context, taskData),
                   _buildLineSpace(),
+                  Row(children: [
+                    SizedBox(width: 10.w),
+                    Icon(Icons.account_box_outlined, size: 15.w),
+                    Text("lbl_member".tr(),
+                        style: Theme.of(context).textTheme.bodyMedium)
+                  ]),
                   _buildAssign(context, taskData),
                   _buildLineSpace(),
                   _buildAttachments(context),
@@ -244,6 +300,7 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
         _showOptionAddFile == false
             ? _buildAddComment(context, taskData)
             : _buildOptionAddFile(context),
+        SizedBox(height: 5.h),
       ],
     );
   }
@@ -385,10 +442,9 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
     return taskData.assignTo == null
         ? AssignCustomField(
             key: _assignGlobal,
-            assignTo: (userId) {
-              context
-                  .read<TaskDetailBloc>()
-                  .add(AssignTaskEvent(toUserId: userId));
+            assignTo: (userId, name, image) {
+              context.read<TaskDetailBloc>().add(AssignTaskEvent(
+                  toUserId: userId, assigerName: name, pathImage: image));
             },
           )
         : _buildHaveAssignee(context, taskData);
@@ -397,7 +453,8 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
   Widget _buildHaveAssignee(BuildContext context, TaskData taskData) {
     return GestureDetector(
       onTap: () async {
-        if (taskData.assignTo == PrefUtils().getUser()!.id) {
+        if (taskData.creatorId == PrefUtils().getUser()!.id) {
+          logger.i(taskData.creatorId == PrefUtils().getUser()!.id);
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
@@ -446,34 +503,55 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
   }
 
   Widget _buildStartDate(BuildContext context, TaskData taskData) {
-    DateTime? dateTime = DateTime.tryParse(taskData.createdAt!);
     return SizedBox(
-      width: 110.w,
+      width: 100.w,
       child: CustomTextFormField(
         autofocus: true,
         readOnly: true,
-        alignment: Alignment.centerLeft,
+        alignment: Alignment.center,
         textStyle: Theme.of(context).textTheme.bodyMedium,
-        hintText: "Start date",
-        controller:
-            TextEditingController(text: dateTime!.format(pattern: D_M_Y)),
+        hintText: "lbl_startDate".tr(),
+        controller: taskData.startDate != null
+            ? TextEditingController(
+                text: DateTime.tryParse(taskData.startDate!)!
+                    .format(pattern: D_M_Y))
+            : null,
         contentPadding: EdgeInsets.fromLTRB(5.w, 5.h, 5.w, 5.h),
+        onTap: () {
+          onTapStartAt(context, taskData);
+          _onTextFieldInteracted();
+        },
       ),
     );
   }
 
+  Future<void> onTapStartAt(BuildContext context, TaskData taskData) async {
+    DateTime? dateTime = await showDatePicker(
+        context: context,
+        initialDate: taskData.startDate != null
+            ? DateTime.tryParse(taskData.startDate!)
+            : DateTime.tryParse(taskData.dueAt!)!,
+        initialEntryMode: DatePickerEntryMode.calendarOnly,
+        firstDate: DateTime(1970),
+        lastDate: DateTime.tryParse(taskData.dueAt!)!);
+    if (dateTime != null) {
+      // ignore: use_build_context_synchronously
+      context.read<TaskDetailBloc>().add(UpdateStartAtTaskEvent(dateTime));
+    }
+  }
+
   Widget _buildEndDate(BuildContext context, TaskData taskData) {
     return SizedBox(
-      width: 150.w,
+      width: 140.w,
       child: CustomTextFormField(
         autofocus: true,
         readOnly: true,
-        alignment: Alignment.centerLeft,
+        alignment: Alignment.center,
         controller: TextEditingController(text: taskData.dueAt),
         contentPadding: EdgeInsets.fromLTRB(5.w, 5.h, 0.w, 5.h),
         onTap: () {
           if (readOnly) {
-            onTapDateInput(context);
+            onTapDateInput(context, taskData);
             _onTextFieldInteracted();
           }
         },
@@ -481,12 +559,14 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
     );
   }
 
-  Future<void> onTapDateInput(BuildContext context) async {
+  Future<void> onTapDateInput(BuildContext context, TaskData taskData) async {
     DateTime? dateTime = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
         initialEntryMode: DatePickerEntryMode.calendarOnly,
-        firstDate: DateTime(1970),
+        firstDate: taskData.startDate == null
+            ? DateTime(1970)
+            : DateTime.tryParse(taskData.startDate!)!,
         lastDate: DateTime(DateTime.now().year + 2));
 
     if (dateTime != null) {
@@ -566,7 +646,7 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
             ? _buildCustomDropAttach(
                 context,
                 Icons.file_present,
-                "lbl_attach_files"..tr(),
+                "lbl_attach_files".tr(),
                 taskData,
                 taskDetailModel.reportOfFile,
               )
@@ -595,7 +675,7 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
               ),
             ],
           ),
-          children: type == 'Photos'
+          children: type == "lbl_attach_photos".tr()
               ? [
                   ReportPhotoWidget(
                     reportData,
@@ -916,7 +996,6 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
           child: BlocListener<TaskDetailBloc, TaskDetailState>(
             listener: (context, state) {
               if (state is AddCommentSuccess) {
-                _commentController.clear();
                 _focusAddComments.unfocus();
                 context
                     .read<TaskDetailBloc>()
@@ -945,20 +1024,14 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
                   data: mentionData,
                   matchAll: false,
                   suggestionBuilder: (data) {
-                    // return ListTile(
-
-                    //   title: Text(data['full_name']),
-                    // );
-
                     return Container(
                         color: Theme.of(context).colorScheme.surface,
                         height: 50.h,
                         width: 100.w,
                         child: Row(
                           children: [
-                            CustomCircleAvatar(
-                                imagePath: PrefUtils().getUser()!.imagePath!,
-                                size: 25),
+                            // CustomCircleAvatar(
+                            //     imagePath: data['image'], size: 25),
                             SizedBox(width: 10.w),
                             Container(
                               alignment: Alignment.centerLeft,
@@ -969,6 +1042,28 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
                   },
                 ),
               ],
+              onSearchChanged: (trigger, value) async {
+                // final repository = Repository();
+                // if (taskData.creatorId != PrefUtils().getUser()!.id!) {
+                //   await repository
+                //       .getUser(taskData.creatorId!)
+                //       .then((value) async {
+                //     if (value.statusCode == 200) {
+                //       ResponseData<UserData> responseData =
+                //           ResponseData.fromJson(value.data, UserData.fromJson);
+                //       final newItem = {
+                //         'id': responseData.data!.id,
+                //         'display':
+                //             '${responseData.data!.firstName!} ${responseData.data!.lastName!}',
+                //         'full_name':
+                //             '${responseData.data!.firstName!} ${responseData.data!.lastName!}',
+                //         'image': responseData.data!.imagePath
+                //       };
+                //       checkItemMentionExist(newItem);
+                //     }
+                //   });
+                // }
+              },
               onChanged: (val) {
                 // Gọi API kiểm tra @ nếu cần thêm
               },
@@ -989,5 +1084,12 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
         ),
       ],
     );
+  }
+
+  void checkItemMentionExist(Map<String, String?> newItem) {
+    final alreadyExist = mentionData.any((item) => item['id'] == newItem['id']);
+    if (!alreadyExist) {
+      mentionData.add(newItem);
+    }
   }
 }

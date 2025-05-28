@@ -1,5 +1,5 @@
 class ContactData {
-  int? id;
+  String? id;
   String? userId;
   String? userName;
   String? image;
@@ -8,7 +8,7 @@ class ContactData {
   String? createdAt;
 
   ContactData({
-    int? id,
+    String? id,
     String? userId,
     String? username,
     String? image,

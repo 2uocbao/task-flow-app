@@ -116,7 +116,18 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
                 contactData.toJson(PrefUtils().getUser()!.id!, event.toUserId))
         .then((value) {
       if (value.statusCode == 200) {
-        add(FetchContactEvent());
+        final updateList = List<UserData>.from(state.userResult);
+        final index =
+            updateList.indexWhere((user) => user.id == event.toUserId);
+        UserData userData = updateList.elementAt(index);
+        if (index != -1) {
+          updateList.remove(userData);
+        }
+        emit(
+          state.copyWith(
+            userResult: updateList,
+          ),
+        );
       }
     });
   }
@@ -133,7 +144,21 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
             requestData: requestData)
         .then((onValue) async {
       if (onValue.statusCode == 200) {
-        add(FetchContactEvent());
+        final updateList =
+            List<ContactData>.from(state.contactModel.contactData);
+        final index =
+            updateList.indexWhere((contact) => contact.id == event.id);
+        ContactData contactData = updateList.elementAt(index);
+        if (index != -1) {
+          updateList.remove(contactData);
+        }
+        emit(
+          state.copyWith(
+            contactModel: state.contactModel.copyWith(
+              contactData: updateList,
+            ),
+          ),
+        );
       }
     });
   }
@@ -146,7 +171,21 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
         .deleteContact(PrefUtils().getUser()!.id!, event.id)
         .then((onValue) async {
       if (onValue.statusCode == 200) {
-        add(FetchContactEvent());
+        final updateList =
+            List<ContactData>.from(state.contactModel.contactData);
+        final index =
+            updateList.indexWhere((contact) => contact.id == event.id);
+        ContactData contactData = updateList.elementAt(index);
+        if (index != -1) {
+          updateList.remove(contactData);
+        }
+        emit(
+          state.copyWith(
+            contactModel: state.contactModel.copyWith(
+              contactData: updateList,
+            ),
+          ),
+        );
       }
     });
   }

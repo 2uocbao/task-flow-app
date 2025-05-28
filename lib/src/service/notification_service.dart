@@ -1,41 +1,69 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:logger/logger.dart';
+import 'package:taskflow/main.dart';
+import 'package:taskflow/src/data/api/api.dart';
 import 'package:taskflow/src/data/model/notification/notification_data.dart';
+import 'package:taskflow/src/views/task_detail_screen/models/task_detail_arguments.dart';
 
 class NotificationService {
   final FirebaseMessaging _messaging = FirebaseMessaging.instance;
-  static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
   final logger = Logger();
 
-  static Future<void> initialize() async {
-    final logger = Logger();
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      showNotificationOfServer(message);
-      logger.i('📩 Có thông báo: ${message.notification?.title}');
-    });
-  }
-
   Future<void> init() async {
+    const android = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const ios = DarwinInitializationSettings();
+    const settings = InitializationSettings(android: android, iOS: ios);
+    await flutterLocalNotificationsPlugin.initialize(
+      settings,
+      onDidReceiveNotificationResponse: _onLocalNotificationTap,
+    );
     String? token = await _messaging.getToken();
     logger.i(token);
-    // trong trường hợp token bị thay đổi
     FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
       logger.i(newToken);
     });
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       showNotificationOfServer(message);
-      logger.i('📩 Có thông báo: ${message.notification?.title}');
-
-      // Hiển thị dialog hoặc local notification
+      logger.i('📩 Có thông báo: ${message.data}');
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      _onFirebaseTap(message);
       logger.i('📲 Người dùng đã mở thông báo: ${message.notification?.title}');
     });
+
+    final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+    if (initialMessage != null) {
+      _onFirebaseTap(initialMessage);
+    }
+  }
+
+  void _onLocalNotificationTap(NotificationResponse response) {
+    final payload = response.payload;
+    _handleNotificationClick(payload);
+  }
+
+  void _onFirebaseTap(RemoteMessage message) {
+    final data = message.data;
+    final payload = data['payload'] ?? '';
+    _handleNotificationClick(payload);
+  }
+
+  void _handleNotificationClick(String? payload) {
+    if (payload == null || payload.isEmpty) return;
+    if (payload.startsWith("task:")) {
+      final taskId = payload.replaceFirst("task:", "");
+      NavigatorService.pushNamed(AppRoutes.taskDetailScreen,
+          arguments: TaskDetailArguments(taskId: taskId));
+    } else {
+      NavigatorService.pushNamed(AppRoutes.homeScreen);
+    }
   }
 
   Future<void> showNotification(String title) async {
@@ -61,63 +89,79 @@ class NotificationService {
     );
   }
 
-  static Future<void> showNotificationOfServer(RemoteMessage message) async {
-    final logger = Logger();
+  Future<void> showNotificationOfServer(RemoteMessage message) async {
     NotificationData notificationData = NotificationData.fromJson(message.data);
-    logger.i(notificationData.typeContent);
-    final content = notificationData.typeContent ?? '';
     const AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
-      'task_channel',
-      'Task',
-      channelDescription: 'Notification for successful file download',
+      'server_channel',
+      'Server',
+      channelDescription: 'Notification for server',
       importance: Importance.max,
       priority: Priority.high,
       showWhen: true,
-      icon: 'download',
+      icon: '@mipmap/ic_launcher',
     );
     const NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidNotificationDetails);
 
+    int notifiId = int.parse(notificationData.id!);
     if (notificationData.type == 'TASK') {
-      if (content.contains("REMOVE_ASSIGN")) {
+      if (notificationData.typeContent!.contains("REMOVE_ASSIGN")) {
+        //Notification removee assignee
         await flutterLocalNotificationsPlugin.show(
-          notificationData.id!,
-          '${'TASK'.tr()} ${notificationData.titleTask}',
+          notifiId,
+          '${'TASK'.tr()}  ${notificationData.titleTask}',
           '${notificationData.senderName} ${'NotifiRemove'.tr()} ${notificationData.titleTask}',
           platformChannelSpecifics,
         );
-      } else if (content.contains("NEW_ASSIGN")) {
+      } else if (notificationData.typeContent!.contains("NEW_ASSIGN")) {
+        // Notification have new assignee
         await flutterLocalNotificationsPlugin.show(
-          notificationData.id!,
-          '${'TASK'.tr()} ${notificationData.titleTask}',
+          notifiId,
+          '${'TASK'.tr()}  ${notificationData.titleTask}',
           '${notificationData.senderName} ${'NotifiAddTask'.tr()} ${notificationData.titleTask}',
           platformChannelSpecifics,
+          payload: 'task:${notificationData.contentId}',
         );
-      }
-    } else if (notificationData.type == 'SYSTEM') {
-      if (content.contains("DUEAT")) {
+      } else if (notificationData.typeContent!.contains("DUEAT")) {
+        // Notification task due date
         await flutterLocalNotificationsPlugin.show(
-          notificationData.id!,
+          notifiId,
           '${'TASK'.tr()} ${notificationData.titleTask}',
           '${'NotifiDueAt'.tr()} ${notificationData.titleTask}',
           platformChannelSpecifics,
+          payload: 'task:${notificationData.contentId}',
+        );
+      } else {
+        // Notification report
+        await flutterLocalNotificationsPlugin.show(
+          notifiId,
+          '${'TASK'.tr()}  ${notificationData.titleTask}',
+          '${notificationData.senderName} ${'new_report'.tr()} ${notificationData.titleTask}',
+          platformChannelSpecifics,
+          payload: 'task:${notificationData.contentId}',
         );
       }
     } else if (notificationData.type == 'COMMENT') {
       await flutterLocalNotificationsPlugin.show(
-        notificationData.id!,
+        notifiId,
         '${'TASK'.tr()} ${notificationData.titleTask}',
         '${notificationData.senderName} ${'NotifiComment'.tr()} ${notificationData.titleTask}',
         platformChannelSpecifics,
+        payload: 'task:${notificationData.contentId}',
       );
-    } else if (notificationData.type == 'CONTACT') {
+    } else {
       await flutterLocalNotificationsPlugin.show(
-        notificationData.id!,
+        notifiId,
         'friendRequest'.tr(),
         '${notificationData.senderName} ${'NotifiRequest'.tr()}',
         platformChannelSpecifics,
       );
     }
   }
+}
+
+@pragma('vm:entry-point')
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
 }

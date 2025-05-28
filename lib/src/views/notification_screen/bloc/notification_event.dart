@@ -28,12 +28,19 @@ class ChangeStatusNotificationEvent extends NotificationEvent {
 }
 
 class AcceptContactEvent extends NotificationEvent {
-  final int contactId;
+  final String contactId;
   AcceptContactEvent(this.contactId);
 }
 
 class DenyContactEvent extends NotificationEvent {
-  final int contactId;
+  final String contactId;
   final String withUser;
   DenyContactEvent(this.contactId, this.withUser);
+}
+
+class UpdateStatusAllNotifi extends NotificationEvent {}
+
+class UpdateStatusNotifi extends NotificationEvent {
+  final String notifiId;
+  UpdateStatusNotifi(this.notifiId);
 }

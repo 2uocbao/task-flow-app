@@ -41,14 +41,14 @@ class ReportPhotoWidget extends StatelessWidget {
                 width: 150.w,
                 fit: BoxFit.cover,
                 imagePath:
-                    "${Api().url}/report/view?reportId=${reportDatas[index].id}&taskId=${taskData.id}&userId=${taskData.creatorId}",
+                    "${Api().url}/users/${PrefUtils().getUser()!.id}/tasks/${taskData.id}/reports/${reportDatas[index].id}/view",
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (_) => ImagePageScreen(
                           imageUrl:
-                              "${Api().url}/report/view?reportId=${reportDatas[index].id}&taskId=${taskData.id}&userId=${taskData.creatorId}"),
+                              "${Api().url}/users/${PrefUtils().getUser()!.id}/tasks/${taskData.id}/reports/${reportDatas[index].id}/view"),
                     ),
                   );
                 },

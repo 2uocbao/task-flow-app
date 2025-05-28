@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:app_settings/app_settings.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
-import 'package:taskflow/main.dart';
 import 'package:taskflow/src/utils/app_export.dart';
 import 'package:taskflow/src/widgets/custom_text_button.dart';
 
@@ -148,21 +147,21 @@ class _SettingScreenState extends State<SettingScreen> {
             ),
           ),
           _buildLineSpace(),
-          Container(
-            margin: EdgeInsets.only(top: 10.h),
-            padding: EdgeInsets.only(left: 20.w),
-            height: 30.h,
-            color: Colors.transparent,
-            child: GestureDetector(
-              onTap: () {
-                logger.i('message');
-              },
-              child: Text(
-                'lbl_app_info'.tr(),
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-            ),
-          ),
+          // Container(
+          //   margin: EdgeInsets.only(top: 10.h),
+          //   padding: EdgeInsets.only(left: 20.w),
+          //   height: 30.h,
+          //   color: Colors.transparent,
+          //   child: GestureDetector(
+          //     onTap: () {
+          //       logger.i('message');
+          //     },
+          //     child: Text(
+          //       'lbl_app_info'.tr(),
+          //       style: Theme.of(context).textTheme.titleLarge,
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

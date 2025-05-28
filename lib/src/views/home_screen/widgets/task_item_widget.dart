@@ -39,7 +39,7 @@ class TaskItemWidget extends StatelessWidget {
                 child: Text(
                   _taskData.title!,
                   overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.headlineSmall,
+                  style: Theme.of(context).textTheme.bodyLarge,
                   maxLines: 1,
                 ),
               ),
@@ -50,7 +50,7 @@ class TaskItemWidget extends StatelessWidget {
             SizedBox(
               child: Text(
                 _taskData.status!.tr(),
-                style: Theme.of(context).textTheme.titleSmall,
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
             ),
             SizedBox(

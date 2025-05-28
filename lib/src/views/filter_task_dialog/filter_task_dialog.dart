@@ -88,6 +88,19 @@ class FilterTaskDialog extends StatelessWidget {
                     SizedBox(
                       height: 10.h,
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text(
+                          "lbl_startDate".tr(),
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                        Text(
+                          "lbl_endDate".tr(),
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ],
+                    ),
                     _buildCustomDate(context),
                   },
                   SizedBox(
@@ -174,7 +187,7 @@ class FilterTaskDialog extends StatelessWidget {
     return CustomTextFormField(
       autofocus: true,
       readOnly: true,
-      width: 110.w,
+      width: 100.w,
       controller: TextEditingController(text: dateStart),
       alignment: Alignment.center,
       contentPadding: EdgeInsets.fromLTRB(5.w, 5.h, 5.w, 5.h),
@@ -201,7 +214,7 @@ class FilterTaskDialog extends StatelessWidget {
     return CustomTextFormField(
       autofocus: true,
       readOnly: true,
-      width: 110.w,
+      width: 100.w,
       controller: TextEditingController(text: dateEnd),
       alignment: Alignment.centerLeft,
       contentPadding: EdgeInsets.fromLTRB(5.w, 5.h, 5.w, 5.h),

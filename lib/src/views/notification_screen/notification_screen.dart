@@ -103,7 +103,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
               Icons.done_all,
               size: 30.sp,
             ),
-            onTap: () {},
+            onTap: () {
+              context.read<NotificationBloc>().add(UpdateStatusAllNotifi());
+            },
           ),
         )
       ],
@@ -158,7 +160,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             buttonTextStyle: Theme.of(context).textTheme.bodyMedium,
             buttonStyle: ElevatedButton.styleFrom(
               backgroundColor: CustomButtonStyle.getButtonColor(
-                  context, state?.selectedStatus == true),
+                  context, state?.selectedStatus == false),
               foregroundColor: Colors.black,
             ),
             decoration: BoxDecoration(
@@ -182,19 +184,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
       builder: (context, state) {
         bool has = false;
         String timenow = "TODAY".tr();
-        // List<NotificationData> listNotifi = state.notificationData;
-        List<NotificationData> listNotifi = [
-          NotificationData(
-            id: 1,
-            senderId: 'DMC',
-            contentId: 'ok',
-            senderName: 'Quoc Bao',
-            image:
-                'https://lh3.googleusercontent.com/a/ACg8ocJ473gmhZHVKcHwGZjMsvdF4fbjPD-Zsr2qvgQr1zPun_7aKaw=s96-c',
-            type: 'COMMENT',
-            createdAt: '2025-05-17 20:00',
-          ),
-        ];
+        List<NotificationData> listNotifi = state.notificationData;
         List<Widget> notifiWidget = [];
         for (var notifi in listNotifi) {
           String stringTime = time(notifi.createdAt!);
@@ -227,8 +217,17 @@ class _NotificationScreenState extends State<NotificationScreen> {
           notifiWidget.add(
             NotificationItemWidget(
               notifi,
-              acceptContact: () {},
-              denyContact: () {},
+              acceptContact: (value) {
+                context.read<NotificationBloc>().add(AcceptContactEvent(value));
+              },
+              denyContact: () {
+                context
+                    .read<NotificationBloc>()
+                    .add(DenyContactEvent(notifi.contentId!, notifi.senderId!));
+              },
+              updateIsRead: (value) {
+                context.read<NotificationBloc>().add(UpdateStatusNotifi(value));
+              },
             ),
           );
         }

@@ -2,32 +2,27 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:taskflow/src/data/model/notification/notification_data.dart';
 import 'package:taskflow/src/theme/custom_button_style.dart';
 import 'package:taskflow/src/utils/app_export.dart';
-import 'package:taskflow/src/views/task_detail_screen/models/task_detail_arguments.dart';
 import 'package:taskflow/src/widgets/custom_circle_avatar.dart';
 import 'package:taskflow/src/widgets/custom_text_button.dart';
 
 // ignore: must_be_immutable
 class NotificationItemWidget extends StatelessWidget {
   NotificationData notificationData;
-  VoidCallback? acceptContact;
+  Function(String) acceptContact;
   VoidCallback? denyContact;
+  Function(String) updateIsRead;
   NotificationItemWidget(this.notificationData,
-      {super.key, this.acceptContact, this.denyContact});
+      {super.key,
+      required this.acceptContact,
+      this.denyContact,
+      required this.updateIsRead});
   @override
   Widget build(BuildContext context) {
-    notificationData = NotificationData(
-        id: 1,
-        senderId: 'DMC',
-        contentId: 'ok',
-        senderName: 'Quoc Bao',
-        // image:
-        //     'https://lh3.googleusercontent.com/a/ACg8ocJ473gmhZHVKcHwGZjMsvdF4fbjPD-Zsr2qvgQr1zPun_7aKaw=s96-c',
-        image: null,
-        type: 'CONTACT',
-        createdAt: '2025-05-17 20:00',
-        titleTask: '@upc');
     return GestureDetector(
-      child: SizedBox(
+      child: Container(
+        color: notificationData.status == false
+            ? Theme.of(context).colorScheme.onSurface.withOpacity(0.1)
+            : null,
         width: double.maxFinite,
         child: Row(
           children: [
@@ -49,7 +44,7 @@ class NotificationItemWidget extends StatelessWidget {
                   SizedBox(
                     height: 5.h,
                   ),
-                  if (notificationData.type == 'CONTACT') ...{
+                  if (notificationData.typeContent == 'CONTACT') ...{
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -60,7 +55,7 @@ class NotificationItemWidget extends StatelessWidget {
                                 CustomButtonStyle.getButtonColor(context, true),
                             foregroundColor: Colors.black,
                           ),
-                          onPressed: acceptContact,
+                          onPressed: acceptContact(notificationData.contentId!),
                         ),
                         CustomTextButton(
                           text: 'bt_deny'.tr(),
@@ -87,13 +82,8 @@ class NotificationItemWidget extends StatelessWidget {
           ],
         ),
       ),
-      onTap: () {
-        if (notificationData.type == 'TASK' ||
-            notificationData.type == 'SYSTEM') {
-          NavigatorService.pushNamed(AppRoutes.taskDetailScreen,
-              arguments:
-                  TaskDetailArguments(taskId: notificationData.contentId));
-        }
+      onTap: () async {
+        updateIsRead(notificationData.id!);
       },
     );
   }
@@ -126,7 +116,7 @@ class NotificationItemWidget extends StatelessWidget {
         title,
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
-        style: Theme.of(context).textTheme.headlineMedium,
+        style: Theme.of(context).textTheme.bodyLarge,
       ),
     );
   }

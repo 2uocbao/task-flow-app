@@ -18,7 +18,11 @@ class Utils {
   ];
   List<String> priorityItems = const ["LOW", "MEDIUM", "HIGH"];
 
-  List<String> statusForAssigner = const ["COMPLETED", "CANCELLED"];
+  List<String> statusForAssigner = const [
+    "INPROGRESS",
+    "COMPLETED",
+    "CANCELLED"
+  ];
 
   List<String> timeKeys = const [
     "TODAY",
@@ -27,7 +31,7 @@ class Utils {
     "CUSTOM",
   ];
 
-  List<String> notifiOption = const ['ALL', 'TASK', 'SYSTEM', 'CONTACT'];
+  List<String> notifiOption = const ['ALL', 'TASK', 'CONTACT'];
 
   Future<String?> getEnglishValue(String key) async {
     final jsonStr = await rootBundle.loadString('assets/translations/en.json');

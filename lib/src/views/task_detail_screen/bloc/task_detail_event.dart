@@ -45,7 +45,6 @@ class FetchReportEvent extends TaskDetailEvent {
 
 class UpdateDueAtTaskEvent extends TaskDetailEvent {
   final DateTime dateTime;
-
   UpdateDueAtTaskEvent(this.dateTime);
 }
 
@@ -56,7 +55,8 @@ class UpdateStartAtTaskEvent extends TaskDetailEvent {
 
 class AddCommentEvent extends TaskDetailEvent {
   final String content;
-  AddCommentEvent(this.content);
+  final String? mentionId;
+  AddCommentEvent(this.content, this.mentionId);
 }
 
 class AttachmentsEvent extends TaskDetailEvent {
@@ -88,7 +88,12 @@ class OpenFileEvent extends TaskDetailEvent {
 
 class AssignTaskEvent extends TaskDetailEvent {
   final String toUserId;
-  AssignTaskEvent({required this.toUserId});
+  final String assigerName;
+  final String pathImage;
+  AssignTaskEvent(
+      {required this.toUserId,
+      required this.assigerName,
+      required this.pathImage});
 }
 
 class RemoveAssignEvent extends TaskDetailEvent {
@@ -108,4 +113,9 @@ class UpdateStatusEvent extends TaskDetailEvent {
 class UpdatePriorityEvent extends TaskDetailEvent {
   final String priority;
   UpdatePriorityEvent(this.priority);
+}
+
+class FetchMentionEvent extends TaskDetailEvent {
+  final String userId;
+  FetchMentionEvent(this.userId);
 }

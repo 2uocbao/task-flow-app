@@ -146,7 +146,7 @@ class PrefUtils {
   bool getReadNotifi() {
     bool? type = _sharedPreferences!.getBool('isRead');
     if (type == null) {
-      return false;
+      return true;
     }
     return type;
   }

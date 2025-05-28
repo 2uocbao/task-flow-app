@@ -10,6 +10,7 @@ class TaskData {
   String? priority;
   String? createdAt;
   String? dueAt;
+  String? startDate;
   int? commentCount;
   int? reportCount;
 
@@ -24,6 +25,7 @@ class TaskData {
     this.status,
     this.priority,
     this.createdAt,
+    this.startDate,
     this.dueAt,
   });
 
@@ -38,13 +40,14 @@ class TaskData {
     String? status,
     String? priority,
     String? createdAt,
+    String? startDate,
     String? dueAt,
     int? commentCount,
     int? reportCount,
   }) {
     return TaskData(
       id: id ?? this.id,
-      creatorId: creatorId,
+      creatorId: creatorId ?? this.creatorId,
       assignTo: assignTo ?? this.assignTo,
       imageAssigner: imageAssigner ?? this.imageAssigner,
       usernameAssigner: usernameAssigner ?? this.usernameAssigner,
@@ -53,6 +56,7 @@ class TaskData {
       status: status ?? this.status,
       priority: priority ?? this.priority,
       createdAt: this.createdAt,
+      startDate: startDate ?? this.startDate,
       dueAt: dueAt ?? this.dueAt,
     );
   }
@@ -69,6 +73,7 @@ class TaskData {
     priority = json['priority'];
     createdAt = json['created_at'];
     dueAt = json['due_at'];
+    startDate = json['start_date'];
     commentCount = json['commentCount'];
     reportCount = json['reportCount'];
   }
@@ -98,6 +103,10 @@ class TaskData {
 
     if (dueAt != null) {
       data['due_at'] = dueAt;
+    }
+
+    if (startDate != null) {
+      data['start_date'] = startDate;
     }
     return data;
   }

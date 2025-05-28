@@ -35,8 +35,11 @@ class ReportUrlDialog extends StatelessWidget {
             ),
             child: Column(
               children: [
+                SizedBox(
+                  height: 5.h,
+                ),
                 Text(
-                  'Attchement Link',
+                  'attachLink'.tr(),
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 Padding(
@@ -51,12 +54,14 @@ class ReportUrlDialog extends StatelessWidget {
                       _controllerUrl.text = value;
                     },
                     validator: (value) {
-                      bool isUrlResult = false;
-                      isUrl(Uri.parse(value!)).then((value) async {
-                        isUrlResult = value;
-                      });
-                      if (!isUrlResult || value.isEmpty) {
+                      if (value!.isEmpty) {
                         return "err_please_enter_valid_url".tr();
+                      } else {
+                        isUrl(Uri.parse(value)).then((onValue) async {
+                          if (onValue == false) {
+                            return "err_please_enter_valid_url".tr();
+                          }
+                        });
                       }
                       return null;
                     },

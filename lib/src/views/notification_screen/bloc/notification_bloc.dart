@@ -4,6 +4,7 @@ import 'package:taskflow/src/data/model/response/response_list.dart';
 import 'package:taskflow/src/data/repository/repository.dart';
 import 'package:taskflow/src/views/notification_screen/bloc/notification_event.dart';
 import 'package:taskflow/src/views/notification_screen/bloc/notification_state.dart';
+import 'package:taskflow/src/views/task_detail_screen/models/task_detail_arguments.dart';
 
 class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   NotificationBloc(super.initialState) {
@@ -12,6 +13,8 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     on<FetchNotificationEvent>(_onFetchNotification);
     on<AcceptContactEvent>(_onAcceptContact);
     on<DenyContactEvent>(_onDenyContact);
+    on<UpdateStatusAllNotifi>(_onUpdateStatusAll);
+    on<UpdateStatusNotifi>(_onUpdateStatus);
   }
 
   int currentPage = 0;
@@ -104,16 +107,17 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
             requestData: requestData)
         .then((onValue) async {
       if (onValue.statusCode == 200) {
-        List<NotificationData?> updateNotifi =
+        final updateNotifi =
             state.notificationModel.notificationData.map((notifi) {
-          if (int.parse(notifi.id as String) == event.contactId) {
-            return notifi.copyWith(type: 'CONTACTACEPT');
+          if (notifi.contentId == event.contactId) {
+            return notifi.copyWith(type: 'CONTACTACEPT', status: true);
           }
+          return notifi;
         }).toList();
 
         emit(state.copyWith(
             notificationModel: state.notificationModel.copyWith(
-          notificationData: updateNotifi.whereType<NotificationData>().toList(),
+          notificationData: updateNotifi,
         )));
       }
     });
@@ -126,7 +130,77 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     await _repository
         .deleteContact(PrefUtils().getUser()!.id!, event.contactId)
         .then((onValue) async {
-      if (onValue.statusCode == 200) {}
+      if (onValue.statusCode == 200) {
+        final updateNotifi = state.notificationModel.notificationData;
+        NotificationData notificationData = updateNotifi.firstWhere(
+          (element) => element.contentId == event.contactId,
+        );
+        updateNotifi.remove(notificationData);
+        emit(state.copyWith(
+            notificationModel: state.notificationModel.copyWith(
+          notificationData: updateNotifi,
+        )));
+      }
+    });
+  }
+
+  _onUpdateStatusAll(
+    UpdateStatusAllNotifi event,
+    Emitter<NotificationState> emit,
+  ) async {
+    await _repository
+        .updateAllNotiStatus(PrefUtils().getUser()!.id!)
+        .then((value) {
+      if (value.statusCode == 200) {
+        final updateNotifi =
+            state.notificationModel.notificationData.map((notifi) {
+          notifi.copyWith(status: true);
+          return notifi;
+        }).toList();
+        emit(
+          state.copyWith(
+            notificationModel: state.notificationModel.copyWith(
+              notificationData: updateNotifi,
+            ),
+          ),
+        );
+      }
+    });
+  }
+
+  _onUpdateStatus(
+    UpdateStatusNotifi event,
+    Emitter<NotificationState> emit,
+  ) async {
+    await _repository
+        .updateStatusNotifi(PrefUtils().getUser()!.id!, event.notifiId)
+        .then((value) {
+      if (value.statusCode == 200) {
+        final updateNotifi =
+            state.notificationModel.notificationData.map((notifi) {
+          if (notifi.id == event.notifiId) {
+            return notifi.copyWith(status: true);
+          }
+          return notifi;
+        }).toList();
+        NotificationData notificationData =
+            state.notificationModel.notificationData.firstWhere(
+          (element) => element.id == event.notifiId,
+        );
+        emit(
+          state.copyWith(
+            notificationModel: state.notificationModel.copyWith(
+              notificationData: updateNotifi,
+            ),
+          ),
+        );
+        if (notificationData.type == 'TASK' ||
+            notificationData.type == 'COMMENT') {
+          NavigatorService.pushNamed(AppRoutes.taskDetailScreen,
+              arguments:
+                  TaskDetailArguments(taskId: notificationData.contentId));
+        }
+      }
     });
   }
 }

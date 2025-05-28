@@ -8,7 +8,7 @@ import 'package:taskflow/src/widgets/contact_item_widget.dart';
 class AssignCustomField extends StatefulWidget {
   const AssignCustomField({super.key, required this.assignTo});
 
-  final Function(String) assignTo;
+  final Function(String, String, String) assignTo;
 
   @override
   State<AssignCustomField> createState() => AssignCustomFieldState();
@@ -101,8 +101,12 @@ class AssignCustomFieldState extends State<AssignCustomField>
                   return ContactItemWidget(
                     contactData: _searchResults[index],
                     isUser: false,
+                    contactScreen: false,
                     onTapRow: () {
-                      widget.assignTo(_searchResults[index].userId!);
+                      widget.assignTo(
+                          _searchResults[index].userId!,
+                          _searchResults[index].userName!,
+                          _searchResults[index].image!);
                     },
                   );
                 },

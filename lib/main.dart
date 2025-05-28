@@ -11,10 +11,6 @@ import 'package:taskflow/src/utils/token_storage.dart';
 var globaleMessagerKey = GlobalKey<ScaffoldMessengerState>();
 
 final logger = Logger();
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-  logger.i("🔕 Thông báo nền: ${message.messageId}");
-}
 
 Future<void> requestNotificationPermission() async {
   final FlutterLocalNotificationsPlugin plugin =
@@ -29,8 +25,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await requestNotificationPermission();
   await Firebase.initializeApp();
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  await NotificationService.initialize();
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   await EasyLocalization.ensureInitialized();
   await PrefUtils().init();
   bool hasToken = await TokenStorage.getToken().then((value) async {
@@ -69,6 +64,7 @@ class TaskManagementSystem extends StatefulWidget {
 class _TaskManagementSystemState extends State<TaskManagementSystem> {
   @override
   void initState() {
+    NotificationService().init();
     super.initState();
   }
 

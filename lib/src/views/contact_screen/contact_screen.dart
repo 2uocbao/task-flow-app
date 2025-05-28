@@ -141,7 +141,6 @@ class _ConTactScreenState extends State<ConTactScreen> {
   Widget _buildBody(BuildContext context, ContactState state) {
     List<ContactData> contactData = [];
     List<UserData> userData = [];
-    bool searchUser = PrefUtils().getOptionsContact() == 'REQUESTED';
     if (_showSearch) {
       if (PrefUtils().getOptionsContact() == 'REQUESTED') {
         userData = state.userResult;
@@ -167,12 +166,13 @@ class _ConTactScreenState extends State<ConTactScreen> {
         Expanded(
           child: ListView.builder(
             controller: _scrollController,
-            itemCount: searchUser ? userData.length : contactData.length,
+            itemCount: _showSearch ? userData.length : contactData.length,
             itemBuilder: (context, index) {
               return ContactItemWidget(
-                contactData: !searchUser ? contactData[index] : null,
-                isUser: searchUser,
-                userData: searchUser ? userData[index] : null,
+                contactData: !_showSearch ? contactData[index] : null,
+                isUser: _showSearch,
+                contactScreen: true,
+                userData: _showSearch ? userData[index] : null,
                 onTapRow: () {},
                 onAccepted: () {
                   context

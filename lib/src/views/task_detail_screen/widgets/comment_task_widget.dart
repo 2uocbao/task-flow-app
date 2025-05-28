@@ -148,7 +148,7 @@ class CommentTaskWidgetState extends State<CommentTaskWidget> {
                                     ),
                                     onTap: () {
                                       widget.requestFocus(
-                                          widget.commentData.username!);
+                                          widget.commentData.creatorId!);
                                     },
                                   ),
                                 ],
@@ -175,13 +175,19 @@ class CommentTaskWidgetState extends State<CommentTaskWidget> {
                     ),
                     onTap: () {
                       if (PrefUtils().getUser()!.id! ==
-                          widget.commentData.creatorId)
+                          widget.commentData.creatorId) {
                         _onEditButtonPressed(widget.commentData.id!);
+                      }
                     },
                     onChange: (value) {
                       widget.commentData.text = value;
                     },
                   ),
+                  // child: ExtendedTextField(
+                  //   controller: _commentController,
+                  //   specialTextSpanBuilder: MySpecialTextSpanBuilder(),
+                  //   maxLines: null,
+                  // ),
                 ),
                 SizedBox(
                   height: 5.h,
@@ -239,3 +245,41 @@ class CommentTaskWidgetState extends State<CommentTaskWidget> {
     );
   }
 }
+
+// class MySpecialTextSpanBuilder extends SpecialTextSpanBuilder {
+//   @override
+//   SpecialText? createSpecialText(String flag,
+//       {TextStyle? textStyle,
+//       SpecialTextGestureTapCallback? onTap,
+//       required int index}) {
+//     if (flag == '@') {
+//       return MentionText(textStyle!, onTap!);
+//     }
+//     return null;
+//   }
+// }
+
+// class MentionText extends SpecialText {
+//   static const String startKey = '@';
+//   static const String endKey = ' ';
+
+//   MentionText(TextStyle textStyle, SpecialTextGestureTapCallback onTap)
+//       : super(startKey, endKey, textStyle, onTap: onTap);
+
+//   @override
+//   InlineSpan finishText() {
+//     final mention = toString(); // ví dụ: @nguyenvana
+
+//     return SpecialTextSpan(
+//       text: mention,
+//       style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+//       // recognizer: TapGestureRecognizer()..onTap = () => onTap?.call(mention),
+//       recognizer: TapGestureRecognizer()
+//         ..onTap = () {
+//           if (onTap != null) {
+//             onTap!(mention);
+//           }
+//         },
+//     );
+//   }
+// }

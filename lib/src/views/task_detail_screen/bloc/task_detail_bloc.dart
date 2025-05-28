@@ -25,6 +25,7 @@ class TaskDetailBloc extends Bloc<TaskDetailEvent, TaskDetailState> {
     on<FetchCommentEvent>(_onFetchComments);
     on<FetchReportEvent>(_onFetchReports);
     on<UpdateCommentEvent>(_onUpdateComment);
+    on<UpdateStartAtTaskEvent>(_onUpdateStartAtTask);
     on<UpdateDueAtTaskEvent>(_onUpdateDueAtTask);
     on<AddCommentEvent>(_onAddComment);
     on<AttachmentsEvent>(_onAttachment);
@@ -48,7 +49,7 @@ class TaskDetailBloc extends Bloc<TaskDetailEvent, TaskDetailState> {
     FetchDetailEvent event,
     Emitter<TaskDetailState> emit,
   ) async {
-    await _repository.getTaskDetail(event.id).then(
+    await _repository.getTaskDetail(PrefUtils().getUser()!.id!, event.id).then(
       (value) async {
         ResponseData<TaskData> taskData =
             ResponseData.fromJson(value.data, TaskData.fromJson);
@@ -76,6 +77,7 @@ class TaskDetailBloc extends Bloc<TaskDetailEvent, TaskDetailState> {
       priority: event.priority,
       status: event.status,
       dueAt: currentTask.dueAt,
+      startDate: currentTask.startDate,
     );
     await _repository
         .updateTask(event.id, requestData: requestData.toJson())
@@ -86,8 +88,14 @@ class TaskDetailBloc extends Bloc<TaskDetailEvent, TaskDetailState> {
         emit(
           state.copyWith(
             taskDetailModel: state.taskDetailModel.copyWith(
-              taskData: responseData.data,
-            ),
+                taskData: state.taskDetailModel.taskData.copyWith(
+              title: responseData.data!.title,
+              description: responseData.data!.description,
+              priority: responseData.data!.priority,
+              status: responseData.data!.status,
+              startDate: responseData.data!.startDate,
+              dueAt: responseData.data!.dueAt,
+            )),
           ),
         );
       }
@@ -108,13 +116,11 @@ class TaskDetailBloc extends Bloc<TaskDetailEvent, TaskDetailState> {
             ResponseData.fromJson(value.data, CommentData.fromJson);
         final updateComment = state.taskDetailModel.commentDatas.map((comment) {
           if (comment.id == responseData.data?.id) {
-            return CommentData(
-                id: comment.id,
-                text: responseData.data?.text,
-                username: comment.username,
-                image: comment.image,
-                createdAt: comment.createdAt,
-                updatedAt: responseData.data?.updatedAt);
+            return comment.copyWith(
+              id: comment.id,
+              text: responseData.data?.text,
+              updatedAt: responseData.data?.updatedAt,
+            );
           }
           return comment;
         }).toList();
@@ -207,6 +213,22 @@ class TaskDetailBloc extends Bloc<TaskDetailEvent, TaskDetailState> {
     add(FetchCommentEvent(taskId: event.taskId));
   }
 
+  _onUpdateStartAtTask(
+    UpdateStartAtTaskEvent event,
+    Emitter<TaskDetailState> emit,
+  ) async {
+    String startAt = event.dateTime.format(pattern: D_M_Y_HH_mm);
+    final currentTask = state.taskDetailModel.taskData;
+    final updatedTask = currentTask.copyWith(startDate: startAt);
+    emit(
+      state.copyWith(
+        taskDetailModel: state.taskDetailModel.copyWith(
+          taskData: updatedTask,
+        ),
+      ),
+    );
+  }
+
   _onUpdateDueAtTask(
     UpdateDueAtTaskEvent event,
     Emitter<TaskDetailState> emit,
@@ -231,6 +253,7 @@ class TaskDetailBloc extends Bloc<TaskDetailEvent, TaskDetailState> {
   ) async {
     var requestData = CommentData(
       text: event.content,
+      mentionId: event.mentionId,
     );
     UserData userData = PrefUtils().getUser()!;
     await _repository
@@ -374,10 +397,13 @@ class TaskDetailBloc extends Bloc<TaskDetailEvent, TaskDetailState> {
             taskDetailModel: state.taskDetailModel.copyWith(
               taskData: state.taskDetailModel.taskData.copyWith(
                 assignTo: event.toUserId,
+                usernameAssigner: event.assigerName,
+                imageAssigner: event.pathImage,
               ),
             ),
           ),
         );
+        logger.i(state.taskDetailModel.taskData.assignTo);
       }
     });
   }

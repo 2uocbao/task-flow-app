@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:logger/logger.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:taskflow/src/data/api/network_interceptor.dart';
@@ -23,7 +24,7 @@ class Api {
   Api._internal();
 
   // var url = "https://projectmanager-i5nz.onrender.com";
-  var url = "http://192.168.1.2:9091";
+  var url = "http://192.168.1.3:9091";
 
   static final Api _api = Api._internal();
 
@@ -39,9 +40,17 @@ class Api {
   }
 
   void clearTokenAndRefresh() async {
-    await TokenStorage.deleteToken();
-    await TokenStorage.deleteRefresh();
-    NavigatorService.pushNamedAndRemoveUtil(AppRoutes.loginScreen);
+    logger.i('message');
+    SnackBar(
+      content: Text(
+        'error_api'.tr(),
+      ),
+      behavior: SnackBarBehavior.floating,
+      margin: EdgeInsets.only(bottom: 100.h),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+    );
   }
 
   Future<bool> requestStoragePermission() async {
@@ -83,7 +92,7 @@ class Api {
       await TokenStorage.saveToken(responseData.data!.refresh!);
     } else {
       PrefUtils().clearPreferentcesData();
-      clearTokenAndRefresh();
+      NavigatorService.pushNamedAndRemoveUtil(AppRoutes.loginScreen);
     }
   }
 

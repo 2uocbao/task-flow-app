@@ -9,7 +9,7 @@ class NotificationModel extends Equatable {
 
   NotificationModel(
       {this.selectedType = "ALL",
-      this.selectedStatus = false,
+      this.selectedStatus = true,
       this.notificationData = const []});
 
   NotificationModel copyWith({

@@ -17,6 +17,10 @@ class Repository {
     return await _api.search('/users/$userId', requestParam: queryParam);
   }
 
+  Future<Response> getUser(String userId) async {
+    return await _api.search('/users/$userId/mentions');
+  }
+
 //TASK
   Future<Response> createTask({Map requestData = const {}}) async {
     return await _api.post('/tasks', requestData: requestData);
@@ -27,8 +31,8 @@ class Repository {
     return await _api.get('/users/$userId/tasks', queryParam: queryParam);
   }
 
-  Future<Response> getTaskDetail(String taskId) async {
-    return await _api.get('/tasks/$taskId');
+  Future<Response> getTaskDetail(String userId, String taskId) async {
+    return await _api.get('/users/$userId/tasks/$taskId');
   }
 
   Future<Response> updateTask(String taskId,
@@ -124,18 +128,27 @@ class Repository {
         queryParam: queryParam);
   }
 
+  Future<Response> updateAllNotiStatus(String userId) async {
+    return await _api.put('/users/$userId/notifications');
+  }
+
+  Future<Response> updateStatusNotifi(
+      String userId, String notificationId) async {
+    return await _api.put('/users/$userId/notifications/$notificationId');
+  }
+
 //CONTACT
   Future<Response> addContact({Map requestData = const {}}) async {
     return await _api.post('/contacts', requestData: requestData);
   }
 
-  Future<Response> updateContact(String userId, int contactId,
+  Future<Response> updateContact(String userId, String contactId,
       {Map requestData = const {}}) async {
     return await _api.put('/users/$userId/contacts/$contactId',
         requestData: requestData);
   }
 
-  Future<Response> deleteContact(String userId, int contactId) async {
+  Future<Response> deleteContact(String userId, String contactId) async {
     return await _api.delete('/users/$userId/contacts/$contactId');
   }
 

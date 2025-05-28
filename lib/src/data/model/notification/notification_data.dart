@@ -1,12 +1,12 @@
 class NotificationData {
-  int? id;
+  String? id;
   String? senderId;
   String? contentId;
   String? senderName;
   String? image;
   String? typeContent;
   String? titleTask;
-  String? status;
+  bool? status;
   String? type;
   String? createdAt;
 
@@ -24,14 +24,14 @@ class NotificationData {
   });
 
   NotificationData copyWith({
-    int? id,
+    String? id,
     String? senderId,
     String? contentId,
     String? senderName,
     String? image,
     String? typeContent,
     String? titleTask,
-    String? status,
+    bool? status,
     String? type,
     String? createdAt,
   }) {

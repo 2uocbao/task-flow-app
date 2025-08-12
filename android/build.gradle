@@ -1,0 +1,39 @@
+buildscript {
+    ext.kotlin_version = '1.9.0'
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        // Thêm Kotlin Gradle Plugin với version mới (1.9.10 hoặc 1.8.0)
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        // Nếu dùng thêm các classpath khác thì giữ nguyên
+    }
+}
+plugins {
+  id 'com.google.gms.google-services' version '4.4.2' apply false
+}
+
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.buildDir = "../build"
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+subprojects {
+    project.evaluationDependsOn(":app")
+}
+
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
+}
+
+// dependencies {
+//     classpath 'com.android.tools.build:gradle:8.1.0'
+// }

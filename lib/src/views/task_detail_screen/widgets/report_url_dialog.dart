@@ -3,21 +3,10 @@ import 'package:taskflow/src/utils/app_export.dart';
 import 'package:taskflow/src/utils/validation_functions.dart';
 import 'package:taskflow/src/views/task_detail_screen/bloc/task_detail_bloc.dart';
 import 'package:taskflow/src/views/task_detail_screen/bloc/task_detail_event.dart';
-<<<<<<< HEAD
-
 class ReportUrlDialog extends StatelessWidget {
   ReportUrlDialog(this.addUrl, {super.key});
 
   final Function(String) addUrl;
-=======
-import 'package:taskflow/src/widgets/custom_text_button.dart';
-
-// ignore: must_be_immutable
-class ReportUrlDialog extends StatelessWidget {
-  ReportUrlDialog(this.addUrl, {super.key});
-
-  Function(String) addUrl;
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
 
   late final TextEditingController _controllerUrl = TextEditingController();
 
@@ -43,19 +32,9 @@ class ReportUrlDialog extends StatelessWidget {
             ),
             child: Column(
               children: [
-<<<<<<< HEAD
                 SizedBox(height: 5.h),
                 Text('attachLink'.tr(),
                     style: Theme.of(context).textTheme.bodyMedium),
-=======
-                SizedBox(
-                  height: 5.h,
-                ),
-                Text(
-                  'attachLink'.tr(),
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
                 Padding(
                   padding:
                       EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
@@ -102,21 +81,10 @@ class ReportUrlDialog extends StatelessWidget {
                         }
                       },
                     ),
-<<<<<<< HEAD
                     SizedBox(width: 10.w),
                   ],
                 ),
                 SizedBox(height: 10.w),
-=======
-                    SizedBox(
-                      width: 10.w,
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 10.w,
-                ),
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
               ],
             ),
           )

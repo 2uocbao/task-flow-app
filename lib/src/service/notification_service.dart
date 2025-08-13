@@ -103,7 +103,6 @@ class NotificationService {
         NotificationDetails(android: androidNotificationDetails);
 
     int notifiId = int.parse(notificationData.id!);
-<<<<<<< HEAD
 
     switch (notificationData.type) {
       case 'TASK':
@@ -227,60 +226,6 @@ class NotificationService {
           platformChannelSpecifics,
           // payload: 'task:${notificationData.contentId}',
         );
-=======
-    if (notificationData.type == 'TASK') {
-      if (notificationData.typeContent!.contains("REMOVE_ASSIGN")) {
-        //Notification removee assignee
-        await flutterLocalNotificationsPlugin.show(
-          notifiId,
-          '${'TASK'.tr()}  ${notificationData.titleTask}',
-          '${notificationData.senderName} ${'NotifiRemove'.tr()} ${notificationData.titleTask}',
-          platformChannelSpecifics,
-        );
-      } else if (notificationData.typeContent!.contains("NEW_ASSIGN")) {
-        // Notification have new assignee
-        await flutterLocalNotificationsPlugin.show(
-          notifiId,
-          '${'TASK'.tr()}  ${notificationData.titleTask}',
-          '${notificationData.senderName} ${'NotifiAddTask'.tr()} ${notificationData.titleTask}',
-          platformChannelSpecifics,
-          payload: 'task:${notificationData.contentId}',
-        );
-      } else if (notificationData.typeContent!.contains("DUEAT")) {
-        // Notification task due date
-        await flutterLocalNotificationsPlugin.show(
-          notifiId,
-          '${'TASK'.tr()} ${notificationData.titleTask}',
-          '${'NotifiDueAt'.tr()} ${notificationData.titleTask}',
-          platformChannelSpecifics,
-          payload: 'task:${notificationData.contentId}',
-        );
-      } else {
-        // Notification report
-        await flutterLocalNotificationsPlugin.show(
-          notifiId,
-          '${'TASK'.tr()}  ${notificationData.titleTask}',
-          '${notificationData.senderName} ${'new_report'.tr()} ${notificationData.titleTask}',
-          platformChannelSpecifics,
-          payload: 'task:${notificationData.contentId}',
-        );
-      }
-    } else if (notificationData.type == 'COMMENT') {
-      await flutterLocalNotificationsPlugin.show(
-        notifiId,
-        '${'TASK'.tr()} ${notificationData.titleTask}',
-        '${notificationData.senderName} ${'NotifiComment'.tr()} ${notificationData.titleTask}',
-        platformChannelSpecifics,
-        payload: 'task:${notificationData.contentId}',
-      );
-    } else {
-      await flutterLocalNotificationsPlugin.show(
-        notifiId,
-        'friendRequest'.tr(),
-        '${notificationData.senderName} ${'NotifiRequest'.tr()}',
-        platformChannelSpecifics,
-      );
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
     }
   }
 }

@@ -5,10 +5,6 @@ import 'package:taskflow/src/utils/app_export.dart';
 import 'package:taskflow/src/views/contact_screen/bloc/contact_bloc.dart';
 import 'package:taskflow/src/views/contact_screen/bloc/contact_event.dart';
 import 'package:taskflow/src/views/contact_screen/bloc/contact_state.dart';
-<<<<<<< HEAD
-=======
-import 'package:taskflow/src/views/contact_screen/model/contact_model.dart';
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
 import 'package:taskflow/src/views/home_screen/widgets/custom_search_appbar.dart';
 import 'package:taskflow/src/widgets/contact_item_widget.dart';
 
@@ -18,13 +14,7 @@ class ConTactScreen extends StatefulWidget {
   static Widget builder(BuildContext context) {
     return BlocProvider<ContactBloc>(
       create: (context) => ContactBloc(
-<<<<<<< HEAD
         const ContactState(),
-=======
-        ContactState(
-          contactModel: ContactModel(),
-        ),
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
       )..add(
           FetchContactEvent(),
         ),
@@ -41,7 +31,6 @@ class _ConTactScreenState extends State<ConTactScreen> {
   final TextEditingController _textController = TextEditingController();
   bool _isFetching = false;
   final _scrollController = ScrollController();
-<<<<<<< HEAD
   final logger = Logger();
 
   void _onSearchContact(String keySearch) async {
@@ -55,29 +44,13 @@ class _ConTactScreenState extends State<ConTactScreen> {
         _textController.text = keySearch;
       });
     }
-=======
-
-  void _onSearchContact(String keySearch) async {
-    if (PrefUtils().getOptionsContact() == 'REQUESTED') {
-      context.read<ContactBloc>().add(SearchUserEvent(keySearch));
-    } else {
-      context.read<ContactBloc>().add(SearchContactEvent(keySearch));
-    }
-    setState(() {
-      _textController.text = keySearch;
-    });
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
   }
 
   void _resetWhenSearchOf() async {
     _textController.clear();
-<<<<<<< HEAD
     _showSearch = false;
     context.read<ContactBloc>().state.copyWith(hasMore: false);
     context.read<ContactBloc>().add(ReloadContactEvent());
-=======
-    context.read<ContactBloc>().add(FetchContactEvent());
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
   }
 
   void _onScroll() {
@@ -115,7 +88,6 @@ class _ConTactScreenState extends State<ConTactScreen> {
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
     return BlocBuilder<ContactBloc, ContactState>(
       builder: (context, state) {
         if (state is FetchContactFailure) {
@@ -153,26 +125,6 @@ class _ConTactScreenState extends State<ConTactScreen> {
         ));
       },
     );
-=======
-    return BlocSelector<ContactBloc, ContactState, ContactState>(
-        selector: (state) => state,
-        builder: (context, state) {
-          return SafeArea(
-              child: Scaffold(
-            appBar: CustomSearchAppbar(
-              showSearch: _showSearch,
-              onToggleSearch: (value) => setState(() {
-                _showSearch = value;
-                _resetWhenSearchOf();
-              }),
-              onSearch: _onSearchContact,
-              searchController: _textController,
-              appbar: _buildAppBar(context),
-            ),
-            body: _buildBody(context, state),
-          ));
-        });
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
   }
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {
@@ -216,7 +168,6 @@ class _ConTactScreenState extends State<ConTactScreen> {
         contactData = state.contactResult;
       }
     } else {
-<<<<<<< HEAD
       contactData = state.contactData;
     }
     if (contactData.isEmpty && userData.isEmpty) {
@@ -240,9 +191,6 @@ class _ConTactScreenState extends State<ConTactScreen> {
           ),
         ],
       );
-=======
-      contactData = state.contactModel.contactData;
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
     }
     return Column(
       children: [
@@ -271,11 +219,7 @@ class _ConTactScreenState extends State<ConTactScreen> {
                 onAccepted: () {
                   context
                       .read<ContactBloc>()
-<<<<<<< HEAD
                       .add(AcceptRequestEvent(contactData[index]));
-=======
-                      .add(AcceptRequestEvent(contactData[index].id!));
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
                 },
                 onDeny: () {
                   context

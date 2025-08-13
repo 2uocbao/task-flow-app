@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-<<<<<<< HEAD
 import 'package:taskflow/src/utils/app_export.dart';
 
 class NetworkInterceptor extends Interceptor {
@@ -10,9 +9,3 @@ class NetworkInterceptor extends Interceptor {
     super.onError(err, handler);
   }
 }
-=======
-
-class NetworkInterceptor extends Interceptor {
-  
-}
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7

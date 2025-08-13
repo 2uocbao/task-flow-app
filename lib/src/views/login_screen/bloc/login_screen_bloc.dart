@@ -1,7 +1,4 @@
-<<<<<<< HEAD
 import 'package:easy_localization/easy_localization.dart';
-=======
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:taskflow/src/data/model/response/response_data.dart';
@@ -9,11 +6,8 @@ import 'package:taskflow/src/data/model/user/user_data.dart';
 import 'package:taskflow/src/data/repository/repository.dart';
 import 'package:taskflow/src/utils/app_export.dart';
 import 'package:taskflow/src/utils/launch_url.dart';
-<<<<<<< HEAD
 import 'package:taskflow/src/utils/network_info.dart/network_info.dart';
 import 'package:taskflow/src/utils/token_storage.dart';
-=======
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
 import 'package:taskflow/src/views/login_screen/bloc/login_screen_event.dart';
 import 'package:taskflow/src/views/login_screen/bloc/login_screen_state.dart';
 
@@ -21,24 +15,15 @@ class LoginScreenBloc extends Bloc<LoginScreenEvent, LoginScreenState> {
   LoginScreenBloc(super.key) {
     on<SignInWithGoogle>(_onSignInWithGoogle);
     on<FetchUserDetailEvent>(_onFetchUserDetail);
-<<<<<<< HEAD
     on<SignInWithUsernameAndPassword>(_onSignIn);
     on<ResetState>(_onResetState);
-=======
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
   }
 
   final _repository = Repository();
 
-<<<<<<< HEAD
   final _logger = Logger();
 
   Future<void> _onSignInWithGoogle(
-=======
-  final logger = Logger();
-
-  _onSignInWithGoogle(
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
     SignInWithGoogle event,
     Emitter<LoginScreenState> emit,
   ) async {
@@ -47,7 +32,6 @@ class LoginScreenBloc extends Bloc<LoginScreenEvent, LoginScreenState> {
     LaunchUrl().openUrl(url);
   }
 
-<<<<<<< HEAD
   Future<void> _onFetchUserDetail(
     FetchUserDetailEvent event,
     Emitter<LoginScreenState> emit,
@@ -74,24 +58,6 @@ class LoginScreenBloc extends Bloc<LoginScreenEvent, LoginScreenState> {
   }
 
   Future<void> _onUpdateToken(String userId) async {
-=======
-  _onFetchUserDetail(
-    FetchUserDetailEvent event,
-    Emitter<LoginScreenState> emit,
-  ) async {
-    await _repository.getUserDetail().then((value) async {
-      if (value.statusCode == 200) {
-        ResponseData<UserData> responseData =
-            ResponseData.fromJson(value.data, UserData.fromJson);
-        PrefUtils().setUser(responseData.data!);
-        await _onUpdateToken(responseData.data!.id!);
-        NavigatorService.pushNamedAndRemoveUtil(AppRoutes.homeScreen);
-      }
-    });
-  }
-
-  _onUpdateToken(String userId) async {
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
     String? tokenFcm = await FirebaseMessaging.instance.getToken();
     String locale = PlatformDispatcher.instance.locale.languageCode;
     Map<String, dynamic> requestData = {
@@ -102,7 +68,6 @@ class LoginScreenBloc extends Bloc<LoginScreenEvent, LoginScreenState> {
     if (tokenFcm != null) {
       await _repository.updateToken(requestData: requestData);
     } else {
-<<<<<<< HEAD
       _logger.i('Can not update FCM token to user $userId');
     }
   }
@@ -145,9 +110,4 @@ class LoginScreenBloc extends Bloc<LoginScreenEvent, LoginScreenState> {
   ) {
     emit(LoginScreenState());
   }
-=======
-      logger.i('Can not update FCM token to user $userId');
-    }
-  }
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
 }

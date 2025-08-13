@@ -1,14 +1,8 @@
 import 'package:taskflow/src/data/api/api.dart';
-<<<<<<< HEAD
 import 'package:taskflow/src/data/model/response/response_list.dart';
 import 'package:taskflow/src/data/model/team_member/member_data.dart';
 import 'package:taskflow/src/data/repository/repository.dart';
-=======
-import 'package:taskflow/src/data/model/contact/contact_data.dart';
-import 'package:taskflow/src/data/model/response/response_list.dart';
-import 'package:taskflow/src/data/repository/repository.dart';
-import 'package:taskflow/src/widgets/contact_item_widget.dart';
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
+
 
 class AssignCustomField extends StatefulWidget {
   const AssignCustomField({super.key, required this.assignTo});
@@ -21,10 +15,7 @@ class AssignCustomField extends StatefulWidget {
 
 class AssignCustomFieldState extends State<AssignCustomField>
     with TickerProviderStateMixin {
-<<<<<<< HEAD
-=======
   // focus node object to detect gained or loss on textField
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
   final FocusNode _focusNode = FocusNode();
   final TextEditingController _controller = TextEditingController();
 
@@ -34,11 +25,7 @@ class AssignCustomFieldState extends State<AssignCustomField>
 
   final LayerLink _layerLink = LayerLink();
 
-<<<<<<< HEAD
   List<MemberData> _searchResults = [];
-=======
-  List<ContactData> _searchResults = [];
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
 
   int currentPage = 0;
 
@@ -59,10 +46,7 @@ class AssignCustomFieldState extends State<AssignCustomField>
         _overlayEntry = _createOverlay();
         overlayState.insert(_overlayEntry!);
       } else {
-<<<<<<< HEAD
         _searchResults.clear();
-=======
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
         _overlayEntry!.remove();
       }
     });
@@ -70,16 +54,13 @@ class AssignCustomFieldState extends State<AssignCustomField>
 
   void reset() async {
     setState(() {
-<<<<<<< HEAD
       _searchResults.clear();
-=======
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
       _focusNode.unfocus();
       _controller.clear();
     });
   }
 
-<<<<<<< HEAD
+
   Future<List<MemberData>> _fetchUserResult(String value) async {
     try {
       Map<String, dynamic> queryParam = {
@@ -91,22 +72,7 @@ class AssignCustomFieldState extends State<AssignCustomField>
 
       List<MemberData> userData =
           ResponseList.fromJson(response.data, MemberData.fromJson).data!;
-=======
-  Future<List<ContactData>> _fetchUserResult(String value) async {
-    try {
-      Map<String, dynamic> queryParam = {
-        'keySearch': value,
-        'status': 'ACCEPTED',
-        'page': currentPage,
-      };
-      final response = await _repository.searchContact(
-        PrefUtils().getUser()!.id!,
-        queryParam: queryParam,
-      );
 
-      List<ContactData> userData =
-          ResponseList.fromJson(response.data, ContactData.fromJson).data!;
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
       return userData;
     } catch (e) {
       return [];
@@ -132,21 +98,8 @@ class AssignCustomFieldState extends State<AssignCustomField>
                 scrollDirection: Axis.vertical,
                 itemCount: _searchResults.length,
                 itemBuilder: (context, index) {
-<<<<<<< HEAD
                   return customDisplayItem(_searchResults[index]);
-=======
-                  return ContactItemWidget(
-                    contactData: _searchResults[index],
-                    isUser: false,
-                    contactScreen: false,
-                    onTapRow: () {
-                      widget.assignTo(
-                          _searchResults[index].userId!,
-                          _searchResults[index].userName!,
-                          _searchResults[index].image!);
-                    },
-                  );
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
+
                 },
               ),
             ),
@@ -156,7 +109,6 @@ class AssignCustomFieldState extends State<AssignCustomField>
     );
   }
 
-<<<<<<< HEAD
   Widget customDisplayItem(MemberData memberData) {
     return GestureDetector(
       onTap: () {
@@ -196,8 +148,6 @@ class AssignCustomFieldState extends State<AssignCustomField>
     );
   }
 
-=======
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
   void _onChanged(String value) async {
     if (value.isEmpty) {
       _overlayEntry?.remove();

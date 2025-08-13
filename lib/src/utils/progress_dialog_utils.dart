@@ -24,7 +24,6 @@ class ProgressDialogUtils {
     }
   }
 
-<<<<<<< HEAD
   // static void showErrorDialog({BuildContext? context, String? error}) async {
   //   showDialog(
   //     context: NavigatorService.navigatorKey.currentState!.overlay!.context,
@@ -39,8 +38,6 @@ class ProgressDialogUtils {
   //   );
   // }
 
-=======
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
   static void hideProgressDialog() {
     if (isProgressVisible) {
       Navigator.pop(

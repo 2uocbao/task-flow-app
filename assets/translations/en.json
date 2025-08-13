@@ -5,11 +5,8 @@
     "description1": "Sign in to get started.",
     "MYTASK": "My tasks",
     "ASSIGNED": "Assigned tasks",
-<<<<<<< HEAD
     "team_not_found": "No teams found. Create a team first to create task.",
     "no_data_available": "No data available.",
-=======
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
     "lbl_create_new_task": "Create New Task",
     "lbl_name_task": "Task title",
     "lbl_due_at": "Due At",
@@ -30,7 +27,6 @@
     "lbl_comments": "Comments",
     "lbl_add_comment": "Add comments",
     "lbl_notification": "Notification",
-<<<<<<< HEAD
     "lbl_title_delete_file": "Delete File?",
     "lbl_subtitle_delete_file": "This file will be permanently removed from the server.",
     "lbl_title_delete_member": "Remove Member?",
@@ -41,10 +37,6 @@
     "lbl_subtitle_delete_comment": "This comment will be removed.",
     "lbl_title_delete_team": "Delete team?",
     "lbl_subtitle_delete_team": "This team and all related data will be lost. Do you want to continue?",
-=======
-    "lbl_title": "You want to delete ",
-    "lbl_subtitle": " will be permanently deleted",
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
     "lbl_card_members": "Card members",
     "lbl_setting": "Settings",
     "lbl_theme": "Theme",
@@ -57,7 +49,6 @@
     "lbl_at": " at ",
     "lbl_month": "Month",
     "lbl_year": "Year",
-<<<<<<< HEAD
     "lbl_member": "Members",
     "lbl_startDate": "Start date",
     "lbl_endDate": "End date",
@@ -77,16 +68,6 @@
     "RECEIVED": "Received",
     "bt_create_team": "Create team",
     "bt_create_task": "Create task",
-=======
-    "lbl_member": "Member",
-    "lbl_startDate": "Start date",
-    "lbl_endDate": "End date",
-    "lbl_error": "Somethings went wrong!!! Please try again",
-    "ACCEPTED": "Friends",
-    "REQUESTED": "Requested",
-    "RECEIVED": "Received",
-    "bt_create": "Create",
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
     "bt_apply": "Apply",
     "bt_high": "High",
     "bt_medium": "Medium",
@@ -100,7 +81,6 @@
     "bt_download": "Download",
     "bt_accept": "Accept",
     "bt_deny": "Deny",
-<<<<<<< HEAD
     "bt_add_member": "Add member",
     "bt_done": "Done",
     "bt_reload": "Reload",
@@ -121,12 +101,6 @@
     "in": "in",
     "PENDING": "Pending",
     "IN_PROGRESS": "In Progress",
-=======
-    "err_please_enter_valid_text": "Please input valid text!!!",
-    "err_please_enter_valid_url": "Please input valid Url!!!",
-    "PENDING": "Pending",
-    "INPROGRESS": "In Progress",
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
     "COMPLETED": "Completed",
     "CANCELLED": "Cancelled",
     "TODAY": "Today",
@@ -138,11 +112,7 @@
     "HIGH": "High",
     "ALL": "All",
     "TASK": "Task",
-<<<<<<< HEAD
     "COMMENT": "Comment",
-=======
-    "SYSTEM": "System",
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
     "CONTACT": "Contact",
     "en": "English",
     "vi": "Tiếng Việt",
@@ -153,14 +123,11 @@
     "NotifiAccepted": "accepted your friend request",
     "NotifiComment": "mentioned you in the task",
     "NotifiDueAt": "due date at",
-<<<<<<< HEAD
     "Notifi_Add_Member": "added you to the team",
     "Notifi_remove_member": "removed you in the team",
     "notifi_leave": "has left the group",
     "notifi_new": "You have new notification",
     "notifi_detail": "Click to see details",
-=======
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
     "friendRequest": "Friend request",
     "error_api": "Requested Failure!!!",
     "attachLink": "Attach a link",

@@ -1,8 +1,5 @@
 import 'package:equatable/equatable.dart';
-<<<<<<< HEAD
 import 'package:taskflow/src/data/model/contact/contact_data.dart';
-=======
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
 
 class ContactEvent extends Equatable {
   @override
@@ -11,11 +8,7 @@ class ContactEvent extends Equatable {
 
 class FetchContactEvent extends ContactEvent {}
 
-<<<<<<< HEAD
 class ReloadContactEvent extends ContactEvent {}
-
-=======
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
 class SearchContactEvent extends ContactEvent {
   final String keySearch;
   SearchContactEvent(this.keySearch);
@@ -37,13 +30,8 @@ class SendRequestEvent extends ContactEvent {
 }
 
 class AcceptRequestEvent extends ContactEvent {
-<<<<<<< HEAD
   final ContactData contactData;
   AcceptRequestEvent(this.contactData);
-=======
-  final String id;
-  AcceptRequestEvent(this.id);
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
 }
 
 class DenyRequestEvent extends ContactEvent {

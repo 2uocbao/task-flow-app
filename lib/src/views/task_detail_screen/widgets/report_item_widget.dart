@@ -6,18 +6,9 @@ import 'package:taskflow/src/views/confirm_delete_dialog/model/custom_id.dart';
 import 'package:taskflow/src/views/task_detail_screen/bloc/task_detail_bloc.dart';
 import 'package:taskflow/src/views/task_detail_screen/bloc/task_detail_event.dart';
 
-<<<<<<< HEAD
 class ReportItemWidget extends StatelessWidget {
   final ReportData reportData;
   final TaskData taskData;
-=======
-// ignore: must_be_immutable
-class ReportItemWidget extends StatelessWidget {
-  ReportData reportData;
-  TaskData taskData;
-
-  // final Function(String fileName) requestFocus;
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
 
   ReportItemWidget(
     this.reportData,
@@ -34,13 +25,7 @@ class ReportItemWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-<<<<<<< HEAD
           SizedBox(width: 10.w),
-=======
-          SizedBox(
-            width: 10.w,
-          ),
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,16 +55,10 @@ class ReportItemWidget extends StatelessWidget {
                 SizedBox(
                   child: Text(
                     reportData.createdAt!,
-<<<<<<< HEAD
                     style: Theme.of(context)
                         .textTheme
                         .displaySmall!
                         .copyWith(fontSize: 10.sp),
-=======
-                    style: Theme.of(context).textTheme.displaySmall!.copyWith(
-                          fontSize: 10.sp,
-                        ),
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
                   ),
                 )
               ],
@@ -129,15 +108,8 @@ class ReportItemWidget extends StatelessWidget {
                       },
                     ),
                     PopupMenuItem(
-<<<<<<< HEAD
                       child: Text("bt_delete".tr(),
                           style: Theme.of(context).textTheme.bodySmall),
-=======
-                      child: Text(
-                        "bt_delete".tr(),
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
                       onTap: () {
                         showDialog(
                           context: context,
@@ -147,13 +119,9 @@ class ReportItemWidget extends StatelessWidget {
                               CustomId(
                                 reportId: reportData.id,
                                 taskId: taskData.id,
-<<<<<<< HEAD
                                 type: 'REPORT',
                                 title: 'lbl_title_delete_file'.tr(),
                                 subTitle: 'lbl_subtitle_delete_file'.tr(),
-=======
-                                type: 'Report',
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
                               ),
                             ),
                             backgroundColor: Colors.transparent,
@@ -166,14 +134,7 @@ class ReportItemWidget extends StatelessWidget {
                   ],
                 );
               },
-<<<<<<< HEAD
               child: Icon(Icons.keyboard_control_sharp, size: 25.sp),
-=======
-              child: Icon(
-                Icons.keyboard_control_sharp,
-                size: 25.sp,
-              ),
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
             ),
           ),
         ],

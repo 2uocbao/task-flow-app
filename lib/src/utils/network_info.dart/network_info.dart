@@ -2,11 +2,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:taskflow/main.dart';
 
-<<<<<<< HEAD
 abstract class NetWorkInfo {
-=======
-abstract class NetWorkInfoI {
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
   Future<bool> isConnected();
 
   Future<List<ConnectivityResult>> get connectivityResult;
@@ -14,11 +10,7 @@ abstract class NetWorkInfoI {
   Stream<List<ConnectivityResult>> get onConnectivityChanged;
 }
 
-<<<<<<< HEAD
 class NetworkInfo implements NetWorkInfo {
-=======
-class NetworkInfo implements NetWorkInfoI {
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
   Connectivity connectivity;
 
   static final NetworkInfo _networdInfo = NetworkInfo._internal(Connectivity());

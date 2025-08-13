@@ -22,19 +22,12 @@ class Api {
   Api._internal();
 
   // var url = "https://projectmanager-i5nz.onrender.com";
-<<<<<<< HEAD
+
   var url = "http://192.168.1.3:9091";
 
   static final Api _api = Api._internal();
 
   final _dio = Dio(BaseOptions(connectTimeout: const Duration(seconds: 5)))
-=======
-  var url = "http://192.168.116.94:9091";
-
-  static final Api _api = Api._internal();
-
-  final _dio = Dio(BaseOptions(connectTimeout: const Duration(seconds: 30)))
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
     ..interceptors.add(NetworkInterceptor());
 
   late String? token;
@@ -47,7 +40,7 @@ class Api {
 
   void clearTokenAndRefresh() async {}
 
-<<<<<<< HEAD
+
   Future<Response> getUserTest(String path,
       {Map<String, dynamic> queryParam = const {}}) async {
     ProgressDialogUtils.showProgressDialog();
@@ -67,8 +60,6 @@ class Api {
     }
   }
 
-=======
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
   Future<bool> requestStoragePermission() async {
     if (Platform.isAndroid) {
       if (await Permission.storage.request().isGranted) {
@@ -89,7 +80,7 @@ class Api {
 
   Future<void> refreshToken() async {
     ProgressDialogUtils.showProgressDialog();
-<<<<<<< HEAD
+
     try {
       await isNetWorkConnected();
       Response response;
@@ -115,28 +106,6 @@ class Api {
       ProgressDialogUtils.hideProgressDialog();
 
       rethrow;
-=======
-    await isNetWorkConnected();
-    Response response;
-    String? refresh;
-    await TokenStorage.getRefresh().then((value) {
-      refresh = value;
-    });
-    logger.i(refresh);
-    final requestData = RefreshToken(refresh: refresh);
-    response = await _dio.get(
-      '$url/users/refresh-token',
-      data: requestData.toJson(),
-    );
-    if (response.statusCode == 200) {
-      ResponseData<RefreshToken> responseData =
-          ResponseData.fromJson(response.data, RefreshToken.fromJson);
-      logger.i('Refresh Token Success ${responseData.data!.refresh!}');
-      await TokenStorage.saveToken(responseData.data!.refresh!);
-    } else {
-      PrefUtils().clearPreferentcesData();
-      NavigatorService.pushNamedAndRemoveUtil(AppRoutes.loginScreen);
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
     }
   }
 
@@ -144,7 +113,7 @@ class Api {
       {Map requestData = const {},
       Map<String, dynamic> queryParam = const {}}) async {
     ProgressDialogUtils.showProgressDialog();
-<<<<<<< HEAD
+
     try {
       await isNetWorkConnected();
       Response response;
@@ -160,19 +129,6 @@ class Api {
 
       rethrow;
     }
-=======
-    await isNetWorkConnected();
-    Response response;
-    response = await postApi(path, requestData: requestData);
-    if (response.statusCode == 401) {
-      await refreshToken();
-      response = await post(path, requestData: requestData);
-    } else if (response.statusCode! > 300) {
-      clearTokenAndRefresh();
-    }
-    ProgressDialogUtils.hideProgressDialog();
-    return response;
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
   }
 
   Future<Response> postApi(String path, {Map requestData = const {}}) async {
@@ -196,7 +152,7 @@ class Api {
   Future<Response> get(String path,
       {Map<String, dynamic> queryParam = const {}}) async {
     ProgressDialogUtils.showProgressDialog();
-<<<<<<< HEAD
+
     try {
       await isNetWorkConnected();
       Response response;
@@ -212,19 +168,6 @@ class Api {
 
       rethrow;
     }
-=======
-    await isNetWorkConnected();
-    Response response;
-    response = await getApi(path, queryParam: queryParam);
-    if (response.statusCode == 401) {
-      await refreshToken();
-      response = await getApi(path, queryParam: queryParam);
-    } else if (response.statusCode! > 300) {
-      clearTokenAndRefresh();
-    }
-    ProgressDialogUtils.hideProgressDialog();
-    return response;
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
   }
 
   Future<Response> getApi(String path,
@@ -248,7 +191,7 @@ class Api {
 
   Future<Response> put(String path, {Map requestData = const {}}) async {
     ProgressDialogUtils.showProgressDialog();
-<<<<<<< HEAD
+
     try {
       await isNetWorkConnected();
       Response response;
@@ -264,20 +207,6 @@ class Api {
 
       rethrow;
     }
-=======
-    await isNetWorkConnected();
-    Response response;
-    response = await putApi(path, requestData: requestData);
-
-    if (response.statusCode == 401) {
-      await refreshToken();
-      response = await putApi(path, requestData: requestData);
-    } else if (response.statusCode! > 300) {
-      clearTokenAndRefresh();
-    }
-    ProgressDialogUtils.hideProgressDialog();
-    return response;
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
   }
 
   Future<Response> putApi(String path, {Map requestData = const {}}) async {
@@ -300,7 +229,7 @@ class Api {
 
   Future<Response> delete(String path) async {
     ProgressDialogUtils.showProgressDialog();
-<<<<<<< HEAD
+
     try {
       await isNetWorkConnected();
       Response response;
@@ -316,19 +245,6 @@ class Api {
 
       rethrow;
     }
-=======
-    await isNetWorkConnected();
-    Response response;
-    response = await deleteApi(path);
-    if (response.statusCode == 401) {
-      await refreshToken();
-      response = await deleteApi(path);
-    } else if (response.statusCode! > 300) {
-      clearTokenAndRefresh();
-    }
-    ProgressDialogUtils.hideProgressDialog();
-    return response;
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
   }
 
   Future<Response> deleteApi(String path) async {
@@ -350,7 +266,7 @@ class Api {
 
   Future<Response> addFile(String path, FormData formData) async {
     ProgressDialogUtils.showProgressDialog();
-<<<<<<< HEAD
+
     try {
       await isNetWorkConnected();
       Response response;
@@ -366,19 +282,6 @@ class Api {
 
       rethrow;
     }
-=======
-    await isNetWorkConnected();
-    Response response;
-    response = await requestAddFile(path, formData);
-    if (response.statusCode == 401) {
-      await refreshToken();
-      response = await requestAddFile(path, formData);
-    } else if (response.statusCode! > 300) {
-      clearTokenAndRefresh();
-    }
-    ProgressDialogUtils.hideProgressDialog();
-    return response;
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
   }
 
   Future<Response> requestAddFile(String path, FormData formData) async {
@@ -402,7 +305,7 @@ class Api {
 
   Future<void> downloadFile(String path, String fileName,
       {Map<String, dynamic> queryParam = const {}}) async {
-<<<<<<< HEAD
+
     try {
       bool hasPermission = await requestStoragePermission();
       if (!hasPermission) return;
@@ -434,36 +337,6 @@ class Api {
 
       rethrow;
     }
-=======
-    bool hasPermission = await requestStoragePermission();
-    if (!hasPermission) return;
-    logger.i(hasPermission);
-
-    Directory? dcim = Directory('/storage/emulated/0/DCIM/MyFolder');
-    checkFileExists('$dcim/path').then((exists) {
-      if (exists) {
-        return;
-      }
-    });
-    if (!await dcim.exists()) {
-      await dcim.create(recursive: true);
-    }
-    ProgressDialogUtils.showProgressDialog();
-    String savePath = '${dcim.path}/$fileName';
-
-    Response response;
-    response =
-        await requestDownload(path, fileName, savePath, queryParam: queryParam);
-    if (response.statusCode == 401) {
-      await refreshToken();
-
-      response = await requestDownload(path, fileName, savePath,
-          queryParam: queryParam);
-    } else if (response.statusCode! > 300) {
-      clearTokenAndRefresh();
-    }
-    ProgressDialogUtils.hideProgressDialog();
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
   }
 
   Future<Response> requestDownload(
@@ -496,7 +369,7 @@ class Api {
 
   Future<Response> search(String path,
       {Map<String, dynamic> requestParam = const {}}) async {
-<<<<<<< HEAD
+
     try {
       await isNetWorkConnected();
       Response response;
@@ -510,18 +383,6 @@ class Api {
       ProgressDialogUtils.hideProgressDialog();
       rethrow;
     }
-=======
-    await isNetWorkConnected();
-    Response response;
-    response = await searchRequest(path, requestParam: requestParam);
-    if (response.statusCode == 401) {
-      await refreshToken();
-      response = await searchRequest(path, requestParam: requestParam);
-    } else if (response.statusCode! > 300) {
-      clearTokenAndRefresh();
-    }
-    return response;
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
   }
 
   Future<Response> searchRequest(String path,

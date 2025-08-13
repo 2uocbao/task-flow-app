@@ -63,17 +63,10 @@ String time(String date) {
     if (dateTime.month == now.month) {
       if (dateTime.day == now.day) {
         return "TODAY".tr();
-<<<<<<< HEAD
       } else if ((dateTime.day - now.day) == 1) {
         return "lbl_tomorrow".tr();
       } else {
         return "${dateTime.day}-${dateTime.month}";
-=======
-      } else if ((now.day - dateTime.day) == 1) {
-        return "lbl_tomorrow".tr();
-      } else {
-        return "${dateTime.day}/${dateTime.month}";
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
       }
     } else {
       return "${'lbl_month'.tr()} ${dateTime.month}";

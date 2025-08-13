@@ -16,8 +16,5 @@ export 'package:taskflow/src/widgets/custom_text_form_field.dart';
 export 'package:taskflow/src/utils/pref_utils.dart';
 export 'package:taskflow/src/utils/utils.dart';
 export 'package:logger/logger.dart';
-<<<<<<< HEAD
 export 'package:taskflow/src/widgets/custom_circle_avatar.dart';
 export 'package:taskflow/src/widgets/custom_text_button.dart';
-=======
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7

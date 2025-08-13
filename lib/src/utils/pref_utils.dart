@@ -41,8 +41,6 @@ class PrefUtils {
       return null;
     }
   }
-
-<<<<<<< HEAD
   Future<void> setTeamId(String teamId) async {
     _sharedPreferences?.setString('teamId', teamId);
   }
@@ -53,18 +51,6 @@ class PrefUtils {
       return '';
     }
     return teamId;
-=======
-  Future<void> setTypeTask(String type) async {
-    _sharedPreferences?.setString('taskType', type);
-  }
-
-  String getTypeTask() {
-    String? typeTask = _sharedPreferences?.getString('taskType');
-    if (typeTask == null) {
-      return 'MYTASK';
-    }
-    return typeTask;
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
   }
 
   Future<void> setTimeFilterTask(String type) async {

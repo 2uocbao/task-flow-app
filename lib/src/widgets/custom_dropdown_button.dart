@@ -26,23 +26,14 @@ class CustomDropdownButton<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: width ?? 110.w,
-<<<<<<< HEAD
       padding: EdgeInsets.symmetric(
         horizontal: 5.h,
-=======
-      padding: const EdgeInsets.symmetric(
-        horizontal: 5.0,
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
       ),
       decoration: BoxDecoration(
         border: Border.all(
           color: Theme.of(context).colorScheme.onSurface,
         ),
-<<<<<<< HEAD
         borderRadius: BorderRadiusStyle.circleBorder10,
-=======
-        borderRadius: BorderRadius.circular(12),
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
       ),
       child: DropdownButton<T>(
         isExpanded: true,

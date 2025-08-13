@@ -15,13 +15,8 @@ class ResponseData<T> {
   }
 
   ResponseData.fromJsonToken(Map<String, dynamic> json) {
-<<<<<<< HEAD
     if (json['data'] != null) {
       data = json['data'];
-=======
-    if (json['token'] != null) {
-      data = json['token'];
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
     }
   }
 

@@ -12,15 +12,10 @@ class NavigatorService {
         ?.pushNamed(routeName, arguments: arguments);
   }
 
-<<<<<<< HEAD
   static void goBack({
     bool signals = false,
   }) {
     return navigatorKey.currentState?.pop(signals);
-=======
-  static void goBack() {
-    return navigatorKey.currentState?.pop();
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
   }
 
   static Future<dynamic> pushNamedAndRemoveUtil(
@@ -41,7 +36,6 @@ class NavigatorService {
         ?.popAndPushNamed(routeName, arguments: arguments);
   }
 
-<<<<<<< HEAD
   static void showSnackBarAndGoBack(String message) {
     final context = navigatorKey.currentContext;
     if (context != null) {
@@ -67,9 +61,6 @@ class NavigatorService {
   }
 
   static void showSnackBar(String message) {
-=======
-  static void showErrorAndGoBack(String message) {
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
     final context = navigatorKey.currentContext;
     if (context != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -79,32 +70,6 @@ class NavigatorService {
               message,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
-<<<<<<< HEAD
-=======
-            duration: const Duration(milliseconds: 1500),
-            behavior: SnackBarBehavior.floating,
-            backgroundColor: Theme.of(context).colorScheme.surface,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
-          ),
-        );
-        navigatorKey.currentState?.pop();
-      });
-    }
-  }
-
-  static void showError(String message) {
-    final context = navigatorKey.currentContext;
-    if (context != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              message,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            duration: const Duration(milliseconds: 1500),
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
             behavior: SnackBarBehavior.floating,
             backgroundColor: Theme.of(context).colorScheme.surface,
             shape: RoundedRectangleBorder(

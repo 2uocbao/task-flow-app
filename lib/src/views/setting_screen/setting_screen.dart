@@ -4,10 +4,6 @@ import 'package:app_settings/app_settings.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
 import 'package:taskflow/src/utils/app_export.dart';
-<<<<<<< HEAD
-=======
-import 'package:taskflow/src/widgets/custom_text_button.dart';
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({super.key});
@@ -37,14 +33,7 @@ class _SettingScreenState extends State<SettingScreen> {
     return CustomAppBar(
       leading: CustomIconButton(
         height: 30.h,
-<<<<<<< HEAD
         child: Icon(Icons.arrow_back_outlined, size: 25.sp),
-=======
-        child: Icon(
-          Icons.arrow_back_outlined,
-          size: 25.sp,
-        ),
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
         onTap: () {
           NavigatorService.pushNamedAndRemoveUtil(AppRoutes.homeScreen);
         },
@@ -287,13 +276,7 @@ class SelectLangueDialog extends StatelessWidget {
                   )
                 ],
               ),
-<<<<<<< HEAD
               SizedBox(height: 10.h)
-=======
-              SizedBox(
-                height: 10.h,
-              )
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
             ],
           ),
         ),

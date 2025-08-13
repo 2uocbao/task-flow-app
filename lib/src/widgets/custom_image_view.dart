@@ -1,11 +1,7 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
-<<<<<<< HEAD
 import 'package:taskflow/src/utils/app_export.dart';
-=======
-import 'package:flutter/material.dart';
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
 
 extension ImageTypeExtension on String {
   ImageType get imageType {
@@ -36,12 +32,8 @@ class CustomImageView extends StatelessWidget {
       this.radius,
       this.margin,
       this.border,
-<<<<<<< HEAD
       this.httpHeaders = const {},
       this.placeHolder = 'assets/images/account.png'});
-=======
-      this.placeHolder = 'assets/images/image_not_found.png'});
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
 
   final String? imagePath;
 
@@ -65,11 +57,8 @@ class CustomImageView extends StatelessWidget {
 
   final BoxBorder? border;
 
-<<<<<<< HEAD
   final Map<String, String> httpHeaders;
 
-=======
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
   @override
   Widget build(BuildContext context) {
     return alignment != null
@@ -87,11 +76,7 @@ class CustomImageView extends StatelessWidget {
     );
   }
 
-<<<<<<< HEAD
   dynamic _buildCircleImage() {
-=======
-  _buildCircleImage() {
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
     if (radius != null) {
       return ClipRRect(
         borderRadius: radius ?? BorderRadius.zero,
@@ -102,11 +87,7 @@ class CustomImageView extends StatelessWidget {
     }
   }
 
-<<<<<<< HEAD
   Widget _buildImageWithBorder() {
-=======
-  _buildImageWithBorder() {
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
     if (border != null) {
       return Container(
         decoration: BoxDecoration(
@@ -137,18 +118,11 @@ class CustomImageView extends StatelessWidget {
             width: width,
             fit: fit,
             imageUrl: imagePath!,
-<<<<<<< HEAD
             httpHeaders: httpHeaders,
             color: color,
             placeholder: (context, url) => SizedBox(
               height: 30.h,
               width: 30.w,
-=======
-            color: color,
-            placeholder: (context, url) => SizedBox(
-              height: 30,
-              width: 30,
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
               child: LinearProgressIndicator(
                 color: Colors.grey.shade200,
                 backgroundColor: Colors.grey.shade100,

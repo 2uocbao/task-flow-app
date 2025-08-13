@@ -9,11 +9,8 @@ import 'package:taskflow/src/utils/token_storage.dart';
 
 var globaleMessagerKey = GlobalKey<ScaffoldMessengerState>();
 
-<<<<<<< HEAD
-=======
 final logger = Logger();
 
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
 Future<void> requestNotificationPermission() async {
   final FlutterLocalNotificationsPlugin plugin =
       FlutterLocalNotificationsPlugin();
@@ -87,16 +84,10 @@ class _TaskManagementSystemState extends State<TaskManagementSystem> {
               locale: context.locale,
               supportedLocales: context.supportedLocales,
               localizationsDelegates: context.localizationDelegates,
-<<<<<<< HEAD
               // initialRoute: widget.hasToken
               //     ? AppRoutes.homeScreen
               //     : AppRoutes.loginScreen,
               initialRoute: AppRoutes.loginScreen,
-=======
-              initialRoute: widget.hasToken
-                  ? AppRoutes.homeScreen
-                  : AppRoutes.loginScreen,
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
               routes: AppRoutes.routes,
             );
           },

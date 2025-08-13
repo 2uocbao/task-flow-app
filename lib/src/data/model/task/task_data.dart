@@ -1,12 +1,6 @@
 class TaskData {
   String? id;
   String? creatorId;
-<<<<<<< HEAD
-=======
-  String? assignTo;
-  String? imageAssigner;
-  String? usernameAssigner;
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
   String? title;
   String? description;
   String? status;
@@ -20,12 +14,6 @@ class TaskData {
   TaskData({
     this.id,
     this.creatorId,
-<<<<<<< HEAD
-=======
-    this.assignTo,
-    this.imageAssigner,
-    this.usernameAssigner,
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
     this.title,
     this.description,
     this.status,
@@ -38,12 +26,6 @@ class TaskData {
   TaskData copyWith({
     String? id,
     String? creatorId,
-<<<<<<< HEAD
-=======
-    String? assignTo,
-    String? imageAssigner,
-    String? usernameAssigner,
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
     String? title,
     String? description,
     String? status,
@@ -57,12 +39,6 @@ class TaskData {
     return TaskData(
       id: id ?? this.id,
       creatorId: creatorId ?? this.creatorId,
-<<<<<<< HEAD
-=======
-      assignTo: assignTo ?? this.assignTo,
-      imageAssigner: imageAssigner ?? this.imageAssigner,
-      usernameAssigner: usernameAssigner ?? this.usernameAssigner,
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
       title: title ?? this.title,
       description: description ?? this.description,
       status: status ?? this.status,
@@ -76,12 +52,6 @@ class TaskData {
   TaskData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     creatorId = json['user_id'];
-<<<<<<< HEAD
-=======
-    assignTo = json['assign_to'];
-    imageAssigner = json['imageAssigner'];
-    usernameAssigner = json['usernameAssigner'];
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
     title = json['title'];
     description = json['description'];
     status = json['status'];

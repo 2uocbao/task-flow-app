@@ -3,11 +3,6 @@ import 'package:taskflow/src/theme/custom_button_style.dart';
 import 'package:taskflow/src/views/filter_task_dialog/bloc/filter_task_bloc.dart';
 import 'package:taskflow/src/views/filter_task_dialog/bloc/filter_task_event.dart';
 import 'package:taskflow/src/views/filter_task_dialog/bloc/filter_task_state.dart';
-<<<<<<< HEAD
-=======
-import 'package:taskflow/src/views/filter_task_dialog/models/filter_task_model.dart';
-import 'package:taskflow/src/widgets/custom_text_button.dart';
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
 import 'package:taskflow/src/utils/app_export.dart';
 
 // ignore: must_be_immutable
@@ -17,18 +12,12 @@ class FilterTaskDialog extends StatelessWidget {
   static Widget builder(BuildContext context) {
     return BlocProvider(
       create: (context) => FilterTaskBloc(
-<<<<<<< HEAD
         const FilterTaskState(),
       ),
-=======
-        FilterTaskState(filterTaskModel: FilterTaskModel()),
-      )..add(FilterTaskInitialEvent()),
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
       child: FilterTaskDialog(),
     );
   }
 
-<<<<<<< HEAD
   String byTime = PrefUtils().getTimeFilterTask();
 
   String byPriority = PrefUtils().getPriorityFilterTask();
@@ -36,19 +25,6 @@ class FilterTaskDialog extends StatelessWidget {
   String dateStart = PrefUtils().getStartDateCustom();
 
   String dateEnd = PrefUtils().getEndDateCustom();
-=======
-  late String byTime = PrefUtils().getTimeFilterTask();
-
-  late String byStatus = PrefUtils().getStatusFilterTask();
-
-  late String byPriority = PrefUtils().getPriorityFilterTask();
-
-  late String dateStart = PrefUtils().getStartDateCustom();
-
-  late String dateEnd = PrefUtils().getEndDateCustom();
-
-  late Logger logger = Logger();
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
 
   @override
   Widget build(BuildContext context) {
@@ -82,15 +58,6 @@ class FilterTaskDialog extends StatelessWidget {
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ),
-<<<<<<< HEAD
-=======
-                      SizedBox(
-                        child: Text(
-                          "lbl_by_status".tr(),
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                      )
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
                     ],
                   ),
                   SizedBox(
@@ -100,10 +67,6 @@ class FilterTaskDialog extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       _buildFilterByTime(context, state),
-<<<<<<< HEAD
-=======
-                      _buildFilterByStatus(context, state),
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
                     ],
                   ),
                   if (byTime == 'CUSTOM') ...{
@@ -113,26 +76,14 @@ class FilterTaskDialog extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-<<<<<<< HEAD
                         Text("lbl_startDate".tr(),
                             style: Theme.of(context).textTheme.bodySmall),
                         Text("lbl_endDate".tr(),
                             style: Theme.of(context).textTheme.bodySmall),
-=======
-                        Text(
-                          "lbl_startDate".tr(),
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                        Text(
-                          "lbl_endDate".tr(),
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
                       ],
                     ),
                     _buildCustomDate(context),
                   },
-<<<<<<< HEAD
                   SizedBox(height: 5.h),
                   Align(
                     alignment: Alignment.center,
@@ -144,29 +95,6 @@ class FilterTaskDialog extends StatelessWidget {
                   SizedBox(height: 10.h),
                   _buildApplyButton(context),
                   SizedBox(height: 10.h),
-=======
-                  SizedBox(
-                    height: 5.h,
-                  ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      "lbl_by_priority".tr(),
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 5.h,
-                  ),
-                  _buildPriorityRow(context),
-                  SizedBox(
-                    height: 10.h,
-                  ),
-                  _buildApplyButton(context),
-                  SizedBox(
-                    height: 10.h,
-                  ),
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
                 ],
               ),
             )
@@ -178,7 +106,6 @@ class FilterTaskDialog extends StatelessWidget {
 
   Widget _buildAppBar(BuildContext context) {
     return CustomAppBar(
-<<<<<<< HEAD
       leading: CustomIconButton(
         height: 30.h,
         width: 35.w,
@@ -190,20 +117,6 @@ class FilterTaskDialog extends StatelessWidget {
         onTap: () {
           NavigatorService.goBack();
         },
-=======
-      leading: Transform.rotate(
-        angle: 50 * 3.1415926535 / 70,
-        child: CustomIconButton(
-          onTap: () {
-            NavigatorService.goBack();
-          },
-          child: Icon(
-            Icons.add,
-            color: Colors.red,
-            size: 30.sp,
-          ),
-        ),
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
       ),
       centerTitle: true,
       title: Text(
@@ -260,19 +173,6 @@ class FilterTaskDialog extends StatelessWidget {
           dateStart = dateTime.format(pattern: D_M_Y);
           // ignore: use_build_context_synchronously
           context
-              .read<FilterTaskBloc>()
-              .add(ChangeDateStartEvent(dateStart: dateTime));
-        }
-      },
-    );
-  }
-
-  Widget _buildSelectedDateEnd(BuildContext context) {
-    return CustomTextFormField(
-      autofocus: true,
-      readOnly: true,
-      width: 100.w,
-      controller: TextEditingController(text: dateEnd),
       alignment: Alignment.centerLeft,
       contentPadding: EdgeInsets.fromLTRB(5.w, 5.h, 5.w, 5.h),
       onTap: () async {
@@ -285,7 +185,6 @@ class FilterTaskDialog extends StatelessWidget {
         if (dateTime != null) {
           dateEnd = dateTime.format(pattern: D_M_Y);
           // ignore: use_build_context_synchronously
-          context
               .read<FilterTaskBloc>()
               .add(ChangeDateEndEvent(dateEnd: dateTime));
         }
@@ -293,26 +192,6 @@ class FilterTaskDialog extends StatelessWidget {
     );
   }
 
-<<<<<<< HEAD
-=======
-  Widget _buildFilterByStatus(BuildContext context, FilterTaskState state) {
-    List<String> trans =
-        Utils().statusItems.map((status) => status.tr()).toList();
-    int indexValue;
-    return CustomDropdownButton(
-      textStyle: Theme.of(context).textTheme.bodyMedium,
-      width: 120.w,
-      items: trans,
-      value: byStatus.tr(),
-      onChanged: (value) => {
-        indexValue = trans.indexOf(value!),
-        byStatus = Utils().statusItems[indexValue],
-        context.read<FilterTaskBloc>().add(ChangeStatusEvent(status: value)),
-      },
-    );
-  }
-
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
   Widget _buildPriorityRow(BuildContext context) {
     return SizedBox(
       child: Row(
@@ -361,10 +240,6 @@ class FilterTaskDialog extends StatelessWidget {
         PrefUtils().setTimeFilterTask(byTime);
         PrefUtils().setStartDateCustom(dateStart);
         PrefUtils().setEndDateCustom(dateEnd);
-<<<<<<< HEAD
-=======
-        PrefUtils().setStatusFilterTask(byStatus);
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
         PrefUtils().setPriorityFilterTask(byPriority);
         setTime(byTime);
         NavigatorService.pushNamedAndRemoveUtil(AppRoutes.homeScreen);

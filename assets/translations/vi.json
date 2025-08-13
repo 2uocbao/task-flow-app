@@ -5,11 +5,8 @@
     "description1": "Đăng nhập để bắt đầu.",
     "MYTASK": "Nhiệm vụ của tôi",
     "ASSIGNED": "Đã giao",
-<<<<<<< HEAD
     "team_not_found": "Không tìm thấy nhóm nào. Hãy tạo nhóm để thêm nhiệm vụ.",
     "no_data_available": "Không có dữ liệu.",
-=======
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
     "lbl_create_new_task": "Tạo nhiệm vụ mới",
     "lbl_name_task": "Tiêu đề nhiệm vụ",
     "lbl_due_at": "Đến hạn tại",
@@ -30,7 +27,6 @@
     "lbl_comments": "Nhận xét",
     "lbl_add_comment": "Thêm nhận xét",
     "lbl_notification": "Thông báo",
-<<<<<<< HEAD
     "lbl_title_delete_file": "Xóa tập tin?",
     "lbl_subtitle_delete_file": "Tập tin sẽ bị xóa vĩnh viễn khỏi máy chủ.",
     "lbl_title_delete_member": "Xóa thành viên?",
@@ -41,10 +37,6 @@
     "lbl_subtitle_delete_comment": "Nhận xét này sẽ bị xóa vĩnh viễn.",
     "lbl_title_delete_team": "Xóa nhóm?",
     "lbl_subtitle_delete_team": "Nhóm này và tất cả dữ liệu liên quan sẽ bị xóa. Bạn có muốn tiếp tục không?",
-=======
-    "lbl_title": "Bạn muốn xóa ",
-    "lbl_subtitle": " sẽ bị xóa vĩnh viễn",
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
     "lbl_card_members": "Liên hệ",
     "lbl_setting": "Cài đặt",
     "lbl_theme": "Chủ đề",
@@ -57,18 +49,14 @@
     "lbl_at": " lúc ",
     "lbl_month": "Tháng",
     "lbl_year": "Năm",
-<<<<<<< HEAD
     "lbl_teams": "Nhóm",
     "lbl_leader": "Trưởng nhóm",
     "lbl_joinAt": "Tham gia lúc",
     "lbl_createdAt": "Tạo lúc",
-=======
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
     "lbl_member": "Thành viên",
     "lbl_startDate": "Ngày bắt đầu",
     "lbl_endDate": "Ngày kết thúc",
     "lbl_error": "Có gì đó không ổn!!!, vui lòng thử lại sau",
-<<<<<<< HEAD
     "lbl_create_new_team": "Tạo nhóm mới",
     "lbl_team_name": "Tên nhóm",
     "lbl_team_members": "Thành viên nhóm",
@@ -80,12 +68,6 @@
     "RECEIVED": "Yêu cầu đã nhận",
     "bt_create_team": "Tạo nhóm",
     "bt_create_task": "Tạo nhiệm vụ",
-=======
-    "ACCEPTED": "Bạn bè",
-    "REQUESTED": "Đã yêu cầu",
-    "RECEIVED": "Yêu cầu đã nhận",
-    "bt_create": "Tạo",
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
     "bt_apply": "Áp dụng",
     "bt_high": "Cao",
     "bt_medium": "Trung bình",
@@ -99,7 +81,6 @@
     "bt_download": "Tải xuống",
     "bt_accept": "Chấp nhận",
     "bt_deny": "Từ chối",
-<<<<<<< HEAD
     "bt_add_member": "Thêm thành viên",
     "bt_done": "Hoàn thành",
     "bt_reload": "Tải lại",
@@ -120,12 +101,6 @@
     "in": "trong ",
     "PENDING": "Chờ xử lý",
     "IN_PROGRESS": "Đang thực hiện",
-=======
-    "err_please_enter_valid_text": "Vui lòng nhập văn bản hợp lệ!!!",
-    "err_please_enter_valid_url": "Vui lòng nhập liên kết hợp lệ!!!",
-    "PENDING": "Chờ xử lý",
-    "INPROGRESS": "Đang thực hiện",
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
     "COMPLETED": "Hoàn thành",
     "CANCELLED": "Đã hủy",
     "TODAY": "Hôm nay",
@@ -137,11 +112,7 @@
     "HIGH": "Cao",
     "ALL": "Tất cả",
     "TASK": "Nhiệm vụ",
-<<<<<<< HEAD
     "COMMENT": "Nhận xét",
-=======
-    "SYSTEM": "Hệ thống",
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
     "CONTACT": "Liên hệ",
     "en": "English",
     "vi": "Tiếng Việt",
@@ -152,14 +123,11 @@
     "NotifiAccepted": "đã chấp nhận lời mời kết bạn của bạn",
     "NotifiComment": "đã nhắc đến bạn trong nhiệm vụ",
     "NotifiDueAt": "sắp đến hạn",
-<<<<<<< HEAD
     "Notifi_Add_Member": "đã thêm bạn vào nhóm",
     "Notifi_remove_member": "đã xóa bạn khỏi nhóm",
     "notifi_leave": "đã rời khỏi nhóm",
     "notifi_new": "Bạn có thông báo mới",
     "notifi_detail": "Nhấn để xem chi tiết",
-=======
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
     "friendRequest": "Lời mời kết bạn",
     "error_api": "Yêu cầu không thành công!!!",
     "attachLink": "Đính kèm liên kết",

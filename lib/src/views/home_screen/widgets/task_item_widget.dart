@@ -18,19 +18,10 @@ class TaskItemWidget extends StatelessWidget {
       },
       child: Container(
         margin: EdgeInsets.only(left: 10.h, bottom: 5.h, right: 10.h),
-<<<<<<< HEAD
         padding: EdgeInsets.only(left: 5.w, right: 5.w),
         decoration: BoxDecoration(
           border: Border.all(
             width: 1.w,
-=======
-        padding: EdgeInsets.symmetric(
-          horizontal: 5.w,
-        ),
-        decoration: BoxDecoration(
-          border: Border.all(
-            width: 1,
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
             color: Theme.of(context).colorScheme.onSurface,
           ),
           borderRadius: BorderRadiusStyle.circleBorder10,
@@ -40,24 +31,12 @@ class TaskItemWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-<<<<<<< HEAD
             SizedBox(
               child: Text(
                 _taskData.title!,
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.bodyLarge,
                 maxLines: 1,
-=======
-            Padding(
-              padding: EdgeInsets.only(right: 20.w, left: 5.w),
-              child: SizedBox(
-                child: Text(
-                  _taskData.title!,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                  maxLines: 1,
-                ),
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
               ),
             ),
             SizedBox(
@@ -65,11 +44,7 @@ class TaskItemWidget extends StatelessWidget {
             ),
             SizedBox(
               child: Text(
-<<<<<<< HEAD
                 _taskData.priority!.tr(),
-=======
-                _taskData.status!.tr(),
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
             ),

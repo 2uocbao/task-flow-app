@@ -136,11 +136,7 @@ class ThemeProvider with ChangeNotifier {
           surface: Colors.white,
           onSurface: Colors.black,
         ),
-<<<<<<< HEAD
         dialogTheme: const DialogThemeData(
-=======
-        dialogTheme: const DialogTheme(
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
           backgroundColor: Colors.white,
           titleTextStyle: TextStyle(color: Colors.black, fontSize: 18),
           contentTextStyle: TextStyle(color: Colors.black87, fontSize: 14),
@@ -158,11 +154,7 @@ class ThemeProvider with ChangeNotifier {
           surface: Colors.grey[900]!,
           onSurface: Colors.white,
         ),
-<<<<<<< HEAD
         dialogTheme: DialogThemeData(
-=======
-        dialogTheme: DialogTheme(
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
           backgroundColor: Colors.grey[900],
           titleTextStyle: const TextStyle(color: Colors.white, fontSize: 18),
           contentTextStyle:

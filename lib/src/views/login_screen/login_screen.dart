@@ -4,10 +4,6 @@ import 'package:taskflow/src/utils/token_storage.dart';
 import 'package:taskflow/src/views/login_screen/bloc/login_screen_bloc.dart';
 import 'package:taskflow/src/views/login_screen/bloc/login_screen_event.dart';
 import 'package:taskflow/src/views/login_screen/bloc/login_screen_state.dart';
-<<<<<<< HEAD
-=======
-import 'package:taskflow/src/widgets/custom_text_button.dart';
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
 import 'package:taskflow/src/utils/app_export.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -26,33 +22,22 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   late AppLinks _appLinks;
-<<<<<<< HEAD
 
   final TextEditingController _usernameController = TextEditingController();
-=======
-  final logger = Logger();
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
 
   @override
   void initState() {
     super.initState();
-<<<<<<< HEAD
-=======
-
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
     _appLinks = AppLinks();
     startListening();
   }
 
-<<<<<<< HEAD
   @override
   void dispose() {
     _usernameController.dispose();
     super.dispose();
   }
 
-=======
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
   void startListening() async {
     _appLinks.uriLinkStream.listen((Uri? uri) {
       handleLink(uri!);
@@ -75,7 +60,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-<<<<<<< HEAD
     return BlocBuilder<LoginScreenBloc, LoginScreenState>(
       builder: (context, state) {
         if (state is SignInFailure) {
@@ -168,54 +152,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   username: _usernameController.text));
             },
           )
-=======
-    return Container(
-      width: double.maxFinite,
-      height: screenHeight,
-      color: Theme.of(context).colorScheme.surface,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Image.asset(
-            'assets/images/login_image.png',
-            height: screenHeight * (1 / 2),
-            width: double.maxFinite,
-            fit: BoxFit.contain,
-          ),
-          SizedBox(
-            child: Text(
-              'title_welcome'.tr(),
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-          ),
-          SizedBox(
-            height: 5.h,
-          ),
-          SizedBox(
-            child: Text(
-              textAlign: TextAlign.center,
-              'description'.tr(),
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-          ),
-          SizedBox(
-            child: Text(
-              textAlign: TextAlign.center,
-              'description1'.tr(),
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-          ),
-          SizedBox(
-            height: 100.h,
-          ),
-          CustomTextButton(
-            text: 'lbl_sign_in_by_google'.tr(),
-            onPressed: () {
-              context.read<LoginScreenBloc>().add(SignInWithGoogle());
-              // context.read<LoginScreenBloc>().add(FetchUserDetailEvent());
-            },
-          ),
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
         ],
       ),
     );

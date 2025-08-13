@@ -1,38 +1,21 @@
 import 'package:easy_localization/easy_localization.dart';
-<<<<<<< HEAD
 import 'package:taskflow/src/data/model/task/status_summary.dart';
 import 'package:taskflow/src/data/model/task/task_data.dart';
 import 'package:taskflow/src/data/model/team/team_data.dart';
 import 'package:taskflow/src/data/model/user/user_data.dart';
 import 'package:taskflow/src/utils/progress_dialog_utils.dart';
-=======
-import 'package:taskflow/src/data/model/task/task_data.dart';
-import 'package:taskflow/src/data/model/user/user_data.dart';
-import 'package:taskflow/src/utils/token_storage.dart';
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
 import 'package:taskflow/src/views/create_new_task_dialog/create_new_task_dialog.dart';
 import 'package:taskflow/src/views/filter_task_dialog/filter_task_dialog.dart';
 import 'package:taskflow/src/views/home_screen/bloc/home_bloc.dart';
 import 'package:taskflow/src/views/home_screen/bloc/home_event.dart';
 import 'package:taskflow/src/views/home_screen/bloc/home_state.dart';
-<<<<<<< HEAD
-=======
-import 'package:taskflow/src/views/home_screen/models/home_initial_model.dart';
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
 import 'package:taskflow/src/views/home_screen/widgets/custom_search_appbar.dart';
 import 'package:taskflow/src/views/home_screen/widgets/task_item_widget.dart';
 import 'package:taskflow/src/views/notification_screen/bloc/notification_bloc.dart';
 import 'package:taskflow/src/views/notification_screen/bloc/notification_event.dart';
 import 'package:taskflow/src/views/notification_screen/bloc/notification_state.dart';
-<<<<<<< HEAD
 import 'package:taskflow/src/views/task_detail_screen/models/task_detail_arguments.dart';
 import 'package:taskflow/src/utils/app_export.dart';
-=======
-import 'package:taskflow/src/views/notification_screen/model/notification_model.dart';
-import 'package:taskflow/src/views/task_detail_screen/models/task_detail_arguments.dart';
-import 'package:taskflow/src/utils/app_export.dart';
-import 'package:taskflow/src/widgets/custom_circle_avatar.dart';
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -44,24 +27,12 @@ class HomeScreen extends StatefulWidget {
       providers: [
         BlocProvider(
           create: (context) => HomeBloc(
-<<<<<<< HEAD
             HomeState(),
           )..add(FetchDataEvent()),
         ),
         BlocProvider(
           create: (context) => NotificationBloc(const NotificationState())
             ..add(HaveNotifiUnReadEvent()),
-=======
-            HomeState(homeInitialModel: HomeInitialModel()),
-          )..add(FetchDataEvent()),
-        ),
-        BlocProvider(
-          create: (context) => NotificationBloc(
-            NotificationState(
-              notificationModel: NotificationModel(),
-            ),
-          )..add(HaveNotifiUnReadEvent()),
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
         )
       ],
       child: const HomeScreen(),
@@ -71,7 +42,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _scrollController = ScrollController();
-<<<<<<< HEAD
   final TextEditingController _textController = TextEditingController();
   final logger = Logger();
 
@@ -83,28 +53,6 @@ class _HomeScreenState extends State<HomeScreen> {
     final successState =
         context.read<HomeBloc>().state as HomeFetchSuccessState;
     if (successState.hasMore) {
-=======
-
-  bool _showSearch = false;
-  final TextEditingController _textController = TextEditingController();
-
-  bool _isFetching = false;
-  final logger = Logger();
-
-  void _onScroll() {
-    if (_isBottom && !_isFetching) {
-      _isFetching = true;
-      context.read<HomeBloc>().add(FetchDataEvent());
-      Future.delayed(const Duration(seconds: 1), () => _isFetching = false);
-    }
-    if (_isBottom) {
-      context.read<HomeBloc>().add(FetchDataEvent());
-    }
-  }
-
-  bool get _isBottom {
-    if (context.read<HomeBloc>().state.hasMore) {
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
       return false;
     }
     if (!_scrollController.hasClients) return false;
@@ -113,7 +61,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return currentScroll >= (maxScroll);
   }
 
-<<<<<<< HEAD
   void _onScroll() {
     if (_isBottom && !_isFetching) {
       _isFetching = true;
@@ -138,8 +85,6 @@ class _HomeScreenState extends State<HomeScreen> {
     context.read<HomeBloc>().add(FetchDataEvent());
   }
 
-=======
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
   @override
   void initState() {
     super.initState();
@@ -151,8 +96,6 @@ class _HomeScreenState extends State<HomeScreen> {
     _scrollController.dispose();
     super.dispose();
   }
-
-<<<<<<< HEAD
   void _toggleFab() {
     setState(() {
       _isExpanded = !_isExpanded;
@@ -183,53 +126,10 @@ class _HomeScreenState extends State<HomeScreen> {
           drawer: _openDrawer(context),
           floatingActionButton: _customFloatingActionButton(context),
         ),
-=======
-  void _onSearchTask(String keySearch) async {
-    context.read<HomeBloc>().add(SearchTaskEvent(keySearch));
-    setState(() {
-      _textController.text = keySearch;
-    });
-  }
-
-  void _resetWhenSearchOf() async {
-    _textController.clear();
-    _showSearch = false;
-    context.read<HomeBloc>().add(FetchDataEvent());
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: CustomSearchAppbar(
-          showSearch: _showSearch,
-          onToggleSearch: (value) => setState(() {
-            _showSearch = value;
-            _resetWhenSearchOf();
-          }),
-          onSearch: _onSearchTask,
-          searchController: _textController,
-          appbar: _buildAppBar(context),
-        ),
-        drawer: _openDrawer(context),
-        body: Column(
-          children: [
-            _showSearch ? const SizedBox() : _buildTabView(context),
-            SizedBox(
-              height: 5.h,
-            ),
-            Expanded(
-              child: _buildTaskGrid(context),
-            ),
-          ],
-        ),
-        floatingActionButton: _floatingActionButton(context),
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
       ),
     );
   }
 
-<<<<<<< HEAD
   Widget _buildBody(BuildContext context) {
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
@@ -274,9 +174,6 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     );
   }
-
-=======
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return CustomAppBar(
       leading: Builder(
@@ -285,14 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               Scaffold.of(context).openDrawer();
             },
-<<<<<<< HEAD
             icon: Icon(Icons.menu, size: 30.sp),
-=======
-            icon: Icon(
-              Icons.menu,
-              size: 24.sp,
-            ),
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
           );
         },
       ),
@@ -303,7 +193,6 @@ class _HomeScreenState extends State<HomeScreen> {
               _showSearch = true;
             });
           },
-<<<<<<< HEAD
           icon: Icon(Icons.search, size: 25.sp),
         ),
         BlocBuilder<NotificationBloc, NotificationState>(
@@ -332,41 +221,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
               ],
-=======
-          icon: Icon(
-            Icons.search,
-            size: 25.sp,
-          ),
-        ),
-        IconButton(
-          onPressed: () {
-            NavigatorService.pushNamed(AppRoutes.contactScreen);
-          },
-          icon: Icon(
-            Icons.person_add_alt_1_outlined,
-            size: 25.sp,
-          ),
-        ),
-        BlocBuilder<NotificationBloc, NotificationState>(
-          builder: (context, state) {
-            return IconButton(
-              color: state.hasUnRead ? Colors.redAccent : null,
-              onPressed: () {
-                NavigatorService.pushNamed(AppRoutes.notificationScreen);
-              },
-              icon: Icon(
-                Icons.notifications_none,
-                size: 25.sp,
-              ),
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
             );
           },
         ),
       ],
     );
   }
-
-<<<<<<< HEAD
   Widget _showTaskList(BuildContext context, HomeFetchSuccessState state) {
     String timeNow = "TODAY".tr();
     bool has = false;
@@ -422,107 +282,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return ListView(
       controller: _scrollController,
       children: customDisplay,
-=======
-  Widget _buildTabView(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        _buildOptionTask(context),
-        CustomIconButton(
-          onTap: () {
-            onTapOpenFilterTask(context);
-          },
-          child: Icon(
-            Icons.filter_list_sharp,
-            size: 30.sp,
-          ),
-        )
-      ],
-    );
-  }
-
-  Widget _buildOptionTask(BuildContext context) {
-    List<String> trans = Utils().typeTasks.map((time) => time.tr()).toList();
-    int index;
-    return BlocSelector<HomeBloc, HomeState, HomeInitialModel?>(
-      selector: (state) => state.homeInitialModel,
-      builder: (context, state) {
-        return CustomDropdownButton(
-          width: 200.w,
-          textStyle: Theme.of(context).textTheme.bodyMedium,
-          items: trans,
-          value: PrefUtils().getTypeTask().tr(),
-          onChanged: (value) {
-            index = trans.indexOf(value!);
-            String? indexValue = Utils().typeTasks[index];
-            context.read<HomeBloc>().add(ChangeTypeEvent(type: indexValue));
-          },
-        );
-      },
-    );
-  }
-
-  Widget _buildTaskGrid(BuildContext context) {
-    return BlocSelector<HomeBloc, HomeState, HomeState>(
-      selector: (state) => state,
-      builder: (context, state) {
-        String timeNow = "TODAY".tr();
-        bool has = false;
-        List<Widget> customDisplay = [];
-        List<TaskData> listTaskData = [];
-        if (_showSearch) {
-          listTaskData = state.resultSearch;
-        } else {
-          listTaskData = state.homeInitialModel.listTasks;
-        }
-        for (var taskData in listTaskData) {
-          String stringTime = time(taskData.dueAt!);
-          if (stringTime == timeNow) {
-            if (!has) {
-              customDisplay.add(
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5.w),
-                  child: Text(
-                    timeNow,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                ),
-              );
-              has = true;
-            }
-          } else {
-            timeNow = stringTime;
-            customDisplay.add(
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5.w),
-                child: Text(
-                  timeNow,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-              ),
-            );
-            has = true;
-          }
-          customDisplay.add(
-            TaskItemWidget(
-              taskData,
-              onTapToTask: () {
-                NavigatorService.pushNamed(
-                  AppRoutes.taskDetailScreen,
-                  arguments: TaskDetailArguments(
-                    taskId: taskData.id,
-                  ),
-                );
-              },
-            ),
-          );
-        }
-        return ListView(
-          controller: _scrollController,
-          children: customDisplay,
-        );
-      },
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
     );
   }
 
@@ -538,11 +297,7 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomCircleAvatar(imagePath: userData!.imagePath!, size: 50),
-<<<<<<< HEAD
               Text('${userData.firstName!} ${userData.lastName}',
-=======
-              Text(userData.mention!,
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
                   style: Theme.of(context).textTheme.titleSmall),
               Text(userData.email!,
                   overflow: TextOverflow.ellipsis,
@@ -582,14 +337,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
             onTap: () async {
-<<<<<<< HEAD
               context.read<HomeBloc>().add(LogoutEvent());
-=======
-              PrefUtils().clearPreferentcesData();
-              await TokenStorage.deleteToken();
-              await TokenStorage.deleteRefresh();
-              NavigatorService.pushNamedAndRemoveUtil(AppRoutes.loginScreen);
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
             },
           ),
         ],
@@ -597,25 +345,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-<<<<<<< HEAD
   Future<void> onTapCreateNewTask(BuildContext context) async {
     final result = await showDialog<bool>(
-=======
-  Widget _floatingActionButton(BuildContext context) {
-    return FloatingActionButton(
-      onPressed: () {
-        onTapCreateNewTask(context);
-      },
-      child: Icon(
-        Icons.add,
-        size: 25.w,
-      ),
-    );
-  }
-
-  onTapCreateNewTask(BuildContext context) {
-    showDialog(
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
       context: context,
       builder: (context) => AlertDialog(
         content: CreateNewTaskDialog.builder(
@@ -626,7 +357,6 @@ class _HomeScreenState extends State<HomeScreen> {
         insetPadding: EdgeInsets.zero,
       ),
     );
-<<<<<<< HEAD
 
     if (result == true) {
       // ignore: use_build_context_synchronously
@@ -638,11 +368,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void onTapOpenFilterTask(BuildContext context) {
-=======
-  }
-
-  onTapOpenFilterTask(BuildContext context) {
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
     showModalBottomSheet(
       context: context,
       isDismissible: false,
@@ -659,8 +384,6 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     );
   }
-<<<<<<< HEAD
-
   Widget _showTeamsAndFilter(
       BuildContext context, HomeFetchSuccessState state) {
     return SizedBox(
@@ -902,6 +625,4 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-=======
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
 }

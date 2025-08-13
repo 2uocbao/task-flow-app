@@ -2,13 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:taskflow/src/data/api/api.dart';
 import 'package:taskflow/src/data/model/notification/notification_data.dart';
 import 'package:taskflow/src/data/model/response/response_list.dart';
-<<<<<<< HEAD
 import 'package:taskflow/src/data/model/user/user_data.dart';
 import 'package:taskflow/src/data/repository/repository.dart';
 import 'package:taskflow/src/utils/network_info.dart/network_info.dart';
-=======
-import 'package:taskflow/src/data/repository/repository.dart';
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
 import 'package:taskflow/src/views/notification_screen/bloc/notification_event.dart';
 import 'package:taskflow/src/views/notification_screen/bloc/notification_state.dart';
 
@@ -22,22 +18,15 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     on<UpdateStatusAllNotifi>(_onUpdateStatusAll);
     on<UpdateStatusNotifi>(_onUpdateStatus);
     on<HaveNotifiUnReadEvent>(_onExistUnReadNotifi);
-<<<<<<< HEAD
     on<NotificationCleared>(_onClearUnRead);
-=======
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
   }
 
   int currentPage = 0;
   final _repository = Repository();
 
-<<<<<<< HEAD
   bool _hasNew = false;
 
   Future<void> _onChangeType(
-=======
-  _onChangeType(
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
     ChangeTypeNotificationEvent event,
     Emitter<NotificationState> emit,
   ) async {
@@ -45,14 +34,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       currentPage = 0;
       emit(
         state.copyWith(
-<<<<<<< HEAD
           notificationData: [],
-=======
-          notificationModel: state.notificationModel.copyWith(
-            notificationData: [],
-            selectedType: event.notifiType,
-          ),
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
           hasMore: false,
         ),
       );
@@ -60,26 +42,14 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       add(FetchNotificationEvent());
     }
   }
-
-<<<<<<< HEAD
   Future<void> _onChangeStatus(
-=======
-  _onChangeStatus(
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
     ChangeStatusNotificationEvent event,
     Emitter<NotificationState> emit,
   ) async {
     currentPage = 0;
     emit(
       state.copyWith(
-<<<<<<< HEAD
         notificationData: [],
-=======
-        notificationModel: state.notificationModel.copyWith(
-          selectedStatus: event.notifiStatus,
-          notificationData: [],
-        ),
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
         hasMore: false,
       ),
     );
@@ -87,7 +57,6 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     add(FetchNotificationEvent());
   }
 
-<<<<<<< HEAD
   Future<void> _onFetchNotification(
     FetchNotificationEvent event,
     Emitter<NotificationState> emit,
@@ -247,174 +216,15 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
         emit(NotificationUpdated(_hasNew));
       } else {
         emit(NotificationUpdated(_hasNew));
-=======
-  _onFetchNotification(
-    FetchNotificationEvent event,
-    Emitter<NotificationState> emit,
-  ) async {
-    if (state.hasMore) {
-      return;
-    } else {
-      Map<String, dynamic> requestParam = <String, dynamic>{
-        'type': PrefUtils().getTypeNotifi(),
-        'status': PrefUtils().getReadNotifi(),
-        'size': 10,
-        'page': currentPage,
-      };
-      await _repository
-          .getNotification(PrefUtils().getUser()!.id!, queryParam: requestParam)
-          .then(
-        (value) async {
-          if (value.statusCode == 200) {
-            ResponseList<NotificationData> responseList =
-                ResponseList.fromJson(value.data, NotificationData.fromJson);
-            emit(
-              state.copyWith(
-                notificationModel: state.notificationModel.copyWith(
-                  notificationData: [
-                    ...state.notificationModel.notificationData,
-                    ...responseList.data!
-                  ],
-                ),
-                hasMore: responseList.pagination!.currentPage! ==
-                    responseList.pagination!.totalPages! - 1,
-              ),
-            );
-          }
-        },
-      );
-      currentPage++;
-    }
-  }
-
-  _onAcceptContact(
-    AcceptContactEvent event,
-    Emitter<NotificationState> emit,
-  ) async {
-    final requestData = <String, dynamic>{
-      'status': 'ACCEPTED',
-    };
-    await _repository
-        .updateContact(PrefUtils().getUser()!.id!, event.contactId,
-            requestData: requestData)
-        .then((onValue) async {
-      if (onValue.statusCode == 200) {
-        final updateNotifi =
-            state.notificationModel.notificationData.map((notifi) {
-          if (notifi.contentId == event.contactId) {
-            return notifi.copyWith(type: 'CONTACTACEPT', status: true);
-          }
-          return notifi;
-        }).toList();
-
-        emit(state.copyWith(
-            notificationModel: state.notificationModel.copyWith(
-          notificationData: updateNotifi,
-        )));
-      } else {
-        NavigatorService.showErrorAndGoBack("lbl_error".tr());
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
       }
     });
   }
 
-<<<<<<< HEAD
   Future<void> _onClearUnRead(
     NotificationCleared event,
     Emitter<NotificationState> emit,
   ) async {
     _hasNew = false;
     emit(NotificationUpdated(_hasNew));
-=======
-  _onDenyContact(
-    DenyContactEvent event,
-    Emitter<NotificationState> emit,
-  ) async {
-    await _repository
-        .deleteContact(PrefUtils().getUser()!.id!, event.contactId)
-        .then((onValue) async {
-      if (onValue.statusCode == 200) {
-        final updateNotifi = state.notificationModel.notificationData;
-        NotificationData notificationData = updateNotifi.firstWhere(
-          (element) => element.contentId == event.contactId,
-        );
-        updateNotifi.remove(notificationData);
-        emit(state.copyWith(
-            notificationModel: state.notificationModel.copyWith(
-          notificationData: updateNotifi,
-        )));
-      } else {
-        NavigatorService.showErrorAndGoBack("lbl_error".tr());
-      }
-    });
-  }
-
-  _onUpdateStatusAll(
-    UpdateStatusAllNotifi event,
-    Emitter<NotificationState> emit,
-  ) async {
-    await _repository
-        .updateAllNotiStatus(PrefUtils().getUser()!.id!)
-        .then((value) {
-      if (value.statusCode == 200) {
-        final updateNotifi =
-            state.notificationModel.notificationData.map((notifi) {
-          notifi.copyWith(status: true);
-          return notifi;
-        }).toList();
-        emit(
-          state.copyWith(
-            notificationModel: state.notificationModel.copyWith(
-              notificationData: updateNotifi,
-            ),
-          ),
-        );
-      }
-    });
-  }
-
-  _onUpdateStatus(
-    UpdateStatusNotifi event,
-    Emitter<NotificationState> emit,
-  ) async {
-    await _repository
-        .updateStatusNotifi(PrefUtils().getUser()!.id!, event.notifiId)
-        .then((value) {
-      if (value.statusCode == 200) {
-        final updateNotifi =
-            state.notificationModel.notificationData.map((notifi) {
-          if (notifi.id == event.notifiId) {
-            return notifi.copyWith(status: true);
-          }
-          return notifi;
-        }).toList();
-
-        emit(
-          state.copyWith(
-            notificationModel: state.notificationModel.copyWith(
-              notificationData: updateNotifi,
-            ),
-          ),
-        );
-      }
-    });
-  }
-
-  _onExistUnReadNotifi(
-    HaveNotifiUnReadEvent event,
-    Emitter<NotificationState> emit,
-  ) async {
-    await _repository
-        .haveUnRead(PrefUtils().getUser()!.id!)
-        .then((value) async {
-      if (value.statusCode == 200) {
-        emit(
-          state.copyWith(
-            hasUnRead: value.data['data'],
-          ),
-        );
-      }
-    });
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
   }
 }

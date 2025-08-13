@@ -58,7 +58,6 @@ class CustomTextFormField extends StatelessWidget {
   final TextInputType? textInputType;
   final int? maxLines;
 
-
   final Widget? prefix;
 
   final BoxConstraints? prefixConstraints;
@@ -80,6 +79,10 @@ class CustomTextFormField extends StatelessWidget {
   final Function(String)? onChange;
 
   final Function(String)? onFieldSubmitted;
+
+  final dynamic hintText;
+
+  final dynamic hintStyle;
 
   @override
   Widget build(BuildContext context) {

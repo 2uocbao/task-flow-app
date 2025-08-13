@@ -53,27 +53,16 @@ dependencies:
   open_filex: ^4.7.0
   app_links: ^6.4.0
   flutter_secure_storage: ^9.2.4
-  firebase_core: ^4.0.0
-  firebase_messaging: ^16.0.0
+  firebase_core: ^2.24.2
+  firebase_messaging: ^14.7.10
   url_launcher: ^6.3.1
   app_settings: ^6.1.1
-  # android_intent_plus: ^5.3.0
   provider: ^6.1.5
   easy_localization: ^3.0.7+1
   intl: ^0.20.2
   extended_text_field: ^16.0.2
   flutter_mentions: ^2.0.1
   flutter_expandable_fab: ^2.5.2
-  firebase_core: ^3.13.0
-  firebase_messaging: ^15.2.5
-  url_launcher: ^6.3.1
-  app_settings: ^6.1.1
-  android_intent_plus: ^5.3.0
-  provider: ^6.1.5
-  easy_localization: ^3.0.7+1
-  intl: ^0.19.0
-  extended_text_field: ^16.0.2
-  flutter_mentions: ^2.0.1
 
 dev_dependencies:
   flutter_test:

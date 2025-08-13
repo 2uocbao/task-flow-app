@@ -43,11 +43,7 @@ class CommentData {
 
   CommentData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-<<<<<<< HEAD
     creatorId = json['creator_id'];
-=======
-    creatorId = json['creatorId'];
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
     username = json['username'];
     image = json['image'];
     text = json['text'];

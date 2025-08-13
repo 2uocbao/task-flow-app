@@ -1,9 +1,5 @@
-import 'dart:io';
-
-import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:open_filex/open_filex.dart';
-import 'package:path/path.dart';
 import 'package:taskflow/src/data/api/api.dart';
 import 'package:taskflow/src/data/model/comment/comment_data.dart';
 import 'package:taskflow/src/data/model/report/report_data.dart';
@@ -35,11 +31,75 @@ class TaskDetailBloc extends Bloc<TaskDetailEvent, TaskDetailState> {
     on<RemoveAssignEvent>(_onRemoveAssign);
     on<UpdateStatusEvent>(_onUpdateStatus);
     on<UpdatePriorityEvent>(_onUpdatePriority);
+    on<DownloadFileEvent>(_onDownload);
+    on<AttachmentsURLEvent>(_onAttachmentUrl);
   }
 
   final _repository = Repository();
 
   int currentPage = 0;
+
+  dynamic value = {
+    "status": 200,
+    "data": [
+      {
+        "task": {
+          "id": "nmgjnP",
+          "user_id": "oP95Px",
+          "title": "Kiểm thử máy chủ",
+          "description": "Kiểm thử các chức năng máy chủ cung cấp",
+          "priority": "HIGH",
+          "status": "PENDING",
+          "start_date": null,
+          "created_at": "2025-07-16 13:05",
+          "updated_at": "2025-08-02 04:58",
+          "due_at": "2025-08-02 11:58",
+          "commentCount": null,
+          "reportCount": null
+        },
+        "assigners": [
+          {
+            "id": "oP9d5Y",
+            "assigner_id": "oeN5m7",
+            "name": "Jane Smith",
+            "mention": "janesmith",
+            "image":
+                "https://images.unsplash.com/photo-1624948465027-6f9b51067557?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
+            "joined_at": "2025-08-11 14:53"
+          }
+        ],
+        "reports": [
+          {
+            "id": "EYkned",
+            "type": "PHOTO",
+            "file_name": "20250727_210203.jpg",
+            "file_path": "/app/storeFile/nmgjnP20250727_210203.jpg",
+            "external_url": null,
+            "created_at": "2025-08-03 18:47"
+          }
+        ],
+        "comments": [
+          {
+            "id": 72,
+            "creator_id": "oP95Px",
+            "username": "John Doe",
+            "image":
+                "https://images.unsplash.com/photo-1624948465027-6f9b51067557?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
+            "text": "@janesmith have any question?",
+            "created_at": "2025-08-11 15:15",
+            "updated_at": null
+          }
+        ]
+      }
+    ],
+    "pagination": {
+      "current_page": 0,
+      "per_page": 10,
+      "total_items": 1,
+      "total_pages": 1
+    },
+    "sort": {"sorted": true, "unsorted": false, "empty": false}
+  };
 
   Future<void> _onFetchTaskDetail(
     FetchDetailEvent event,
@@ -286,96 +346,6 @@ class TaskDetailBloc extends Bloc<TaskDetailEvent, TaskDetailState> {
       emit(successState.copyWith(
         taskData: updatedTask,
       ));
-    }
-  }
-
-  Future<void> _onAddComment(
-    AddCommentEvent event,
-    Emitter<TaskDetailState> emit,
-  ) async {
-    try {
-      if (state is FetchTaskSuccess) {
-        final successState = state as FetchTaskSuccess;
-        UserData userData = PrefUtils().getUser()!;
-        var requestData = <String, dynamic>{
-          'sender_name': '${userData.firstName} ${userData.lastName}',
-          'task_title': successState.taskData.title,
-          'mention': event.mentionId,
-          'text': event.content,
-        };
-        await _repository
-            .addComment(successState.taskData.id!, requestData: requestData)
-            .then((value) async {
-          if (value.statusCode == 200) {
-            ResponseData<CommentData> responseData =
-                ResponseData.fromJson(value.data, CommentData.fromJson);
-
-            final commentDatas = [
-              responseData.data!.copyWith(
-                id: responseData.data!.id,
-                username: userData.firstName! + userData.lastName!,
-                creatorId: userData.id,
-                image: userData.imagePath,
-              ),
-              ...successState.commentDatas
-            ];
-            final commentKeys = {
-              ...(successState.commentKeys),
-              responseData.data!.id!: GlobalKey<CommentTaskWidgetState>(),
-            };
-            emit(successState.copyWith(
-              commentDatas: commentDatas,
-              commentKeys: commentKeys,
-            ));
-          } else if (value.statusCode == 404) {
-            NavigatorService.showSnackBarAndGoBack('error_404'.tr());
-          } else {
-            emit(TaskDetailErrorState('lbl_error'.tr()));
-          }
-        });
-      }
-    } catch (e) {
-      if (e is NoInternetException) {
-        emit(TaskDetailErrorState('error_no_internet'.tr()));
-      } else {
-        emit(TaskDetailErrorState('lbl_error'.tr()));
-      }
-    }
-  }
-
-  Future<void> _onAttachment(
-    AttachmentsEvent event,
-    Emitter<TaskDetailState> emit,
-  ) async {
-    try {
-      if (state is FetchTaskSuccess) {
-        final successState = state as FetchTaskSuccess;
-
-        File file = event.file;
-        FormData formData = FormData.fromMap({
-          'file': await MultipartFile.fromFile(
-            file.path,
-            filename: basename(file.path),
-          ),
-          'userId': PrefUtils().getUser()!.id,
-          'taskId': successState.taskData.id,
-        });
-        await _repository.addReportsFile(formData).then((value) async {
-          if (value.statusCode == 200) {
-            NavigatorService.pushNamedAndRemoveUtil(AppRoutes.taskDetailScreen,
-                arguments:
-                    TaskDetailArguments(taskId: successState.taskData.id));
-          } else {
-            emit(TaskDetailErrorState('lbl_error'.tr()));
-          }
-        });
-      }
-    } catch (e) {
-      if (e is NoInternetException) {
-        emit(TaskDetailErrorState('error_no_internet'.tr()));
-      } else {
-        emit(TaskDetailErrorState('lbl_error'.tr()));
-      }
     }
   }
 

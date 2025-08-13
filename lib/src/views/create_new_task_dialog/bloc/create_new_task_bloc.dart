@@ -1,4 +1,4 @@
-
+import 'package:easy_localization/easy_localization.dart';
 import 'package:taskflow/src/data/api/api.dart';
 import 'package:taskflow/src/data/model/response/response_data.dart';
 import 'package:taskflow/src/data/model/task/task_data.dart';

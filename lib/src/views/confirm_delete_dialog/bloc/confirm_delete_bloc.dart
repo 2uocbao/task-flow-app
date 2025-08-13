@@ -14,51 +14,47 @@ class ConfirmDeleteBloc extends Bloc<ConfirmDeleteEvent, ConfirmDeleteState> {
 
   final _repository = Repository();
 
-  _onDeleteTask(
+  Future<void> _onDeleteTask(
     RequestDeleteTaskEvent event,
     Emitter<ConfirmDeleteState> emit,
   ) async {
-    await _repository
-        .deleteTask(state.customId!.taskId!, PrefUtils().getUser()!.id!)
-        .then((value) {
+    await _repository.deleteTask(state.customId!.taskId!).then((value) {
       if (value.statusCode == 200) {
         NavigatorService.pushNamedAndRemoveUtil(AppRoutes.homeScreen);
       } else {
-        NavigatorService.showErrorAndGoBack("lbl_error".tr());
+        NavigatorService.showSnackBarAndGoBack("lbl_error".tr());
       }
     }).onError((error, stackTrace) {});
   }
 
-  _onDeleteComment(
+  Future<void> _onDeleteComment(
     RequestDeleteCommentEvent event,
     Emitter<ConfirmDeleteState> emit,
   ) async {
     await _repository
-        .deleteComment(
-            PrefUtils().getUser()!.id!, int.parse(state.customId!.commentId!))
+        .deleteComment(int.parse(state.customId!.commentId!))
         .then((value) {
       if (value.statusCode == 200) {
         NavigatorService.pushNamedAndRemoveUtil(AppRoutes.taskDetailScreen,
             arguments: TaskDetailArguments(taskId: state.customId!.taskId));
       } else {
-        NavigatorService.showErrorAndGoBack("lbl_error".tr());
+        NavigatorService.showSnackBarAndGoBack("lbl_error".tr());
       }
     });
   }
 
-  _onDeleteReport(
+  Future<void> _onDeleteReport(
     RequestDeleteReportEvent event,
     Emitter<ConfirmDeleteState> emit,
   ) async {
     await _repository
-        .deleteReport(PrefUtils().getUser()!.id!, state.customId!.taskId!,
-            state.customId!.reportId!)
+        .deleteReport(state.customId!.taskId!, state.customId!.reportId!)
         .then((value) {
       if (value.statusCode == 200) {
         NavigatorService.pushNamedAndRemoveUtil(AppRoutes.taskDetailScreen,
             arguments: TaskDetailArguments(taskId: state.customId!.taskId));
       } else {
-        NavigatorService.showErrorAndGoBack("lbl_error".tr());
+        NavigatorService.showSnackBarAndGoBack("lbl_error".tr());
       }
     });
   }

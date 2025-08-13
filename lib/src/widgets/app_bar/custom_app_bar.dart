@@ -51,19 +51,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => Size(double.maxFinite, 30.h);
 
-<<<<<<< HEAD
   Container? _getStyle() {
     switch (styleType) {
       case Style.bgFillOnPrimaryContainer:
         return Container(
           height: height ?? 30.h,
-=======
-  _getStyle() {
-    switch (styleType) {
-      case Style.bgFillOnPrimaryContainer:
-        return Container(
-          height: 30.h,
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
           width: double.maxFinite,
           decoration: const BoxDecoration(
               // color: theme.colorScheme.onPrimaryContainer.withOpacity(1),

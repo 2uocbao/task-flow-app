@@ -4,25 +4,16 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_mentions/flutter_mentions.dart';
 import 'package:taskflow/src/data/api/api.dart';
 import 'package:taskflow/src/data/model/report/report_data.dart';
-<<<<<<< HEAD
 import 'package:taskflow/src/data/model/task/assign_data.dart';
 import 'package:taskflow/src/data/model/task/task_data.dart';
 import 'package:taskflow/src/utils/app_export.dart';
 import 'package:taskflow/src/utils/progress_dialog_utils.dart';
 import 'package:taskflow/src/utils/validation_functions.dart';
-=======
-import 'package:taskflow/src/data/model/task/task_data.dart';
-import 'package:taskflow/src/utils/app_export.dart';
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
 import 'package:taskflow/src/views/confirm_delete_dialog/model/custom_id.dart';
 import 'package:taskflow/src/views/task_detail_screen/bloc/task_detail_bloc.dart';
 import 'package:taskflow/src/views/task_detail_screen/bloc/task_detail_event.dart';
 import 'package:taskflow/src/views/task_detail_screen/bloc/task_detail_state.dart';
 import 'package:taskflow/src/views/task_detail_screen/models/task_detail_arguments.dart';
-<<<<<<< HEAD
-=======
-import 'package:taskflow/src/views/task_detail_screen/models/task_detail_model.dart';
->>>>>>> 171a38493ae278d0d36e52f0fa44f840961665e7
 import 'package:taskflow/src/views/task_detail_screen/widgets/assign_custom_field.dart';
 import 'package:taskflow/src/views/task_detail_screen/widgets/comment_task_widget.dart';
 import 'package:taskflow/src/views/task_detail_screen/widgets/detail_assign_dialog.dart';
@@ -268,6 +259,7 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
       ],
     );
   }
+
   Widget _buildBody(BuildContext context, FetchTaskSuccess state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -323,6 +315,7 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
       ],
     );
   }
+
   Widget _buildLable(String lable, IconData icon) {
     return Row(children: [
       Icon(icon, size: 15.sp),
@@ -469,7 +462,7 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
       children: [
         Expanded(
           child: SizedBox(
-            height: 35.h,
+            height: 30.h,
             width: double.maxFinite,
             child: GestureDetector(
               onTap: () async {
@@ -488,10 +481,10 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
                 itemCount: assignData.length,
                 itemBuilder: (context, index) {
                   return Container(
-                    margin: EdgeInsets.only(right: 10.w),
+                    padding: EdgeInsets.only(right: 5.w),
                     child: CustomCircleAvatar(
                       imagePath: assignData.first.image!,
-                      size: 40,
+                      size: 35,
                     ),
                   );
                 },
@@ -645,6 +638,7 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
       ),
     );
   }
+
   Widget _buildDisplayDropAttchments(
       BuildContext context, FetchTaskSuccess state, TaskData taskData) {
     return Column(
@@ -835,6 +829,7 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
       ),
     );
   }
+
   Widget _buildDisplayComments(BuildContext context, FetchTaskSuccess state) {
     return ListView.builder(
       itemCount: state.commentDatas.length,

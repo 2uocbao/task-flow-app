@@ -88,7 +88,7 @@ class ContactItemWidget extends StatelessWidget {
     );
   }
 
-  Widget _showOptionUser(BuildContext context) {
+  _showOptionUser(BuildContext context) {
     if (isContact!) {
       return CustomIconButton(
         height: 30.h,

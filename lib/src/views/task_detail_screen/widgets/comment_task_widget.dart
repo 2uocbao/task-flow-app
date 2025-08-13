@@ -78,80 +78,23 @@ class CommentTaskWidgetState extends State<CommentTaskWidget> {
       child: Row(
         children: [
           SizedBox(width: 5.w),
-          CustomCircleAvatar(imagePath: widget.commentData.image!, size: 40),
-                SizedBox(height: 5.h),
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.commentData.username!,
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                        SizedBox(height: 2.h),
-                        Text(
-                          formatDateAndTime(
-                            date: widget.commentData.createdAt!,
-                          ),
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                      ],
-                    ),
-                    Transform.rotate(
-                      angle: 90 * 3.1415926535 / 180,
-                      child: CustomIconButton(
-                        child: Icon(
-                          Icons.keyboard_control_sharp,
-                          size: 25.sp,
-                        ),
-                        onTap: () {
-                          final RenderBox button =
-                              context.findRenderObject() as RenderBox;
-                          final RenderBox overlay = Overlay.of(context)
-                              .context
-                              .findRenderObject() as RenderBox;
-                          final Offset buttonPosition = button
-                              .localToGlobal(Offset.zero, ancestor: overlay);
-                          final Size buttonSize = button.size;
-                          final Size overlaySize = overlay.size;
-
-                          final RelativeRect position = RelativeRect.fromLTRB(
-                            buttonPosition.dx + buttonSize.width,
-                            buttonPosition.dy + 30.h,
-                            overlaySize.width -
-                                (buttonPosition.dx + buttonSize.width),
-                            overlaySize.height -
-                                (buttonPosition.dy + buttonSize.height),
-                          );
-                          if (widget.commentData.creatorId ==
-                              PrefUtils().getUser()!.id) {
-                            _buildShowMyMenuComments(context, position);
-                          } else {
-                            showMenu(
-                              context: context,
-                              position: position,
-                              items: [
-                                PopupMenuItem(
-                                  child: Text(
-                                    "bt_reply".tr(),
-                                    style:
-                                        Theme.of(context).textTheme.bodySmall,
-                                  ),
-                                  onTap: () {
-                                    widget.requestFocus(
-                                        widget.commentData.creatorId!);
-                                  },
-                                ),
-                              ],
-                            );
-                          }
-                        },
-                      ),
-                    ),
-                  ],
+          CustomCircleAvatar(imagePath: widget.commentData.image!, size: 35),
+          SizedBox(width: 5.w),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.commentData.username!,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                SizedBox(height: 5.h),
+                SizedBox(height: 2.h),
+                Text(
+                  formatDateAndTime(
+                    date: widget.commentData.createdAt!,
+                  ),
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
                 SizedBox(
                   child: ExtendedTextField(
                     controller: _commentController,
@@ -167,6 +110,57 @@ class CommentTaskWidgetState extends State<CommentTaskWidget> {
                         _onEditButtonPressed(widget.commentData.id!);
                       }
                     },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Transform.rotate(
+            angle: 90 * 3.1415926535 / 180,
+            child: CustomIconButton(
+              child: Icon(
+                Icons.keyboard_control_sharp,
+                size: 25.sp,
+              ),
+              onTap: () {
+                final RenderBox button =
+                    context.findRenderObject() as RenderBox;
+                final RenderBox overlay =
+                    Overlay.of(context).context.findRenderObject() as RenderBox;
+                final Offset buttonPosition =
+                    button.localToGlobal(Offset.zero, ancestor: overlay);
+                final Size buttonSize = button.size;
+                final Size overlaySize = overlay.size;
+
+                final RelativeRect position = RelativeRect.fromLTRB(
+                  buttonPosition.dx + buttonSize.width,
+                  buttonPosition.dy + 30.h,
+                  overlaySize.width - (buttonPosition.dx + buttonSize.width),
+                  overlaySize.height - (buttonPosition.dy + buttonSize.height),
+                );
+                if (widget.commentData.creatorId == PrefUtils().getUser()!.id) {
+                  _buildShowMyMenuComments(context, position);
+                } else {
+                  showMenu(
+                    context: context,
+                    position: position,
+                    items: [
+                      PopupMenuItem(
+                        child: Text(
+                          "bt_reply".tr(),
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                        onTap: () {
+                          widget.requestFocus(widget.commentData.creatorId!);
+                        },
+                      ),
+                    ],
+                  );
+                }
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -181,8 +175,7 @@ class CommentTaskWidgetState extends State<CommentTaskWidget> {
             "bt_edit".tr(),
             style: Theme.of(context).textTheme.bodySmall,
           ),
-          onTap: () {
-          },
+          onTap: () {},
         ),
         PopupMenuItem(
           child: Text(
@@ -215,7 +208,6 @@ class CommentTaskWidgetState extends State<CommentTaskWidget> {
   }
 }
 
-<<<<<<< HEAD
 class MentionTextSpanBuilder extends SpecialTextSpanBuilder {
   @override
   SpecialText? createSpecialText(String flag,

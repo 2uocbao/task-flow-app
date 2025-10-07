@@ -21,6 +21,7 @@ Future<void> requestNotificationPermission() async {
 }
 
 void main() async {
+  debugPrint = (String? message, {int? wrapWidth}) {};
   WidgetsFlutterBinding.ensureInitialized();
   await requestNotificationPermission();
   await Firebase.initializeApp();

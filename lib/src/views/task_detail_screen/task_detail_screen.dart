@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_mentions/flutter_mentions.dart';
 import 'package:taskflow/src/data/api/api.dart';
+import 'package:taskflow/src/data/model/comment/comment_data.dart';
 import 'package:taskflow/src/data/model/report/report_data.dart';
 import 'package:taskflow/src/data/model/task/assign_data.dart';
 import 'package:taskflow/src/data/model/task/task_data.dart';
@@ -42,18 +43,18 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
   final ScrollController _scrollController = ScrollController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final FocusNode _focusAddComments = FocusNode();
+  final FocusNode _focusUpdateComment = FocusNode();
   final FocusNode _focusDescription = FocusNode();
   final FocusNode _focusTitle = FocusNode();
   final GlobalKey<AssignCustomFieldState> _assignGlobal = GlobalKey();
   final GlobalKey<FlutterMentionsState> _mentionKey =
       GlobalKey<FlutterMentionsState>();
-  late List<Map<String, dynamic>> mentionData = [];
 
   bool _showOptionUpdate = false;
   bool _showOptionAddFile = false;
   bool readOnly = false;
-  bool isUpdateComment = false;
   bool isHandleAddMember = false;
+  bool _isUpdateComment = false;
 
   late String originalStatus;
   late String originalPriority;
@@ -61,9 +62,8 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
   late TextEditingController _description;
   late String originalTitle;
   late TextEditingController _title;
-  late int _editingCommentId;
-
-  late bool isSelected;
+  late List<Map<String, dynamic>> mentionData;
+  late CommentData commentDataUpdate;
 
   final logger = Logger();
 
@@ -74,6 +74,8 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
 
   @override
   void dispose() {
+    _focusAddComments.dispose();
+    _focusUpdateComment.dispose();
     _scrollController.dispose();
     super.dispose();
   }
@@ -88,60 +90,10 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
     }
   }
 
-  void _onIsUpdateComment(int id) async {
-    if (!isUpdateComment) {
-      setState(() {
-        isUpdateComment = true;
-        _editingCommentId = id;
-      });
-    }
-  }
-
-  void _requestFocusAddComment(String id) async {
-    final controller = _mentionKey.currentState?.controller;
-    String diplay = mentionData.firstWhere((e) => e['id'] == id)['display'];
-    final mentionText = '@$diplay ';
-
-    final text = controller!.text;
-    final selection = controller.selection;
-
-    if (selection.start >= 0 && selection.end >= 0) {
-      final newText = text.replaceRange(
-        selection.start,
-        selection.end,
-        mentionText,
-      );
-
-      controller.value = TextEditingValue(
-        text: newText,
-        selection: TextSelection.collapsed(
-            offset: selection.start + mentionText.length),
-      );
-    } else {
-      controller.text += mentionText;
-      controller.selection = TextSelection.fromPosition(
-        TextPosition(offset: controller.text.length),
-      );
-    }
-    _focusAddComments.requestFocus();
-  }
-
   void _sendComment() {
-    final text = _mentionKey.currentState?.controller?.markupText ?? ' ';
-    logger.i('Current text $text');
+    final String text = _mentionKey.currentState!.controller!.markupText;
     if (text.isNotEmpty) {
-      final pattern = RegExp(r'@\[\_\_(.*?)\_\_\]\(\_\_(.*?)\_\_\)');
-      final matches = pattern.firstMatch(text);
-      String? id;
-      String? display;
-      if (matches != null) {
-        id = matches.group(1);
-        display = matches.group(2);
-        context.read<TaskDetailBloc>().add(AddCommentEvent(
-            '@$display ${text.substring(text.indexOf(')') + 1)}', id!));
-      } else {
-        context.read<TaskDetailBloc>().add(AddCommentEvent(text, id));
-      }
+      context.read<TaskDetailBloc>().add(AddCommentEvent(text));
       _focusAddComments.unfocus();
       _mentionKey.currentState?.controller?.clear();
     }
@@ -157,6 +109,12 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
           builder: (context, state) {
             if (state is FetchTaskLoading) {
               ProgressDialogUtils.showProgressDialog();
+            } else if (state is UpdateCommentSuccess) {
+              logger.i('Update success');
+              logger.i('comment key in screen: ${state.commentKey}');
+              context
+                  .read<TaskDetailBloc>()
+                  .add(ReloadComments(taskId: arg.taskId!));
             } else if (state is TaskDetailErrorState) {
               return Scaffold(
                   appBar: CustomAppBar(
@@ -200,24 +158,23 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
                 behavior: HitTestBehavior.translucent,
                 onTap: () async {
                   _mentionKey.currentState?.controller!.clear();
-                  if (isUpdateComment) {
-                    state.commentKeys[_editingCommentId]?.currentState
-                        ?.resetText();
-                  }
                   setState(() {
-                    isUpdateComment = false;
                     isHandleAddMember = false;
                     _showOptionUpdate = false;
                     _showOptionAddFile = false;
+                    _isUpdateComment = false;
+                    commentDataUpdate = CommentData();
                   });
-
                   FocusManager.instance.primaryFocus?.unfocus();
                   _assignGlobal.currentState?.reset();
                 },
                 child: Form(
                   key: _formKey,
                   child: Scaffold(
-                    appBar: _buildAppBar(context, state.taskData),
+                    resizeToAvoidBottomInset: true,
+                    appBar: _showOptionUpdate
+                        ? _optionUpdate(context, state)
+                        : _buildAppBar(context, state.taskData),
                     body: _buildBody(context, state),
                   ),
                 ),
@@ -227,6 +184,45 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
           },
         ),
       ),
+    );
+  }
+
+  PreferredSizeWidget _optionUpdate(
+      BuildContext context, FetchTaskSuccess state) {
+    return AppBar(
+      actions: [
+        CustomIconButton(
+          child: Icon(Icons.done, color: Colors.green, size: 25.sp),
+          onTap: () async {
+            if (_formKey.currentState!.validate()) {
+              context.read<TaskDetailBloc>().add(
+                    UpdateTaskEvent(
+                      id: state.taskData.id!,
+                      description: _description.text,
+                      title: _title.text,
+                      status: originalStatus,
+                      priority: originalPriority,
+                    ),
+                  );
+            }
+            setState(() {
+              _showOptionUpdate = false;
+            });
+          },
+        ),
+        Transform.rotate(
+          angle: 90 * 3.1415926535 / 75,
+          child: CustomIconButton(
+            onTap: () {
+              setState(() {
+                _showOptionUpdate = false;
+                _description = TextEditingController(text: originalDescription);
+              });
+            },
+            child: Icon(Icons.add, color: Colors.red, size: 25.sp),
+          ),
+        ),
+      ],
     );
   }
 
@@ -305,12 +301,9 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
             ),
           ),
         ),
-        if (_showOptionUpdate) ...{
-          _buildOptionUpdate(context, isUpdateComment, state)
-        },
-        _showOptionAddFile == false
-            ? _buildAddComment(context, state.taskData)
-            : _buildOptionAddFile(context),
+        _showOptionAddFile
+            ? _buildOptionAddFile(context)
+            : _buildAddComment(context, state.taskData),
         SizedBox(height: 5.h),
       ],
     );
@@ -466,28 +459,26 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
             width: double.maxFinite,
             child: GestureDetector(
               onTap: () async {
-                if (readOnly) {
-                  showDialog(
-                    context: context,
-                    builder: (dialogContext) => BlocProvider.value(
-                      value: context.read<TaskDetailBloc>(),
-                      child: const DetailAssignDialog(),
-                    ),
-                  );
-                }
+                showDialog(
+                  context: context,
+                  builder: (dialogContext) => BlocProvider.value(
+                    value: context.read<TaskDetailBloc>(),
+                    child: const DetailAssignDialog(),
+                  ),
+                );
               },
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: assignData.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    padding: EdgeInsets.only(right: 5.w),
-                    child: CustomCircleAvatar(
-                      imagePath: assignData.first.image!,
-                      size: 35,
-                    ),
-                  );
-                },
+                itemBuilder: (context, index) =>
+                    assignData[index].role!.contains('MEMBER')
+                        ? SizedBox(
+                            width: 35.w,
+                            child: CustomCircleAvatar(
+                              imagePath: assignData.first.image!,
+                              size: 30,
+                            ))
+                        : const SizedBox(),
               ),
             ),
           ),
@@ -545,7 +536,6 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
         onTap: () {
           if (readOnly) {
             onTapStartAt(context, taskData);
-            _onTextFieldInteracted();
           }
         },
       ),
@@ -579,7 +569,6 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
         onTap: () {
           if (readOnly) {
             onTapDateInput(context, taskData);
-            _onTextFieldInteracted();
           }
         },
       ),
@@ -691,68 +680,6 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
     );
   }
 
-  Widget _buildOptionUpdate(
-      BuildContext context, bool isUpdateTask, FetchTaskSuccess state) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        CustomIconButton(
-          child: Icon(Icons.done, color: Colors.green, size: 25.sp),
-          onTap: () async {
-            if (!isUpdateTask) {
-              if (_formKey.currentState!.validate()) {
-                context.read<TaskDetailBloc>().add(
-                      UpdateTaskEvent(
-                        id: state.taskData.id!,
-                        description: _description.text,
-                        title: _title.text,
-                        status: originalStatus,
-                        priority: originalPriority,
-                      ),
-                    );
-              }
-            } else {
-              context.read<TaskDetailBloc>().add(
-                    UpdateCommentEvent(
-                      commentId: _editingCommentId,
-                      text: (state.commentKeys[_editingCommentId]!.currentState!
-                          .getCurrentComment()),
-                    ),
-                  );
-              setState(() {
-                state.commentKeys[_editingCommentId]?.currentState
-                    ?.unfoCusComment();
-              });
-            }
-            setState(() {
-              isUpdateComment = false;
-              _showOptionUpdate = false;
-            });
-          },
-        ),
-        SizedBox(width: 10.w),
-        Transform.rotate(
-          angle: 90 * 3.1415926535 / 75,
-          child: CustomIconButton(
-            onTap: () {
-              setState(() {
-                if (isUpdateComment == true) {
-                  state.commentKeys[_editingCommentId]?.currentState
-                      ?.resetText();
-                }
-                isUpdateComment = false;
-                _showOptionUpdate = false;
-                _description = TextEditingController(text: originalDescription);
-              });
-            },
-            child: Icon(Icons.add, color: Colors.red, size: 25.sp),
-          ),
-        ),
-        SizedBox(width: 10.w)
-      ],
-    );
-  }
-
   Widget _buildOptionAddFile(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -834,28 +761,14 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
     return ListView.builder(
       itemCount: state.commentDatas.length,
       shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
+      controller: _scrollController,
       itemBuilder: (context, index) {
         final model = state.commentDatas[index];
-        if (model.creatorId == PrefUtils().getUser()!.id!) {
-          return CommentTaskWidget(
-            key: state.commentKeys[model.id],
-            commentData: model,
-            onEditStarted: _onTextFieldInteracted,
-            isUpdateComment: PrefUtils().getUser()!.id! == model.creatorId
-                ? _onIsUpdateComment
-                // ignore: avoid_types_as_parameter_names
-                : (int) {},
-            taskId: state.taskData.id!,
-            requestFocus: _requestFocusAddComment,
-          );
-        }
         return CommentTaskWidget(
+          key: state.commentKeys[model.id],
           commentData: model,
-          taskId: '',
-          onEditStarted: () {},
-          isUpdateComment: (id) {},
-          requestFocus: _requestFocusAddComment,
+          taskId: state.taskData.id!,
+          requestFocusBox: (comment) => requestFocusUpdateComment(comment),
         );
       },
     );
@@ -874,6 +787,10 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
   }
 
   Widget _buildAddComment(BuildContext context, TaskData taskData) {
+    if (_isUpdateComment) {
+      _mentionKey.currentState?.controller?.value =
+          TextEditingValue(text: makeTextController(commentDataUpdate.text!));
+    }
     return Row(
       children: [
         SizedBox(width: 10.w),
@@ -881,64 +798,68 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
             imagePath: PrefUtils().getUser()!.imagePath!, size: 30),
         SizedBox(width: 5.w),
         Expanded(
-          child: BlocListener<TaskDetailBloc, TaskDetailState>(
-            listener: (context, state) {
-              if (state is FetchTaskSuccess) {
-                _focusAddComments.unfocus();
-                context
-                    .read<TaskDetailBloc>()
-                    .add(FetchCommentEvent(taskId: taskData.id!));
-              }
-            },
-            child: FlutterMentions(
-              key: _mentionKey,
-              focusNode: _focusAddComments,
-              maxLines: 1,
-              decoration: InputDecoration(
-                  hintText: "lbl_add_comment".tr(),
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadiusStyle.circleBorder10)),
-              style: Theme.of(context).textTheme.bodyMedium,
-              suggestionPosition: SuggestionPosition.Top,
-              mentions: [
-                Mention(
-                  trigger: '@',
-                  style: const TextStyle(
-                      color: Colors.blue, fontWeight: FontWeight.w500),
-                  data: mentionData,
-                  matchAll: false,
-                  suggestionBuilder: (data) {
-                    return Container(
-                        color: Theme.of(context).colorScheme.surface,
-                        height: 50.h,
-                        width: 100.w,
-                        child: Row(
-                          children: [
-                            CustomCircleAvatar(
-                                imagePath: data['image'], size: 25),
-                            SizedBox(width: 10.w),
-                            Container(
-                              alignment: Alignment.centerLeft,
-                              child: Text(data['name']),
-                            )
-                          ],
-                        ));
-                  },
-                ),
-              ],
-              onSearchChanged: (trigger, value) async {},
-              onChanged: (val) {},
-            ),
+          child: FlutterMentions(
+            key: _mentionKey,
+            focusNode: _focusAddComments,
+            decoration: InputDecoration(
+                hintText: "lbl_add_comment".tr(),
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadiusStyle.circleBorder10)),
+            style: Theme.of(context).textTheme.bodyMedium,
+            suggestionPosition: SuggestionPosition.Top,
+            mentions: [
+              Mention(
+                trigger: '@',
+                style: const TextStyle(
+                    color: Colors.blue, fontWeight: FontWeight.w500),
+                data: mentionData,
+                matchAll: false,
+                suggestionBuilder: (data) {
+                  return Container(
+                      color: Theme.of(context).colorScheme.surface,
+                      height: 50.h,
+                      width: 100.w,
+                      child: Row(
+                        children: [
+                          CustomCircleAvatar(
+                              imagePath: data['image'], size: 25),
+                          SizedBox(width: 10.w),
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            child: Text(data['name']),
+                          )
+                        ],
+                      ));
+                },
+              ),
+            ],
+            onSearchChanged: (trigger, value) async {},
+            onChanged: (val) {},
           ),
         ),
-        SizedBox(width: 10.w),
-        GestureDetector(
-          onTap: _sendComment,
-          child: Icon(Icons.send, size: 20.sp, color: Colors.blue),
-        ),
-        SizedBox(width: 10.w),
+        _isUpdateComment
+            ? CustomIconButton(
+                height: 30.h,
+                width: 35.w,
+                onTap: () {
+                  final String text =
+                      _mentionKey.currentState!.controller!.markupText;
+                  context.read<TaskDetailBloc>().add(UpdateCommentEvent(
+                      commentId: commentDataUpdate.id!, text: text));
+                  _isUpdateComment = false;
+                  _focusAddComments.unfocus();
+                  _mentionKey.currentState?.controller?.clear();
+                },
+                child: Icon(Icons.done, size: 25.sp, color: Colors.blue),
+              )
+            : CustomIconButton(
+                height: 30.h,
+                width: 35.w,
+                onTap: _sendComment,
+                child: Icon(Icons.send, size: 25.sp, color: Colors.blue),
+              ),
       ],
     );
   }
@@ -948,5 +869,23 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
     if (!alreadyExist) {
       mentionData.add(newItem);
     }
+  }
+
+  void requestFocusUpdateComment(CommentData comment) {
+    setState(() {
+      commentDataUpdate = comment;
+      _isUpdateComment = true;
+    });
+    FocusScope.of(context).requestFocus(_focusAddComments);
+  }
+
+  String makeTextController(String contentDisplay) {
+    final pattern = RegExp(r'@\[\_\_(.*?)\_\_\]\(\_\_(.*?)\_\_\)');
+    final matches = pattern.allMatches(contentDisplay);
+    String? display = contentDisplay;
+    for (var element in matches) {
+      display = display!.replaceFirst(pattern, '@${element.group(2)!}');
+    }
+    return display!;
   }
 }

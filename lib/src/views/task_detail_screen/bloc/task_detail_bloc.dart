@@ -33,73 +33,15 @@ class TaskDetailBloc extends Bloc<TaskDetailEvent, TaskDetailState> {
     on<UpdatePriorityEvent>(_onUpdatePriority);
     on<DownloadFileEvent>(_onDownload);
     on<AttachmentsURLEvent>(_onAttachmentUrl);
+    on<AddCommentEvent>(_onAddComment);
+    on<ReloadComments>(_onReloadComments);
   }
 
   final _repository = Repository();
 
   int currentPage = 0;
 
-  dynamic value = {
-    "status": 200,
-    "data": [
-      {
-        "task": {
-          "id": "nmgjnP",
-          "user_id": "oP95Px",
-          "title": "Kiểm thử máy chủ",
-          "description": "Kiểm thử các chức năng máy chủ cung cấp",
-          "priority": "HIGH",
-          "status": "PENDING",
-          "start_date": null,
-          "created_at": "2025-07-16 13:05",
-          "updated_at": "2025-08-02 04:58",
-          "due_at": "2025-08-02 11:58",
-          "commentCount": null,
-          "reportCount": null
-        },
-        "assigners": [
-          {
-            "id": "oP9d5Y",
-            "assigner_id": "oeN5m7",
-            "name": "Jane Smith",
-            "mention": "janesmith",
-            "image":
-                "https://images.unsplash.com/photo-1624948465027-6f9b51067557?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
-            "joined_at": "2025-08-11 14:53"
-          }
-        ],
-        "reports": [
-          {
-            "id": "EYkned",
-            "type": "PHOTO",
-            "file_name": "20250727_210203.jpg",
-            "file_path": "/app/storeFile/nmgjnP20250727_210203.jpg",
-            "external_url": null,
-            "created_at": "2025-08-03 18:47"
-          }
-        ],
-        "comments": [
-          {
-            "id": 72,
-            "creator_id": "oP95Px",
-            "username": "John Doe",
-            "image":
-                "https://images.unsplash.com/photo-1624948465027-6f9b51067557?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
-            "text": "@janesmith have any question?",
-            "created_at": "2025-08-11 15:15",
-            "updated_at": null
-          }
-        ]
-      }
-    ],
-    "pagination": {
-      "current_page": 0,
-      "per_page": 10,
-      "total_items": 1,
-      "total_pages": 1
-    },
-    "sort": {"sorted": true, "unsorted": false, "empty": false}
-  };
+  final logger = Logger();
 
   Future<void> _onFetchTaskDetail(
     FetchDetailEvent event,
@@ -123,8 +65,10 @@ class TaskDetailBloc extends Bloc<TaskDetailEvent, TaskDetailState> {
             List<Map<String, dynamic>> mentionDatas = [];
 
             final Map<int, GlobalKey<CommentTaskWidgetState>> commentKeys = {};
+            final Map<int, LayerLink> mapLayerLinkComments = {};
             for (var comment in listComments) {
               commentKeys[comment.id!] = GlobalKey();
+              mapLayerLinkComments[comment.id!] = LayerLink();
             }
 
             List<ReportData> reportOfPhotos = [];
@@ -132,7 +76,9 @@ class TaskDetailBloc extends Bloc<TaskDetailEvent, TaskDetailState> {
             List<ReportData> reportOfLink = [];
 
             for (var element in listAssigns) {
-              mentionDatas.add(element.toJson());
+              if (element.assignerId != PrefUtils().getUser()!.id) {
+                mentionDatas.add(element.toJson());
+              }
             }
 
             for (var report in listReports) {
@@ -158,6 +104,7 @@ class TaskDetailBloc extends Bloc<TaskDetailEvent, TaskDetailState> {
               commentDatas: listComments,
               mentionData: mentionDatas,
               commentKeys: commentKeys,
+              mapLayerLink: mapLayerLinkComments,
             ));
           } else {
             emit(TaskDetailErrorState('lbl_error'.tr()));
@@ -227,9 +174,11 @@ class TaskDetailBloc extends Bloc<TaskDetailEvent, TaskDetailState> {
     try {
       if (state is FetchTaskSuccess) {
         final successState = state as FetchTaskSuccess;
-        var requestData = CommentData(text: event.text);
+        var requestData = {
+          'text': event.text,
+        };
         await _repository
-            .updateComment(event.commentId, requestData: requestData.toJson())
+            .updateComment(event.commentId, requestData: requestData)
             .then((value) async {
           if (value.statusCode == 200) {
             ResponseData<CommentData> responseData =
@@ -252,6 +201,52 @@ class TaskDetailBloc extends Bloc<TaskDetailEvent, TaskDetailState> {
           }
         });
       }
+    } catch (e) {
+      if (e is NoInternetException) {
+        emit(TaskDetailErrorState('error_no_internet'.tr()));
+      } else {
+        emit(TaskDetailErrorState('lbl_error'.tr()));
+        logger.i('error here');
+      }
+    }
+  }
+
+  Future<void> _onAddComment(
+    AddCommentEvent event,
+    Emitter<TaskDetailState> emit,
+  ) async {
+    try {
+      UserData currentUser = PrefUtils().getUser()!;
+      final successState = state as FetchTaskSuccess;
+      var requestData = {
+        'text': event.content,
+      };
+      await _repository
+          .addComment(successState.taskData.id!, requestData: requestData)
+          .then((value) async {
+        if (value.statusCode == 200) {
+          ResponseData<CommentData> responseData =
+              ResponseData.fromJson(value.data, CommentData.fromJson);
+          CommentData commentData = responseData.data!;
+          commentData = commentData.copyWith(
+              creatorId: currentUser.id,
+              image: currentUser.imagePath,
+              username: '${currentUser.firstName} ${currentUser.lastName!}');
+          emit(successState.copyWith(
+            commentDatas: [commentData, ...successState.commentDatas],
+            commentKeys: {
+              ...successState.commentKeys,
+              commentData.id!: GlobalKey()
+            },
+            mapLayerLink: {
+              ...successState.mapLayerLink,
+              commentData.id!: LayerLink()
+            },
+          ));
+        } else {
+          emit(TaskDetailErrorState('lbl_error'.tr()));
+        }
+      });
     } catch (e) {
       if (e is NoInternetException) {
         emit(TaskDetailErrorState('error_no_internet'.tr()));
@@ -304,6 +299,7 @@ class TaskDetailBloc extends Bloc<TaskDetailEvent, TaskDetailState> {
                 ));
               } else {
                 emit(TaskDetailErrorState('lbl_error'.tr()));
+                logger.i('error here');
               }
             },
           ).onError((error, staceTrack) {});
@@ -315,6 +311,7 @@ class TaskDetailBloc extends Bloc<TaskDetailEvent, TaskDetailState> {
         emit(TaskDetailErrorState('error_no_internet'.tr()));
       } else {
         emit(TaskDetailErrorState('lbl_error'.tr()));
+        logger.i('error here with: $e');
       }
     }
   }
@@ -325,12 +322,37 @@ class TaskDetailBloc extends Bloc<TaskDetailEvent, TaskDetailState> {
   ) async {
     if (state is FetchTaskSuccess) {
       final successState = state as FetchTaskSuccess;
-      String startAt = event.dateTime.format(pattern: D_M_Y_HH_mm);
-      final currentTask = successState.taskData;
-      final updatedTask = currentTask.copyWith(startDate: startAt);
-      emit(successState.copyWith(
-        taskData: updatedTask,
-      ));
+      var requestData = TaskData(
+          creatorId: PrefUtils().getUser()!.id,
+          title: successState.taskData.title,
+          description: successState.taskData.description,
+          priority: successState.taskData.priority,
+          status: successState.taskData.status,
+          dueAt: successState.taskData.dueAt,
+          startDate: event.dateTime.toString());
+      await _repository
+          .updateTask(successState.taskData.id!,
+              requestData: requestData.toJson())
+          .then((value) async {
+        if (value.statusCode == 200) {
+          ResponseData<TaskData> responseData =
+              ResponseData.fromJson(value.data, TaskData.fromJson);
+
+          TaskData taskData = successState.taskData.copyWith(
+            title: responseData.data!.title,
+            description: responseData.data!.description,
+            priority: responseData.data!.priority,
+            status: responseData.data!.status,
+            startDate: responseData.data!.startDate,
+            dueAt: responseData.data!.dueAt,
+          );
+          emit(successState.copyWith(
+            taskData: taskData,
+          ));
+        } else {
+          emit(TaskDetailErrorState('lbl_error'.tr()));
+        }
+      });
     }
   }
 
@@ -340,12 +362,38 @@ class TaskDetailBloc extends Bloc<TaskDetailEvent, TaskDetailState> {
   ) async {
     if (state is FetchTaskSuccess) {
       final successState = state as FetchTaskSuccess;
-      String dueAt = event.dateTime.format(pattern: D_M_Y_HH_mm);
-      final currentTask = successState.taskData;
-      final updatedTask = currentTask.copyWith(dueAt: dueAt);
-      emit(successState.copyWith(
-        taskData: updatedTask,
-      ));
+      logger.i(event.dateTime.toString());
+      var requestData = TaskData(
+          creatorId: PrefUtils().getUser()!.id,
+          title: successState.taskData.title,
+          description: successState.taskData.description,
+          priority: successState.taskData.priority,
+          status: successState.taskData.status,
+          dueAt: event.dateTime.toString(),
+          startDate: successState.taskData.startDate);
+      await _repository
+          .updateTask(successState.taskData.id!,
+              requestData: requestData.toJson())
+          .then((value) async {
+        if (value.statusCode == 200) {
+          ResponseData<TaskData> responseData =
+              ResponseData.fromJson(value.data, TaskData.fromJson);
+
+          TaskData taskData = successState.taskData.copyWith(
+            title: responseData.data!.title,
+            description: responseData.data!.description,
+            priority: responseData.data!.priority,
+            status: responseData.data!.status,
+            startDate: responseData.data!.startDate,
+            dueAt: responseData.data!.dueAt,
+          );
+          emit(successState.copyWith(
+            taskData: taskData,
+          ));
+        } else {
+          emit(TaskDetailErrorState('lbl_error'.tr()));
+        }
+      });
     }
   }
 
@@ -464,10 +512,7 @@ class TaskDetailBloc extends Bloc<TaskDetailEvent, TaskDetailState> {
       if (state is FetchTaskSuccess) {
         final successState = state as FetchTaskSuccess;
 
-        UserData? userData = PrefUtils().getUser();
         Map<String, dynamic> requestData = {
-          'sender_name': '${userData!.firstName} ${userData.lastName}',
-          'task_title': successState.taskData.title,
           'to_userId': event.toUserId,
         };
 
@@ -477,12 +522,14 @@ class TaskDetailBloc extends Bloc<TaskDetailEvent, TaskDetailState> {
           if (value.statusCode == 200) {
             ResponseData<AssignData> responseData =
                 ResponseData.fromJson(value.data, AssignData.fromJson);
-            final afterAssign = [
-              ...successState.listAssigns,
-              responseData.data!
-            ];
+            AssignData assignData = responseData.data!;
+            assignData.image = event.pathImage;
+            assignData.name = event.assigerName;
+            assignData.mention =
+                event.assigerName.toLowerCase().replaceAll(' ', '');
+            final afterAssign = [...successState.listAssigns, assignData];
             final newMentionData = List.of(successState.mentionData)
-              ..add(responseData.data!.toJson());
+              ..add(assignData.toJson());
             emit(successState.copyWith(
               listAssigns: afterAssign,
               mentionData: newMentionData,
@@ -508,10 +555,7 @@ class TaskDetailBloc extends Bloc<TaskDetailEvent, TaskDetailState> {
     try {
       if (state is FetchTaskSuccess) {
         final successState = state as FetchTaskSuccess;
-        UserData? userData = PrefUtils().getUser();
         Map<String, dynamic> requestData = {
-          'sender_name': '${userData!.firstName} ${userData.lastName}',
-          'task_title': successState.taskData.title,
           'to_userId': null,
         };
         await _repository
@@ -620,5 +664,47 @@ class TaskDetailBloc extends Bloc<TaskDetailEvent, TaskDetailState> {
         emit(TaskDetailErrorState('lbl_error'.tr()));
       }
     }
+  }
+
+  Future<void> _onReloadComments(
+    ReloadComments event,
+    Emitter<TaskDetailState> emit,
+  ) async {
+    final successState = state as FetchTaskSuccess;
+    emit(successState);
+    // try {
+    //   final Map<int, GlobalKey<CommentTaskWidgetState>> mapkey = {};
+    //   await _repository.getComments(event.taskId).then((value) {
+    //     if (value.statusCode == 200) {
+    //       ResponseList<CommentData> listComments =
+    //           ResponseList.fromJson(value.data, CommentData.fromJson);
+    //       for (var comment in listComments.data!) {
+    //         mapkey[comment.id!] = GlobalKey();
+    //       }
+    //       final commentDatas = [
+    //         ...successState.commentDatas,
+    //         ...?listComments.data,
+    //       ];
+    //       final commentKeys = {
+    //         ...(successState.commentKeys),
+    //         ...mapkey,
+    //       };
+    //       final hasMoreComment = listComments.pagination!.currentPage! ==
+    //           listComments.pagination!.totalPages! - 1;
+
+    //       emit(successState.copyWith(
+    //         hasMoreComment: hasMoreComment,
+    //         commentDatas: commentDatas,
+    //         commentKeys: commentKeys,
+    //       ));
+    //     }
+    //   });
+    // } catch (e) {
+    //   if (e is NoInternetException) {
+    //     emit(TaskDetailErrorState('error_no_internet'.tr()));
+    //   } else {
+    //     emit(TaskDetailErrorState('lbl_error'.tr()));
+    //   }
+    // }
   }
 }

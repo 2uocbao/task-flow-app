@@ -42,6 +42,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       add(FetchNotificationEvent());
     }
   }
+
   Future<void> _onChangeStatus(
     ChangeStatusNotificationEvent event,
     Emitter<NotificationState> emit,
@@ -80,7 +81,10 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
                 state.copyWith(
                   hasMore: responseList.pagination!.currentPage! ==
                       responseList.pagination!.totalPages! - 1,
-                  notificationData: responseList.data!,
+                  notificationData: [
+                    ...state.notificationData,
+                    ...responseList.data!
+                  ],
                 ),
               );
             } else {

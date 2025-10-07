@@ -172,21 +172,36 @@ class FilterTaskDialog extends StatelessWidget {
         if (dateTime != null) {
           dateStart = dateTime.format(pattern: D_M_Y);
           // ignore: use_build_context_synchronously
+          context
+              .read<FilterTaskBloc>()
+              .add(ChangeDateStartEvent(dateStart: dateTime));
+        }
+      },
+    );
+  }
 
-          // alignment: Alignment.centerLeft,
-          // contentPadding: EdgeInsets.fromLTRB(5.w, 5.h, 5.w, 5.h),
-          // onTap: () async {
-          //   DateTime? dateTime = await showDatePicker(
-          //       context: context,
-          //       initialDate: DateTime.tryParse(dateEnd),
-          //       initialEntryMode: DatePickerEntryMode.calendarOnly,
-          //       firstDate: DateTime.tryParse(dateStart)!,
-          //       lastDate: DateTime(DateTime.now().year + 2));
-          //   if (dateTime != null) {
-          //     dateEnd = dateTime.format(pattern: D_M_Y);
-          //     // ignore: use_build_context_synchronously
-          //         context.read<FilterTaskBloc>()
-          //         .add(ChangeDateEndEvent(dateEnd: dateTime));
+  Widget _buildSelectedDateEnd(BuildContext context) {
+    return CustomTextFormField(
+      autofocus: true,
+      readOnly: true,
+      width: 100.w,
+      controller: TextEditingController(text: dateEnd),
+      alignment: Alignment.center,
+      contentPadding: EdgeInsets.fromLTRB(5.w, 5.h, 5.w, 5.h),
+      onTap: () async {
+        DateTime? dateTime = await showDatePicker(
+          context: context,
+          initialDate: DateTime.tryParse(dateEnd),
+          initialEntryMode: DatePickerEntryMode.calendarOnly,
+          firstDate: DateTime.tryParse(dateStart)!,
+          lastDate: DateTime(DateTime.now().year + 2),
+        );
+        if (dateTime != null) {
+          dateEnd = dateTime.format(pattern: D_M_Y);
+          // ignore: use_build_context_synchronously
+          context
+              .read<FilterTaskBloc>()
+              .add(ChangeDateEndEvent(dateEnd: dateTime));
         }
       },
     );
@@ -277,9 +292,5 @@ class FilterTaskDialog extends StatelessWidget {
           .subtract(const Duration(microseconds: 1))
           .format(pattern: D_M_Y));
     }
-  }
-
-  Widget _buildSelectedDateEnd(BuildContext context) {
-    return CustomTextFormField();
   }
 }

@@ -5,8 +5,7 @@ class NotificationData {
   String? senderName;
   String? image;
   String? typeContent;
-  String? titleTask;
-  String? teamName;
+  String? target;
   bool? status;
   String? type;
   String? createdAt;
@@ -18,8 +17,7 @@ class NotificationData {
     this.senderName,
     this.image,
     this.typeContent,
-    this.titleTask,
-    this.teamName,
+    this.target,
     this.status,
     this.type,
     this.createdAt,
@@ -32,8 +30,7 @@ class NotificationData {
     String? senderName,
     String? image,
     String? typeContent,
-    String? titleTask,
-    String? teamName,
+    String? target,
     bool? status,
     String? type,
     String? createdAt,
@@ -45,8 +42,7 @@ class NotificationData {
       senderName: senderName ?? this.senderName,
       image: image ?? this.image,
       typeContent: typeContent ?? this.typeContent,
-      titleTask: titleTask ?? this.titleTask,
-      teamName: teamName ?? this.teamName,
+      target: target ?? this.target,
       status: status ?? this.status,
       type: type ?? this.type,
       createdAt: createdAt ?? this.createdAt,
@@ -66,11 +62,8 @@ class NotificationData {
       image = json['image'];
     }
     typeContent = json['type_content'];
-    if (json['title_task'] != null) {
-      titleTask = json['title_task'];
-    }
-    if (json['name_team'] != null) {
-      teamName = json['name_team'];
+    if (json['target'] != null) {
+      target = json['target'];
     }
     if (json['status'] != null) {
       status = json['status'];

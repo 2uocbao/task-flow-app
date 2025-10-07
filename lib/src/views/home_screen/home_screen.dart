@@ -96,6 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _scrollController.dispose();
     super.dispose();
   }
+
   void _toggleFab() {
     setState(() {
       _isExpanded = !_isExpanded;
@@ -174,6 +175,7 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     );
   }
+
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return CustomAppBar(
       leading: Builder(
@@ -227,6 +229,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ],
     );
   }
+
   Widget _showTaskList(BuildContext context, HomeFetchSuccessState state) {
     String timeNow = "TODAY".tr();
     bool has = false;
@@ -384,6 +387,7 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     );
   }
+
   Widget _showTeamsAndFilter(
       BuildContext context, HomeFetchSuccessState state) {
     return SizedBox(

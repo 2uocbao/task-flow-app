@@ -71,6 +71,11 @@ class _DetailAssignDialogState extends State<DetailAssignDialog> {
 
   Widget _buildAssignDetail(
       BuildContext context, List<AssignData> assignDatas) {
+    String currentId = PrefUtils().getUser()!.id!;
+    String adminUser = assignDatas
+        .firstWhere((element) => element.role == 'ADMIN')
+        .assignerId!;
+    bool isAdminUser = adminUser == currentId;
     return SizedBox(
       height:
           assignDatas.length * 40.h > 150.h ? 150.h : assignDatas.length * 40.h,
@@ -79,6 +84,11 @@ class _DetailAssignDialogState extends State<DetailAssignDialog> {
         scrollDirection: Axis.vertical,
         itemCount: assignDatas.length,
         itemBuilder: (context, index) {
+          if (assignDatas[index].assignerId == adminUser) {
+            return const SizedBox(
+              height: 0,
+            );
+          }
           return SizedBox(
             height: 40.h,
             child: Row(
@@ -90,9 +100,12 @@ class _DetailAssignDialogState extends State<DetailAssignDialog> {
                 ),
                 SizedBox(width: 10.w),
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      assignDatas[index].name!,
+                      currentId == assignDatas[index].assignerId
+                          ? 'lbl_you'.tr()
+                          : assignDatas[index].name!,
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     Text(
@@ -102,19 +115,21 @@ class _DetailAssignDialogState extends State<DetailAssignDialog> {
                   ],
                 ),
                 const Spacer(),
-                CustomIconButton(
-                  height: 30.h,
-                  width: 35.w,
-                  onTap: () {
-                    context.read<TaskDetailBloc>().add(
-                        RemoveAssignEvent(assignId: assignDatas[index].id!));
-                  },
-                  child: Icon(
-                    Icons.close,
-                    color: Colors.red,
-                    size: 30.sp,
+                if (isAdminUser) ...{
+                  CustomIconButton(
+                    height: 30.h,
+                    width: 35.w,
+                    onTap: () {
+                      context.read<TaskDetailBloc>().add(
+                          RemoveAssignEvent(assignId: assignDatas[index].id!));
+                    },
+                    child: Icon(
+                      Icons.close,
+                      color: Colors.red,
+                      size: 30.sp,
+                    ),
                   ),
-                ),
+                },
                 SizedBox(
                   width: 10.w,
                 ),

@@ -40,7 +40,6 @@ class Api {
 
   void clearTokenAndRefresh() async {}
 
-
   Future<Response> getUserTest(String path,
       {Map<String, dynamic> queryParam = const {}}) async {
     ProgressDialogUtils.showProgressDialog();
@@ -305,7 +304,6 @@ class Api {
 
   Future<void> downloadFile(String path, String fileName,
       {Map<String, dynamic> queryParam = const {}}) async {
-
     try {
       bool hasPermission = await requestStoragePermission();
       if (!hasPermission) return;
@@ -369,7 +367,6 @@ class Api {
 
   Future<Response> search(String path,
       {Map<String, dynamic> requestParam = const {}}) async {
-
     try {
       await isNetWorkConnected();
       Response response;

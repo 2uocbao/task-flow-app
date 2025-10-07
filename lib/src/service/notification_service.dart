@@ -110,16 +110,16 @@ class NotificationService {
           case 'REMOVE_ASSIGN':
             await flutterLocalNotificationsPlugin.show(
               notifiId,
-              '${'TASK'.tr()}  ${notificationData.titleTask}',
-              '${notificationData.senderName} ${'NotifiRemove'.tr()} ${notificationData.titleTask}',
+              '${'TASK'.tr()}  ${notificationData.target}',
+              '${notificationData.senderName} ${'NotifiRemove'.tr()} ${notificationData.target}',
               platformChannelSpecifics,
             );
             break;
           case 'NEW_ASSIGN':
             await flutterLocalNotificationsPlugin.show(
               notifiId,
-              '${'TASK'.tr()}  ${notificationData.titleTask}',
-              '${notificationData.senderName} ${'NotifiAddTask'.tr()} ${notificationData.titleTask}',
+              '${'TASK'.tr()}  ${notificationData.target}',
+              '${notificationData.senderName} ${'NotifiAddTask'.tr()} ${notificationData.target}',
               platformChannelSpecifics,
               payload: 'task:${notificationData.contentId}',
             );
@@ -127,8 +127,8 @@ class NotificationService {
           case 'DUEAT':
             await flutterLocalNotificationsPlugin.show(
               notifiId,
-              '${'TASK'.tr()} ${notificationData.titleTask}',
-              '${'NotifiDueAt'.tr()} ${notificationData.titleTask}',
+              '${'TASK'.tr()} ${notificationData.target}',
+              '${'NotifiDueAt'.tr()} ${notificationData.target}',
               platformChannelSpecifics,
               payload: 'task:${notificationData.contentId}',
             );
@@ -136,8 +136,8 @@ class NotificationService {
           case 'REPORT':
             await flutterLocalNotificationsPlugin.show(
               notifiId,
-              '${'TASK'.tr()}  ${notificationData.titleTask}',
-              '${notificationData.senderName} ${'new_report'.tr()} ${notificationData.titleTask}',
+              '${'TASK'.tr()}  ${notificationData.target}',
+              '${notificationData.senderName} ${'new_report'.tr()} ${notificationData.target}',
               platformChannelSpecifics,
               payload: 'task:${notificationData.contentId}',
             );
@@ -154,8 +154,8 @@ class NotificationService {
       case 'COMMENT':
         await flutterLocalNotificationsPlugin.show(
           notifiId,
-          '${'TASK'.tr()} ${notificationData.titleTask}',
-          '${notificationData.senderName} ${'NotifiComment'.tr()} ${notificationData.titleTask}',
+          '${'TASK'.tr()} ${notificationData.target}',
+          '${notificationData.senderName} ${'NotifiComment'.tr()} ${notificationData.target}',
           platformChannelSpecifics,
           payload: 'task:${notificationData.contentId}',
         );
@@ -164,24 +164,24 @@ class NotificationService {
         if (notificationData.typeContent == 'LEAVE_TEAM') {
           await flutterLocalNotificationsPlugin.show(
             notifiId,
-            '${'lbl_teams'.tr()} ${notificationData.titleTask}',
-            '${notificationData.senderName} ${'notifi_leave'.tr()} ${notificationData.teamName}',
+            '${'lbl_teams'.tr()} ${notificationData.target}',
+            '${notificationData.senderName} ${'notifi_leave'.tr()} ${notificationData.target}',
             platformChannelSpecifics,
             // payload: 'task:${notificationData.contentId}',
           );
         } else if (notificationData.typeContent == 'ADD_MEMBER') {
           await flutterLocalNotificationsPlugin.show(
             notifiId,
-            '${'lbl_teams'.tr()} ${notificationData.titleTask}',
-            '${notificationData.senderName} ${'Notifi_Add_Member'.tr()} ${notificationData.teamName} ',
+            '${'lbl_teams'.tr()} ${notificationData.target}',
+            '${notificationData.senderName} ${'Notifi_Add_Member'.tr()} ${notificationData.target} ',
             platformChannelSpecifics,
             // payload: 'task:${notificationData.contentId}',
           );
         } else if (notificationData.typeContent == 'REMOVE_MEMBER') {
           await flutterLocalNotificationsPlugin.show(
             notifiId,
-            '${'lbl_teams'.tr()} ${notificationData.titleTask}',
-            '${notificationData.senderName} ${'Notifi_remove_member'.tr()} ${notificationData.teamName}',
+            '${'lbl_teams'.tr()} ${notificationData.target}',
+            '${notificationData.senderName} ${'Notifi_remove_member'.tr()} ${notificationData.target}',
             platformChannelSpecifics,
             // payload: 'task:${notificationData.contentId}',
           );

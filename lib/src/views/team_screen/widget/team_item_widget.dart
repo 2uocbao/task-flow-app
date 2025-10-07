@@ -60,7 +60,6 @@ class TeamItemWidget extends StatelessWidget {
             padding:
                 EdgeInsets.only(left: 5.w, top: 5.h, right: 5.w, bottom: 5.h),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
@@ -71,11 +70,18 @@ class TeamItemWidget extends StatelessWidget {
                             contentPadding: EdgeInsets.symmetric(
                                 vertical: 2.w, horizontal: 2.h),
                             controller: _nameController,
+                            maxLines: 1,
                             textStyle: Theme.of(context).textTheme.bodyLarge,
                           ))
-                        : Text(teamData.name!,
-                            style: Theme.of(context).textTheme.bodyLarge),
-                    const Spacer(),
+                        : Expanded(
+                            child: SizedBox(
+                              child: Text(
+                                teamData.name!,
+                                style: Theme.of(context).textTheme.bodyLarge,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ),
                     if (teamData.creatorId == PrefUtils().getUser()!.id) ...{
                       !isUpdate
                           ? CustomIconButton(

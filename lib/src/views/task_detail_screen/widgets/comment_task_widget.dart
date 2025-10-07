@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:extended_text_field/extended_text_field.dart';
 import 'package:taskflow/src/data/model/comment/comment_data.dart';
 import 'package:taskflow/src/utils/app_export.dart';
 import 'package:taskflow/src/views/confirm_delete_dialog/model/custom_id.dart';
@@ -9,18 +8,13 @@ class CommentTaskWidget extends StatefulWidget {
 
   final String taskId;
 
-  final VoidCallback onEditStarted;
+  final Function(CommentData comment) requestFocusBox;
 
-  final Function(int id) isUpdateComment;
-
-  final Function(String username) requestFocus;
   const CommentTaskWidget({
     super.key,
     required this.commentData,
     required this.taskId,
-    required this.onEditStarted,
-    required this.isUpdateComment,
-    required this.requestFocus,
+    required this.requestFocusBox,
   });
 
   @override
@@ -28,141 +22,103 @@ class CommentTaskWidget extends StatefulWidget {
 }
 
 class CommentTaskWidgetState extends State<CommentTaskWidget> {
-  final FocusNode _commentFocusNode = FocusNode();
-  late final TextEditingController _commentController;
-  late String originalContent = '';
+  late bool isEdit = false;
+  final logger = Logger();
 
-  @override
-  void initState() {
-    super.initState();
-    originalContent = widget.commentData.text!;
-    _commentController = TextEditingController(text: originalContent);
-  }
-
-  @override
-  void dispose() {
-    _commentController.dispose();
-    _commentFocusNode.dispose();
-    super.dispose();
-  }
-
-  void resetText() async {
-    setState(() {
-      _commentFocusNode.unfocus();
-      _commentController.text = originalContent;
-    });
-  }
-
-  void unfoCusComment() async {
-    setState(() {
-      _commentFocusNode.unfocus();
-    });
-  }
-
-  void _onEditButtonPressed(int id) async {
-    FocusScope.of(context).requestFocus(_commentFocusNode);
-    widget.onEditStarted();
-    widget.isUpdateComment(id);
-  }
-
-  String getCurrentComment() {
-    setState(() {
-      originalContent = _commentController.text;
-    });
-    return _commentController.text;
+  String makeTextController(String contentDisplay) {
+    final pattern = RegExp(r'@\[\_\_(.*?)\_\_\]\(\_\_(.*?)\_\_\)');
+    final matches = pattern.allMatches(contentDisplay);
+    String? display = contentDisplay;
+    for (var element in matches) {
+      display = display!.replaceFirst(pattern, '@${element.group(2)!}');
+    }
+    return display!;
   }
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      child: Row(
-        children: [
-          SizedBox(width: 5.w),
-          CustomCircleAvatar(imagePath: widget.commentData.image!, size: 35),
-          SizedBox(width: 5.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.commentData.username!,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                SizedBox(height: 2.h),
-                Text(
-                  formatDateAndTime(
-                    date: widget.commentData.createdAt!,
+    return Column(
+      children: [
+        Container(
+          height: 0.5.h,
+          color: Theme.of(context).highlightColor,
+        ),
+        Row(
+          children: [
+            SizedBox(width: 5.w),
+            CustomCircleAvatar(imagePath: widget.commentData.image!, size: 35),
+            SizedBox(width: 5.w),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.commentData.username!,
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-                SizedBox(
-                  child: ExtendedTextField(
-                    controller: _commentController,
-                    specialTextSpanBuilder: MentionTextSpanBuilder(),
-                    maxLines: null,
+                  Text(
+                    formatDateAndTime(
+                      date: widget.commentData.createdAt!,
+                    ),
                     style: Theme.of(context).textTheme.bodySmall,
-                    focusNode: _commentFocusNode,
-                    readOnly: PrefUtils().getUser()!.id! !=
-                        widget.commentData.creatorId,
-                    onTap: () {
-                      if (PrefUtils().getUser()!.id! ==
-                          widget.commentData.creatorId) {
-                        _onEditButtonPressed(widget.commentData.id!);
-                      }
-                    },
                   ),
-                ),
-              ],
-            ),
-          ),
-          Transform.rotate(
-            angle: 90 * 3.1415926535 / 180,
-            child: CustomIconButton(
-              child: Icon(
-                Icons.keyboard_control_sharp,
-                size: 25.sp,
+                  HighlightedText(
+                      text: makeTextController(widget.commentData.text!))
+                ],
               ),
-              onTap: () {
-                final RenderBox button =
-                    context.findRenderObject() as RenderBox;
-                final RenderBox overlay =
-                    Overlay.of(context).context.findRenderObject() as RenderBox;
-                final Offset buttonPosition =
-                    button.localToGlobal(Offset.zero, ancestor: overlay);
-                final Size buttonSize = button.size;
-                final Size overlaySize = overlay.size;
-
-                final RelativeRect position = RelativeRect.fromLTRB(
-                  buttonPosition.dx + buttonSize.width,
-                  buttonPosition.dy + 30.h,
-                  overlaySize.width - (buttonPosition.dx + buttonSize.width),
-                  overlaySize.height - (buttonPosition.dy + buttonSize.height),
-                );
-                if (widget.commentData.creatorId == PrefUtils().getUser()!.id) {
-                  _buildShowMyMenuComments(context, position);
-                } else {
-                  showMenu(
-                    context: context,
-                    position: position,
-                    items: [
-                      PopupMenuItem(
-                        child: Text(
-                          "bt_reply".tr(),
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                        onTap: () {
-                          widget.requestFocus(widget.commentData.creatorId!);
-                        },
-                      ),
-                    ],
-                  );
-                }
-              },
             ),
+            isEdit
+                ? SizedBox()
+                : Transform.rotate(
+                    angle: 90 * 3.1415926535 / 180,
+                    child: CustomIconButton(
+                      onTap: onTap,
+                      child: Icon(
+                        Icons.keyboard_control_sharp,
+                        size: 25.sp,
+                      ),
+                    ),
+                  ),
+          ],
+        )
+      ],
+    );
+  }
+
+  void onTap() {
+    final RenderBox button = context.findRenderObject() as RenderBox;
+    final RenderBox overlay =
+        Overlay.of(context).context.findRenderObject() as RenderBox;
+    final Offset buttonPosition =
+        button.localToGlobal(Offset.zero, ancestor: overlay);
+    final Size buttonSize = button.size;
+    final Size overlaySize = overlay.size;
+
+    final RelativeRect position = RelativeRect.fromLTRB(
+      buttonPosition.dx + buttonSize.width,
+      buttonPosition.dy + 30.h,
+      overlaySize.width - (buttonPosition.dx + buttonSize.width),
+      overlaySize.height - (buttonPosition.dy + buttonSize.height),
+    );
+    if (widget.commentData.creatorId == PrefUtils().getUser()!.id) {
+      _buildShowMyMenuComments(context, position);
+    } else {
+      showMenu(
+        context: context,
+        position: position,
+        items: [
+          PopupMenuItem(
+            child: Text(
+              "bt_reply".tr(),
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+            onTap: () {
+              // widget.requestFocus(widget.commentData.creatorId!);
+            },
           ),
         ],
-      ),
-    );
+      );
+    }
   }
 
   Future _buildShowMyMenuComments(BuildContext context, RelativeRect position) {
@@ -175,7 +131,9 @@ class CommentTaskWidgetState extends State<CommentTaskWidget> {
             "bt_edit".tr(),
             style: Theme.of(context).textTheme.bodySmall,
           ),
-          onTap: () {},
+          onTap: () {
+            widget.requestFocusBox(widget.commentData);
+          },
         ),
         PopupMenuItem(
           child: Text(
@@ -208,30 +166,33 @@ class CommentTaskWidgetState extends State<CommentTaskWidget> {
   }
 }
 
-class MentionTextSpanBuilder extends SpecialTextSpanBuilder {
-  @override
-  SpecialText? createSpecialText(String flag,
-      {TextStyle? textStyle,
-      SpecialTextGestureTapCallback? onTap,
-      required int index}) {
-    if (flag.startsWith('@')) {
-      return MentionText(flag, textStyle ?? const TextStyle(), onTap);
-    }
-    return null;
-  }
-}
+class HighlightedText extends StatelessWidget {
+  final String text;
 
-class MentionText extends SpecialText {
-  MentionText(String startFlag, TextStyle textStyle,
-      SpecialTextGestureTapCallback? onTap)
-      : super(startFlag, ' ', textStyle);
+  const HighlightedText({super.key, required this.text});
 
   @override
-  InlineSpan finishText() {
-    final mentionText = toString();
-    return TextSpan(
-      text: mentionText,
-      style: const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+  Widget build(BuildContext context) {
+    final words = text.split(' ');
+
+    return Text.rich(
+      TextSpan(
+        children: words.map((word) {
+          final isMention = word.startsWith('@');
+          return TextSpan(
+            text: "$word ",
+            style: TextStyle(
+              color: isMention
+                  ? Colors.blue
+                  : Theme.of(context)
+                      .primaryTextTheme
+                      .bodySmall!
+                      .backgroundColor,
+              fontWeight: isMention ? FontWeight.bold : FontWeight.normal,
+            ),
+          );
+        }).toList(),
+      ),
     );
   }
 }

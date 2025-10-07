@@ -85,8 +85,7 @@ class LoginScreenBloc extends Bloc<LoginScreenEvent, LoginScreenState> {
             .getUserByEmail(queryParam: queryParam)
             .then((value) async {
           if (value.statusCode == 200) {
-            ResponseData response = ResponseData.fromJsonToken(value.data);
-            await TokenStorage.saveToken(response.data);
+            await TokenStorage.saveToken(value.data);
             add(FetchUserDetailEvent());
           } else {
             emit(SignInFailure('lbl_error'.tr()));
@@ -98,8 +97,6 @@ class LoginScreenBloc extends Bloc<LoginScreenEvent, LoginScreenState> {
     } catch (e) {
       if (e is NoInternetException) {
         emit(SignInFailure('error_no_internet'.tr()));
-      } else {
-        emit(SignInFailure('lbl_error'.tr()));
       }
     }
   }

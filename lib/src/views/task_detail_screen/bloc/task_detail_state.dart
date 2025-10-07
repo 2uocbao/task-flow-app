@@ -18,10 +18,31 @@ class TaskDetailErrorState extends TaskDetailState {
   TaskDetailErrorState(this.error);
 }
 
+class UpdateCommentSuccess extends FetchTaskSuccess {
+  final GlobalKey<CommentTaskWidgetState> commentKey;
+  UpdateCommentSuccess({
+    required this.commentKey,
+    required super.taskData,
+    required super.commentDatas,
+    required super.mapLayerLink,
+  });
+
+  // UpdateCommentSuccess copyWith({
+  //   GlobalKey<CommentTaskWidgetState>? commentKey,
+  // }) {
+  //   return UpdateCommentSuccess(
+  //     commentKey: commentKey ?? this.commentKey,
+  //     taskData: taskData,
+  //   );
+  // }
+
+  @override
+  List<Object?> get props => [commentKey];
+}
+
 class FetchTaskSuccess extends TaskDetailState {
   final bool hasMoreComment;
   final List<AssignData> listAssigns;
-
   final TaskData taskData;
   final List<CommentData> commentDatas;
   final List<ReportData> reportOfPhoto;
@@ -29,17 +50,19 @@ class FetchTaskSuccess extends TaskDetailState {
   final List<ReportData> reportOfFile;
   final List<Map<String, dynamic>> mentionData;
   final Map<int, GlobalKey<CommentTaskWidgetState>> commentKeys;
+  final Map<int, LayerLink> mapLayerLink;
 
   FetchTaskSuccess({
-    required this.hasMoreComment,
-    required this.listAssigns,
+    this.hasMoreComment = false,
+    this.listAssigns = const [],
     required this.taskData,
-    required this.commentDatas,
-    required this.reportOfPhoto,
-    required this.reportOfLink,
-    required this.reportOfFile,
-    required this.mentionData,
-    required this.commentKeys,
+    this.commentDatas = const [],
+    this.reportOfPhoto = const [],
+    this.reportOfLink = const [],
+    this.reportOfFile = const [],
+    this.mentionData = const [],
+    this.commentKeys = const {},
+    this.mapLayerLink = const {},
   });
 
   FetchTaskSuccess copyWith({
@@ -52,6 +75,7 @@ class FetchTaskSuccess extends TaskDetailState {
     List<ReportData>? reportOfLink,
     List<Map<String, dynamic>>? mentionData,
     Map<int, GlobalKey<CommentTaskWidgetState>>? commentKeys,
+    Map<int, LayerLink>? mapLayerLink,
   }) {
     return FetchTaskSuccess(
       hasMoreComment: hasMoreComment ?? this.hasMoreComment,
@@ -63,6 +87,7 @@ class FetchTaskSuccess extends TaskDetailState {
       commentKeys: commentKeys ?? this.commentKeys,
       mentionData: mentionData ?? this.mentionData,
       reportOfLink: reportOfLink ?? this.reportOfLink,
+      mapLayerLink: mapLayerLink ?? this.mapLayerLink,
     );
   }
 

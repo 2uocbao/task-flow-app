@@ -101,6 +101,8 @@ class NotificationItemWidget extends StatelessWidget {
               NavigatorService.pushNamed(AppRoutes.taskDetailScreen,
                   arguments:
                       TaskDetailArguments(taskId: notificationData.contentId));
+            } else if (notificationData.type == 'CONTACT') {
+              NavigatorService.pushNamed(AppRoutes.contactScreen);
             }
           },
         );
@@ -118,26 +120,26 @@ class NotificationItemWidget extends StatelessWidget {
       if (notificationData.typeContent == 'NEW_ASSIGN') {
         return _buildTitleNotifi(
           context,
-          '${notificationData.senderName} ${'NotifiAddTask'.tr()} ${notificationData.titleTask}',
+          '${notificationData.senderName} ${'NotifiAddTask'.tr()} ${notificationData.target}',
         );
       } else if (notificationData.typeContent == 'DUEAT') {
         return _buildTitleNotifi(
           context,
-          '${notificationData.titleTask} ${'NotifiDueAt'.tr()}',
+          '${notificationData.target} ${'NotifiDueAt'.tr()}',
         );
       } else if (notificationData.typeContent == 'REMOVE_ASSIGN') {
         return _buildTitleNotifi(
           context,
-          '${notificationData.senderName} ${'NotifiRemove'.tr()} ${notificationData.titleTask}',
+          '${notificationData.senderName} ${'NotifiRemove'.tr()} ${notificationData.target}',
         );
       }
     } else if (notificationData.type == 'COMMENT') {
       return _buildTitleNotifi(
         context,
-        '${notificationData.senderName} ${'NotifiComment'.tr()} ${notificationData.titleTask}',
+        '${notificationData.senderName} ${'NotifiComment'.tr()} ${notificationData.target}',
       );
     } else if (notificationData.type == 'CONTACT') {
-      if (notificationData.typeContent == 'CONTACT') {
+      if (notificationData.typeContent == 'REQUEST') {
         return _buildTitleNotifi(
           context,
           '${notificationData.senderName} ${'NotifiRequest'.tr()}',
@@ -152,17 +154,17 @@ class NotificationItemWidget extends StatelessWidget {
       if (notificationData.typeContent == 'ADD_MEMBER') {
         return _buildTitleNotifi(
           context,
-          '${notificationData.senderName} ${'Notifi_Add_Member'.tr()} ${notificationData.teamName}',
+          '${notificationData.senderName} ${'Notifi_Add_Member'.tr()} ${notificationData.target}',
         );
       } else if (notificationData.typeContent == 'REMOVE_MEMBER') {
         return _buildTitleNotifi(
           context,
-          '${notificationData.senderName} ${'Notifi_remove_member'.tr()} ${notificationData.teamName}',
+          '${notificationData.senderName} ${'Notifi_remove_member'.tr()} ${notificationData.target}',
         );
       } else if (notificationData.typeContent == 'LEAVE_MEMBER') {
         return _buildTitleNotifi(
           context,
-          '${notificationData.senderName} ${'notifi_leave'.tr()} ${notificationData.teamName}',
+          '${notificationData.senderName} ${'notifi_leave'.tr()} ${notificationData.target}',
         );
       }
     }

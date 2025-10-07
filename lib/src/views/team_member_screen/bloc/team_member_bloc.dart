@@ -59,8 +59,6 @@ class TeamMemberBloc extends Bloc<TeamMemberEvent, TeamMemberState> {
     try {
       var requestData = <String, dynamic>{
         'member_id': event.concactId,
-        'leader_name': event.teamData.creatorName,
-        'team_name': event.teamData.name,
       };
       await _repository
           .addMemberToTeam(event.teamData.id!, requestData: requestData)
@@ -97,8 +95,6 @@ class TeamMemberBloc extends Bloc<TeamMemberEvent, TeamMemberState> {
     try {
       var requestData = <String, dynamic>{
         'member_id': event.teamMemberId,
-        'leader_name': event.teamData.creatorName,
-        'team_name': event.teamData.name,
       };
       await _repository
           .removeMember(event.teamData.id!, event.teamMemberId,

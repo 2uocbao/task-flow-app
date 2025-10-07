@@ -138,9 +138,7 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
     SendRequestEvent event,
     Emitter<ContactState> emit,
   ) async {
-    UserData userData = PrefUtils().getUser()!;
     var requestData = <String, dynamic>{
-      'sender_name': userData.firstName! + userData.lastName!,
       'to_user': event.toUserId,
     };
     try {
@@ -170,10 +168,7 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
     AcceptRequestEvent event,
     Emitter<ContactState> emit,
   ) async {
-    UserData userData = PrefUtils().getUser()!;
     final requestData = <String, dynamic>{
-      'sender_name': userData.firstName! + userData.lastName!,
-      'to_user': event.contactData.userId,
       'status': 'ACCEPTED',
     };
     try {

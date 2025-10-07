@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:taskflow/src/data/model/home/home_data.dart';
 import 'package:taskflow/src/data/model/response/response_list.dart';
 import 'package:taskflow/src/data/repository/repository.dart';
@@ -46,8 +49,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
             List<dynamic> dataList = value.data['data'];
             ResponseList<HomeData> homeData =
                 ResponseList.fromJson(value.data, HomeData.fromJson);
-            HomeData homeData2 = HomeData.fromJson(dataList.first);
-
+            HomeData homeData2 = await parseHomeResponse(dataList.first);
+            sleep(Duration(milliseconds: 100));
             emit(HomeFetchSuccessState(
               selectedTeam: PrefUtils().getTeamId(),
               selectedStatus: PrefUtils().getStatusFilterTask(),
@@ -68,9 +71,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       if (e is NoInternetException) {
         emit(HomeFailureState('error_no_internet'.tr()));
       } else {
+        logger.i(e);
         emit(HomeFailureState('lbl_error'.tr()));
       }
     }
+  }
+
+  Future<HomeData> parseHomeResponse(Map<String, dynamic> responseBody) async {
+    return compute(HomeData.fromJson, responseBody);
   }
 
   Future<void> _getTasks(

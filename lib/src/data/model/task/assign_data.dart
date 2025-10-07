@@ -4,6 +4,7 @@ class AssignData {
   String? name;
   String? mention;
   String? image;
+  String? role;
   String? joinedAt;
 
   AssignData({
@@ -12,6 +13,7 @@ class AssignData {
     this.name,
     this.mention,
     this.image,
+    this.role,
     this.joinedAt,
   });
 
@@ -30,6 +32,9 @@ class AssignData {
     }
     if (json['image'] != null) {
       image = json['image'];
+    }
+    if (json['role'] != null) {
+      role = json['role'];
     }
     if (json['joined_at'] != null) {
       joinedAt = json['joined_at'];

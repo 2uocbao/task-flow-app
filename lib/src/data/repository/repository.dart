@@ -27,7 +27,7 @@ class Repository {
 
   Future<Response> getUserByEmail(
       {Map<String, dynamic> queryParam = const {}}) async {
-    return await _api.getUserTest('/users/tests', queryParam: queryParam);
+    return await _api.getUserTest('/users/test', queryParam: queryParam);
   }
 
 //Custom

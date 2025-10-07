@@ -13,6 +13,11 @@ class FetchDetailEvent extends TaskDetailEvent {
   FetchDetailEvent({required this.id});
 }
 
+class ReloadComments extends TaskDetailEvent {
+  final String taskId;
+  ReloadComments({required this.taskId});
+}
+
 class UpdateTaskEvent extends TaskDetailEvent {
   final String id;
   final String title;
@@ -50,8 +55,7 @@ class UpdateStartAtTaskEvent extends TaskDetailEvent {
 
 class AddCommentEvent extends TaskDetailEvent {
   final String content;
-  final String? mentionId;
-  AddCommentEvent(this.content, this.mentionId);
+  AddCommentEvent(this.content);
 }
 
 class AttachmentsEvent extends TaskDetailEvent {

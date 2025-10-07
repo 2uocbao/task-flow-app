@@ -88,7 +88,7 @@ class ContactItemWidget extends StatelessWidget {
     );
   }
 
-  _showOptionUser(BuildContext context) {
+  CustomIconButton _showOptionUser(BuildContext context) {
     if (isContact!) {
       return CustomIconButton(
         height: 30.h,
@@ -96,6 +96,17 @@ class ContactItemWidget extends StatelessWidget {
         onTap: addMember,
         child: Icon(
           Icons.close,
+          color: Colors.red,
+          size: 30.sp,
+        ),
+      );
+    } else {
+      return CustomIconButton(
+        height: 30.h,
+        width: 35.w,
+        onTap: onRequest,
+        child: Icon(
+          Icons.person_add,
           color: Colors.red,
           size: 30.sp,
         ),

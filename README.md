@@ -58,6 +58,8 @@ flutter pub get
 flutter run
 ```
 ## 📁 Project Structure
+
+```bash
 lib/
 │
 ├── main.dart                # Entry point
@@ -67,6 +69,7 @@ lib/
 ├── screens/                 # UI screens
 ├── widgets/                 # Reusable widgets
 └── services/                # API and local services
+```
 
 ## 🚀 Deployment
 ```bash

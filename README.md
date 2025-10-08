@@ -56,7 +56,7 @@ flutter pub get
 
 # Run the app
 flutter run
-
+```
 ## 📁 Project Structure
 lib/
 │
@@ -69,6 +69,7 @@ lib/
 └── services/                # API and local services
 
 ## 🚀 Deployment
+```bash
 # Build for Android
 flutter build apk --release
 
@@ -77,7 +78,7 @@ flutter build ios --release
 
 # Build for Web
 flutter build web
-
+```
 ## 🧑‍💻 Contributing
 Contributions are welcome!
 Please follow these steps:

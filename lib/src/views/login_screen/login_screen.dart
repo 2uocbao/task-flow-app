@@ -66,61 +66,58 @@ class _LoginScreenState extends State<LoginScreen> {
           NavigatorService.showSnackBar('lbl_error'.tr());
           context.read<LoginScreenBloc>().add(ResetState());
         }
-        return SafeArea(
-          child: Scaffold(
-            body: SingleChildScrollView(
-              child: Container(
-                width: double.maxFinite,
-                height: screenHeight,
-                color: Theme.of(context).colorScheme.surface,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Image.asset(
-                      'assets/images/login_image.png',
-                      height: screenHeight * (1 / 2),
-                      width: double.maxFinite,
-                      fit: BoxFit.contain,
+        return Scaffold(
+          resizeToAvoidBottomInset: true,
+          backgroundColor: Theme.of(context).colorScheme.surface,
+          body: SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Image.asset(
+                    'assets/images/login_image.png',
+                    height: screenHeight * (1 / 2),
+                    width: double.maxFinite,
+                    fit: BoxFit.contain,
+                  ),
+                  SizedBox(
+                    child: Text(
+                      'title_welcome'.tr(),
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
-                    SizedBox(
-                      child: Text(
-                        'title_welcome'.tr(),
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
+                  ),
+                  SizedBox(height: 5.h),
+                  SizedBox(
+                    child: Text(
+                      textAlign: TextAlign.center,
+                      'description'.tr(),
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
-                    SizedBox(height: 5.h),
-                    SizedBox(
-                      child: Text(
-                        textAlign: TextAlign.center,
-                        'description'.tr(),
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
+                  ),
+                  SizedBox(
+                    child: Text(
+                      textAlign: TextAlign.center,
+                      'description1'.tr(),
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
-                    SizedBox(
-                      child: Text(
-                        textAlign: TextAlign.center,
-                        'description1'.tr(),
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                    ),
-                    _buildUsernameAndPasswordInput(context),
-                    SizedBox(height: 20.h),
-                    CustomTextButton(
-                      buttonStyle: ButtonStyle(
-                          backgroundColor: WidgetStatePropertyAll(
-                              Theme.of(context).colorScheme.onSurface)),
-                      buttonTextStyle: Theme.of(context)
-                          .textTheme
-                          .bodySmall
-                          ?.copyWith(
-                              color: Theme.of(context).colorScheme.surface),
-                      text: 'lbl_sign_in_by_google'.tr(),
-                      onPressed: () {
-                        context.read<LoginScreenBloc>().add(SignInWithGoogle());
-                      },
-                    ),
-                  ],
-                ),
+                  ),
+                  _buildUsernameAndPasswordInput(context),
+                  SizedBox(height: 20.h),
+                  CustomTextButton(
+                    buttonStyle: ButtonStyle(
+                        backgroundColor: WidgetStatePropertyAll(
+                            Theme.of(context).colorScheme.onSurface)),
+                    buttonTextStyle: Theme.of(context)
+                        .textTheme
+                        .bodySmall
+                        ?.copyWith(
+                            color: Theme.of(context).colorScheme.surface),
+                    text: 'lbl_sign_in_by_google'.tr(),
+                    onPressed: () {
+                      context.read<LoginScreenBloc>().add(SignInWithGoogle());
+                    },
+                  ),
+                ],
               ),
             ),
           ),

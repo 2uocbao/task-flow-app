@@ -85,10 +85,9 @@ class _TaskManagementSystemState extends State<TaskManagementSystem> {
               locale: context.locale,
               supportedLocales: context.supportedLocales,
               localizationsDelegates: context.localizationDelegates,
-              // initialRoute: widget.hasToken
-              //     ? AppRoutes.homeScreen
-              //     : AppRoutes.loginScreen,
-              initialRoute: AppRoutes.loginScreen,
+              initialRoute: widget.hasToken
+                  ? AppRoutes.homeScreen
+                  : AppRoutes.loginScreen,
               routes: AppRoutes.routes,
             );
           },

@@ -1,10 +1,21 @@
-import pypandoc
+# Task Management App
 
-# Define the README content
-readme_text = """# 🚀 Flutter App – Your App Name
+A beautiful and high-performance **Flutter application** built using **Dart**. 
 
-A beautiful and high-performance **Flutter application** built using **Dart**.  
-This project follows best practices in Flutter development, with clean architecture, modular design, and support for multiple platforms (Android, iOS, Web, Desktop).
+**TaskFlow** is a modern and intuitive task management app built with Flutter, designed to help users efficiently organize, track, and manage their daily tasks.
+The app follows a clean architecture pattern powered by BLoC (Business Logic Component) for state management and integrates seamlessly with a **Task Management Server** through **RESTful APIs**.
+
+---
+
+##  🚀 Key Features
+ 
+* 📅 Task Management — Create, update, delete, and view tasks easily.
+
+* 🔄 Real-Time Sync — Communicates with a backend server via secure RESTful API calls.
+
+* ⚙️ BLoC State Management — Ensures predictable, scalable, and testable app logic.
+
+* 🌓 Responsive UI — Built with Flutter’s Material Design for a smooth cross-platform experience.
 
 ---
 
@@ -46,10 +57,10 @@ Ensure you have the following installed:
 ### Clone and Run
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/yourappname.git
+git clone https://github.com/2uocbao/task-flow-app.git
 
 # Navigate to the project directory
-cd yourappname
+cd task-flow-app
 
 # Get dependencies
 flutter pub get
@@ -57,19 +68,26 @@ flutter pub get
 # Run the app
 flutter run
 ```
+---
+
 ## 📁 Project Structure
 
 ```bash
 lib/
 │
-├── main.dart                # Entry point
-├── core/                    # Constants, themes, utilities
-├── data/                    # Data sources and repositories
-├── models/                  # Data models
-├── screens/                 # UI screens
-├── widgets/                 # Reusable widgets
-└── services/                # API and local services
+├── routes/
+├── src/
+    ├── data/                    # Data sources and repositories
+    ├── theme/                  # theme utils
+    ├── utils/                  # store, convert, utils methods
+    ├── views/                 # UI screens
+    ├── widgets/                 # Reusable widgets
+    └── service/                # API and local services   
+└── main.dart                # Entry point
+
 ```
+
+---
 
 ## 🚀 Deployment
 ```bash
@@ -82,16 +100,19 @@ flutter build ios --release
 # Build for Web
 flutter build web
 ```
+
+---
+
 ## 🧑‍💻 Contributing
 Contributions are welcome!
 Please follow these steps:
 
-Fork the repo
+* Fork the repo
 
-Create a new branch (git checkout -b feature/YourFeature)
+* Create a new branch (git checkout -b feature/YourFeature)
 
-Commit changes (git commit -m "Add YourFeature")
+* Commit changes (git commit -m "Add YourFeature")
 
-Push to branch (git push origin feature/YourFeature)
+* Push to branch (git push origin feature/YourFeature)
 
-Create a Pull Request
+* Create a Pull Request

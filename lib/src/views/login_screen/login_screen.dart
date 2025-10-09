@@ -101,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ),
-                  _buildUsernameAndPasswordInput(context),
+                  // _buildUsernameAndPasswordInput(context),
                   SizedBox(height: 20.h),
                   CustomTextButton(
                     buttonStyle: ButtonStyle(
@@ -126,31 +126,31 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildUsernameAndPasswordInput(BuildContext context) {
-    return Container(
-      width: double.maxFinite,
-      padding: EdgeInsets.only(left: 10.w, right: 10.w),
-      child: Column(
-        children: [
-          SizedBox(height: 10.h),
-          CustomTextFormField(
-            maxLines: 1,
-            controller: _usernameController,
-            hintText: 'Username',
-            contentPadding: EdgeInsets.fromLTRB(10.w, 5.h, 10.w, 15.h),
-            textInputAction: TextInputAction.next,
-          ),
-          SizedBox(height: 10.h),
-          CustomTextButton(
-            text: 'Login',
-            buttonTextStyle: Theme.of(context).textTheme.headlineLarge,
-            onPressed: () {
-              context.read<LoginScreenBloc>().add(SignInWithUsernameAndPassword(
-                  username: _usernameController.text));
-            },
-          )
-        ],
-      ),
-    );
-  }
+  // Widget _buildUsernameAndPasswordInput(BuildContext context) {
+  //   return Container(
+  //     width: double.maxFinite,
+  //     padding: EdgeInsets.only(left: 10.w, right: 10.w),
+  //     child: Column(
+  //       children: [
+  //         SizedBox(height: 10.h),
+  //         CustomTextFormField(
+  //           maxLines: 1,
+  //           controller: _usernameController,
+  //           hintText: 'Username',
+  //           contentPadding: EdgeInsets.fromLTRB(10.w, 5.h, 10.w, 15.h),
+  //           textInputAction: TextInputAction.next,
+  //         ),
+  //         SizedBox(height: 10.h),
+  //         CustomTextButton(
+  //           text: 'Login',
+  //           buttonTextStyle: Theme.of(context).textTheme.headlineLarge,
+  //           onPressed: () {
+  //             context.read<LoginScreenBloc>().add(SignInWithUsernameAndPassword(
+  //                 username: _usernameController.text));
+  //           },
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
 }

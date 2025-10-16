@@ -13,7 +13,7 @@ class NavigatorService {
   }
 
   static void goBack({
-    bool signals = false,
+    bool? signals,
   }) {
     return navigatorKey.currentState?.pop(signals);
   }

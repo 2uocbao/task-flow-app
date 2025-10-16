@@ -7,7 +7,7 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:797256882542:android:7355e13c2aaf885304497f",
+        "mobilesdk_app_id": "mobilesdk-app",
         "android_client_info": {
           "package_name": "com.example.taskflow"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDh1XmswpSFI8bNIhyY3fo5vExGovrcSTA"
+          "current_key": "current_key"
         }
       ],
       "services": {

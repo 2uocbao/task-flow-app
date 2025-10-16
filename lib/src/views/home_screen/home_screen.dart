@@ -365,7 +365,7 @@ class _HomeScreenState extends State<HomeScreen> {
       // ignore: use_build_context_synchronously
       context.read<HomeBloc>().add(FetchDataEvent());
       NavigatorService.showSnackBar('lbl_create_task_success'.tr());
-    } else {
+    } else if (result == false) {
       NavigatorService.showSnackBar('error_user_do_not_permission'.tr());
     }
   }

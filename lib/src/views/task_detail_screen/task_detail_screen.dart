@@ -425,6 +425,9 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
   Widget _buildDescription(BuildContext context) {
     return CustomTextFormField(
       textStyle: Theme.of(context).textTheme.bodyMedium,
+      hintText: '${'lbl_description'.tr()} ...',
+      hintStyle:
+          Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.grey),
       controller: _description
         ..selection = TextSelection.collapsed(offset: _description.text.length),
       textInputType: TextInputType.multiline,

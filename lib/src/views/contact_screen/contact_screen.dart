@@ -91,23 +91,20 @@ class _ConTactScreenState extends State<ConTactScreen> {
     return BlocBuilder<ContactBloc, ContactState>(
       builder: (context, state) {
         if (state is FetchContactFailure) {
-          return SafeArea(
-            bottom: false,
-            child: Scaffold(
-              appBar: _buildAppBar(context),
-              body: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(state.error),
-                  SizedBox(height: 5.h),
-                  CustomTextButton(
-                    text: 'bt_reload'.tr(),
-                    onPressed: () {
-                      context.read<ContactBloc>().add(FetchContactEvent());
-                    },
-                  ),
-                ],
-              ),
+          return Scaffold(
+            appBar: _buildAppBar(context),
+            body: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(state.error),
+                SizedBox(height: 5.h),
+                CustomTextButton(
+                  text: 'bt_reload'.tr(),
+                  onPressed: () {
+                    context.read<ContactBloc>().add(FetchContactEvent());
+                  },
+                ),
+              ],
             ),
           );
         }

@@ -44,11 +44,10 @@ class _TeamMemberScreenState extends State<TeamMemberScreen> {
   Widget build(BuildContext context) {
     final arg =
         ModalRoute.of(context)?.settings.arguments as TeamMemberArgument;
-    return SafeArea(
-        child: Scaffold(
+    return Scaffold(
       appBar: _buildSearchAppBar(context, arg.teamData),
       body: _buildBody(context, arg.teamData),
-    ));
+    );
   }
 
   void _onSearchTeam(String teamId, String keySearch) async {

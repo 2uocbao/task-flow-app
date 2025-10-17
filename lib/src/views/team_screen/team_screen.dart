@@ -64,28 +64,26 @@ class _TeamScreenState extends State<TeamScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: CustomSearchAppbar(
-          showSearch: _onSearch,
-          onToggleSearch: (value) => setState(() {
-            _onSearch = value;
-            _resetWhenSearchOf();
-          }),
-          onSearch: _onSearchTeam,
-          searchController: _textController,
-          appbar: _buildAppBar(context),
+    return Scaffold(
+      appBar: CustomSearchAppbar(
+        showSearch: _onSearch,
+        onToggleSearch: (value) => setState(() {
+          _onSearch = value;
+          _resetWhenSearchOf();
+        }),
+        onSearch: _onSearchTeam,
+        searchController: _textController,
+        appbar: _buildAppBar(context),
+      ),
+      body: customBody(context),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(
+          Icons.add,
+          size: 25.sp,
         ),
-        body: customBody(context),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(
-            Icons.add,
-            size: 25.sp,
-          ),
-          onPressed: () {
-            onTapCreateTeam(context);
-          },
-        ),
+        onPressed: () {
+          onTapCreateTeam(context);
+        },
       ),
     );
   }

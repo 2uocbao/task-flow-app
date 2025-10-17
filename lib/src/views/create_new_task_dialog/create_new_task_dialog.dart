@@ -168,7 +168,9 @@ class _CreateNewTaskDialogState extends State<CreateNewTaskDialog> {
       controller: _titleController,
       focusNode: _focusTitle,
       hintText: 'lbl_name_task'.tr(),
-      hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(),
+      hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: Colors.grey,
+          ),
       contentPadding: EdgeInsets.fromLTRB(10.w, 5.h, 10.w, 15.h),
       onFieldSubmitted: (_) {
         if (_formKey.currentState!.validate()) {
@@ -189,7 +191,9 @@ class _CreateNewTaskDialogState extends State<CreateNewTaskDialog> {
       controller: _descriptionController,
       focusNode: _focusDescription,
       hintText: 'lbl_description'.tr(),
-      hintStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(),
+      hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            color: Colors.grey,
+          ),
       textInputAction: TextInputAction.done,
       maxLines: 1,
       contentPadding: EdgeInsets.fromLTRB(10.w, 5.h, 10.w, 5.h),

@@ -30,6 +30,9 @@ class CustomSearchAppbar extends StatelessWidget
               autofocus: true,
               decoration: InputDecoration(
                 hintText: 'lbl_search'.tr(),
+                hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Colors.grey,
+                    ),
                 border: InputBorder.none,
               ),
               onChanged: (value) async {

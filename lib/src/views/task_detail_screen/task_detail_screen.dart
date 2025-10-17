@@ -803,6 +803,9 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
             focusNode: _focusAddComments,
             decoration: InputDecoration(
                 hintText: "lbl_add_comment".tr(),
+                hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Colors.grey,
+                    ),
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
                 border: OutlineInputBorder(

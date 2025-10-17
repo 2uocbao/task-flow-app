@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/services.dart';
 import 'package:taskflow/src/data/model/task/status_summary.dart';
 import 'package:taskflow/src/data/model/task/task_data.dart';
 import 'package:taskflow/src/data/model/team/team_data.dart';
@@ -105,28 +106,28 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: GestureDetector(
-        onTap: () {
-          if (_isExpanded) {
-            _toggleFab();
-          }
-        },
-        child: Scaffold(
-          appBar: CustomSearchAppbar(
-            showSearch: _showSearch,
-            onToggleSearch: (value) => setState(() {
-              _showSearch = value;
-              _resetWhenSearchOff();
-            }),
-            onSearch: _onSearchTask,
-            searchController: _textController,
-            appbar: _buildAppBar(context),
-          ),
-          body: _buildBody(context),
-          drawer: _openDrawer(context),
-          floatingActionButton: _customFloatingActionButton(context),
+    return GestureDetector(
+      onTap: () {
+        if (_isExpanded) {
+          _toggleFab();
+        }
+      },
+      child: Scaffold(
+        appBar: CustomSearchAppbar(
+          showSearch: _showSearch,
+          onToggleSearch: (value) => setState(() {
+            _showSearch = value;
+            _resetWhenSearchOff();
+          }),
+          onSearch: _onSearchTask,
+          searchController: _textController,
+          appbar: _buildAppBar(context),
         ),
+        body: SafeArea(
+          child: _buildBody(context),
+        ),
+        drawer: _openDrawer(context),
+        floatingActionButton: _customFloatingActionButton(context),
       ),
     );
   }
@@ -397,8 +398,9 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           Expanded(child: _buildOptionSelectTeam(context, state.listTeams)),
           CustomIconButton(
+            margin: EdgeInsets.only(right: 5.w),
             height: 30.h,
-            width: 30.h,
+            width: 35.w,
             onTap: () {
               onTapOpenFilterTask(context);
             },

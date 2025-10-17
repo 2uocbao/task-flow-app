@@ -104,85 +104,83 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
     final arg =
         ModalRoute.of(context)?.settings.arguments as TaskDetailArguments;
     return Portal(
-      child: SafeArea(
-        child: BlocBuilder<TaskDetailBloc, TaskDetailState>(
-          builder: (context, state) {
-            if (state is FetchTaskLoading) {
-              ProgressDialogUtils.showProgressDialog();
-            } else if (state is UpdateCommentSuccess) {
-              logger.i('Update success');
-              logger.i('comment key in screen: ${state.commentKey}');
-              context
-                  .read<TaskDetailBloc>()
-                  .add(ReloadComments(taskId: arg.taskId!));
-            } else if (state is TaskDetailErrorState) {
-              return Scaffold(
-                  appBar: CustomAppBar(
-                    leading: CustomIconButton(
-                      height: 30.h,
-                      child: Icon(
-                        Icons.arrow_back_outlined,
-                        size: 25.sp,
-                      ),
-                      onTap: () {
-                        NavigatorService.pushNamedAndRemoveUtil(
-                            AppRoutes.homeScreen);
-                      },
+      child: BlocBuilder<TaskDetailBloc, TaskDetailState>(
+        builder: (context, state) {
+          if (state is FetchTaskLoading) {
+            ProgressDialogUtils.showProgressDialog();
+          } else if (state is UpdateCommentSuccess) {
+            logger.i('Update success');
+            logger.i('comment key in screen: ${state.commentKey}');
+            context
+                .read<TaskDetailBloc>()
+                .add(ReloadComments(taskId: arg.taskId!));
+          } else if (state is TaskDetailErrorState) {
+            return Scaffold(
+                appBar: CustomAppBar(
+                  leading: CustomIconButton(
+                    height: 30.h,
+                    child: Icon(
+                      Icons.arrow_back_outlined,
+                      size: 25.sp,
                     ),
-                  ),
-                  body: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(state.error),
-                      SizedBox(height: 5.h),
-                      CustomTextButton(
-                        text: 'bt_reload'.tr(),
-                        onPressed: () {
-                          context
-                              .read<TaskDetailBloc>()
-                              .add(FetchDetailEvent(id: arg.taskId!));
-                        },
-                      ),
-                    ],
-                  ));
-            } else if (state is FetchTaskSuccess) {
-              originalStatus = state.taskData.status!;
-              originalPriority = state.taskData.priority!;
-              originalDescription = state.taskData.description ?? '';
-              _description = TextEditingController(text: originalDescription);
-              originalTitle = state.taskData.title ?? '';
-              _title = TextEditingController(text: originalTitle);
-              mentionData = state.mentionData;
-              readOnly = state.taskData.creatorId == PrefUtils().getUser()!.id;
-              return GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onTap: () async {
-                  _mentionKey.currentState?.controller!.clear();
-                  setState(() {
-                    isHandleAddMember = false;
-                    _showOptionUpdate = false;
-                    _showOptionAddFile = false;
-                    _isUpdateComment = false;
-                    commentDataUpdate = CommentData();
-                  });
-                  FocusManager.instance.primaryFocus?.unfocus();
-                  _assignGlobal.currentState?.reset();
-                },
-                child: Form(
-                  key: _formKey,
-                  child: Scaffold(
-                    resizeToAvoidBottomInset: true,
-                    appBar: _showOptionUpdate
-                        ? _optionUpdate(context, state)
-                        : _buildAppBar(context, state.taskData),
-                    body: _buildBody(context, state),
+                    onTap: () {
+                      NavigatorService.pushNamedAndRemoveUtil(
+                          AppRoutes.homeScreen);
+                    },
                   ),
                 ),
-              );
-            }
-            return const SizedBox();
-          },
-        ),
+                body: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(state.error),
+                    SizedBox(height: 5.h),
+                    CustomTextButton(
+                      text: 'bt_reload'.tr(),
+                      onPressed: () {
+                        context
+                            .read<TaskDetailBloc>()
+                            .add(FetchDetailEvent(id: arg.taskId!));
+                      },
+                    ),
+                  ],
+                ));
+          } else if (state is FetchTaskSuccess) {
+            originalStatus = state.taskData.status!;
+            originalPriority = state.taskData.priority!;
+            originalDescription = state.taskData.description ?? '';
+            _description = TextEditingController(text: originalDescription);
+            originalTitle = state.taskData.title ?? '';
+            _title = TextEditingController(text: originalTitle);
+            mentionData = state.mentionData;
+            readOnly = state.taskData.creatorId == PrefUtils().getUser()!.id;
+            return GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: () async {
+                _mentionKey.currentState?.controller!.clear();
+                setState(() {
+                  isHandleAddMember = false;
+                  _showOptionUpdate = false;
+                  _showOptionAddFile = false;
+                  _isUpdateComment = false;
+                  commentDataUpdate = CommentData();
+                });
+                FocusManager.instance.primaryFocus?.unfocus();
+                _assignGlobal.currentState?.reset();
+              },
+              child: Form(
+                key: _formKey,
+                child: Scaffold(
+                  resizeToAvoidBottomInset: true,
+                  appBar: _showOptionUpdate
+                      ? _optionUpdate(context, state)
+                      : _buildAppBar(context, state.taskData),
+                  body: _buildBody(context, state),
+                ),
+              ),
+            );
+          }
+          return const SizedBox();
+        },
       ),
     );
   }

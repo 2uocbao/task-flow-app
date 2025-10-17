@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:taskflow/src/utils/app_export.dart';
 
 enum Style { bgFillOnPrimaryContainer }
@@ -33,6 +34,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      systemOverlayStyle:
+          SystemUiOverlayStyle(statusBarColor: Colors.transparent),
       elevation: 0,
       shape: shape,
       toolbarHeight: height ?? 30.h,

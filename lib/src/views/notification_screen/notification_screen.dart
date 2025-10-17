@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/services.dart';
 import 'package:taskflow/src/data/model/notification/notification_data.dart';
 import 'package:taskflow/src/theme/custom_button_style.dart';
 import 'package:taskflow/src/views/notification_screen/bloc/notification_bloc.dart';
@@ -63,11 +64,14 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+        ),
         child: Scaffold(
-      appBar: _buildAppBar(context),
-      body: _buildBody(context),
-    ));
+          appBar: _buildAppBar(context),
+          body: _buildBody(context),
+        ));
   }
 
   Widget _buildBody(BuildContext context) {

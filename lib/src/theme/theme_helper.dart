@@ -131,19 +131,24 @@ class ThemeProvider with ChangeNotifier {
 
   ThemeData get lightTheme => ThemeData(
         brightness: Brightness.light,
-        colorScheme: const ColorScheme.light(
+        colorScheme: ColorScheme.light(
           primary: Colors.blue,
           surface: Colors.white,
           onSurface: Colors.black,
+          primaryContainer: Colors.blueGrey.shade100,
         ),
-        dialogTheme: const DialogThemeData(
+        dialogTheme: DialogThemeData(
           backgroundColor: Colors.white,
           titleTextStyle: TextStyle(color: Colors.black, fontSize: 18),
           contentTextStyle: TextStyle(color: Colors.black87, fontSize: 14),
         ),
         iconTheme: const IconThemeData(color: Colors.black),
-        textTheme: const TextTheme(
-          bodyMedium: TextStyle(color: Colors.black),
+        textTheme: TextThemes.textTheme(
+          ColorScheme.light(
+            primary: Colors.blue,
+            surface: Colors.white30,
+            onSurface: Colors.black,
+          ),
         ),
       );
 
@@ -151,18 +156,23 @@ class ThemeProvider with ChangeNotifier {
         brightness: Brightness.dark,
         colorScheme: ColorScheme.dark(
           primary: Colors.teal,
-          surface: Colors.grey[900]!,
+          surface: Colors.black,
           onSurface: Colors.white,
+          primaryContainer: Colors.blueGrey.shade100,
         ),
         dialogTheme: DialogThemeData(
-          backgroundColor: Colors.grey[900],
+          backgroundColor: Colors.black,
           titleTextStyle: const TextStyle(color: Colors.white, fontSize: 18),
           contentTextStyle:
               const TextStyle(color: Colors.white70, fontSize: 14),
         ),
         iconTheme: const IconThemeData(color: Colors.white),
-        textTheme: const TextTheme(
-          bodyMedium: TextStyle(color: Colors.white),
+        textTheme: TextThemes.textTheme(
+          ColorScheme.dark(
+            primary: Colors.teal,
+            surface: Colors.black,
+            onSurface: Colors.white,
+          ),
         ),
       );
 

@@ -128,11 +128,11 @@ class _ConTactScreenState extends State<ConTactScreen> {
     return CustomAppBar(
       leading: Builder(
         builder: (context) {
-          return IconButton(
-            onPressed: () {
+          return CustomIconButton(
+            onTap: () {
               NavigatorService.pushNamedAndRemoveUtil(AppRoutes.homeScreen);
             },
-            icon: Icon(
+            child: Icon(
               Icons.arrow_back_outlined,
               size: 25.sp,
             ),
@@ -140,13 +140,15 @@ class _ConTactScreenState extends State<ConTactScreen> {
         },
       ),
       actions: [
-        IconButton(
-          onPressed: () {
+        CustomIconButton(
+          height: 40.h,
+          width: 40.h,
+          onTap: () {
             setState(() {
               _showSearch = true;
             });
           },
-          icon: Icon(
+          child: Icon(
             Icons.search,
             size: 25.sp,
           ),

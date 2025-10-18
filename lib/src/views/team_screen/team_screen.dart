@@ -117,8 +117,9 @@ class _TeamScreenState extends State<TeamScreen> {
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return CustomAppBar(
-      height: 30.h,
       leading: CustomIconButton(
+        height: 30.h,
+        width: 40.w,
         child: Icon(Icons.arrow_back_sharp, size: 25.sp),
         onTap: () {
           NavigatorService.pushNamedAndRemoveUtil(AppRoutes.homeScreen);
@@ -126,9 +127,8 @@ class _TeamScreenState extends State<TeamScreen> {
       ),
       actions: [
         CustomIconButton(
-          height: 30.h,
-          width: 35.w,
-          margin: EdgeInsets.only(right: 5.w),
+          height: 40.h,
+          width: 40.w,
           child: Icon(Icons.search, size: 25.sp),
           onTap: () {
             search();

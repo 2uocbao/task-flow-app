@@ -79,7 +79,6 @@ class _TeamMemberScreenState extends State<TeamMemberScreen> {
 
   PreferredSizeWidget _buildAppBar(BuildContext context, String creatorId) {
     return CustomAppBar(
-      height: 30.h,
       leading: CustomIconButton(
         child: Icon(
           Icons.arrow_back_outlined,
@@ -91,9 +90,8 @@ class _TeamMemberScreenState extends State<TeamMemberScreen> {
       ),
       actions: [
         CustomIconButton(
-          height: 30.sp,
-          width: 30.sp,
-          margin: EdgeInsets.only(right: 5.w),
+          height: 40.h,
+          width: 40.w,
           child: Icon(
             Icons.search,
             size: 25.sp,
@@ -107,9 +105,8 @@ class _TeamMemberScreenState extends State<TeamMemberScreen> {
         ),
         if (creatorId == PrefUtils().getUser()!.id) ...{
           CustomIconButton(
-            height: 30.sp,
-            width: 30.sp,
-            margin: EdgeInsets.only(right: 5.w),
+            height: 40.h,
+            width: 40.w,
             child: Icon(
               !isAddMember ? Icons.person_add : Icons.check,
               size: 25.sp,
@@ -196,10 +193,10 @@ class _TeamMemberScreenState extends State<TeamMemberScreen> {
       String creatorIdTeam, TeamData teamData) {
     return Container(
       width: double.maxFinite,
-      margin: EdgeInsets.only(left: 10.w, right: 10.w, bottom: 10.h),
+      margin: EdgeInsets.only(left: 5.w, right: 5.w, bottom: 10.h),
       child: Container(
         decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surfaceContainer,
+            color: Theme.of(context).colorScheme.primaryContainer,
             borderRadius: BorderRadiusStyle.circleBorder10),
         padding:
             EdgeInsets.only(left: 10.w, top: 10.h, right: 10.w, bottom: 10.h),

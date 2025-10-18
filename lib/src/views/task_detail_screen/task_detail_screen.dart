@@ -611,7 +611,8 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
     return CustomIconButton(
       height: 30.h,
       width: double.maxFinite,
-      decoration: null,
+      decoration:
+          BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5.w))),
       onTap: () async {
         setState(() {
           _showOptionAddFile = true;
@@ -624,6 +625,9 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
           Text("lbl_attachments".tr()),
           const Spacer(),
           Icon(Icons.add, size: 20.sp),
+          SizedBox(
+            width: 5.w,
+          )
         ],
       ),
     );
@@ -666,14 +670,12 @@ class TaskDetailScreenState extends State<TaskDetailScreen> {
                   ReportPhotoWidget(
                     reportData,
                     taskData,
-                    // requestFocus: _requestFocusAddComment,
                   )
                 ]
               : reportData.map((report) {
                   return ReportItemWidget(
                     report,
                     taskData,
-                    // requestFocus: _requestFocusAddComment,
                   );
                 }).toList(),
         ),

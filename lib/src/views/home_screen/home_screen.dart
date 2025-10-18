@@ -181,22 +181,24 @@ class _HomeScreenState extends State<HomeScreen> {
     return CustomAppBar(
       leading: Builder(
         builder: (context) {
-          return IconButton(
-            onPressed: () {
+          return CustomIconButton(
+            onTap: () {
               Scaffold.of(context).openDrawer();
             },
-            icon: Icon(Icons.menu, size: 30.sp),
+            child: Icon(Icons.menu, size: 25.sp),
           );
         },
       ),
       actions: <Widget>[
-        IconButton(
-          onPressed: () {
+        CustomIconButton(
+          height: 40.h,
+          width: 40.w,
+          onTap: () {
             setState(() {
               _showSearch = true;
             });
           },
-          icon: Icon(Icons.search, size: 25.sp),
+          child: Icon(Icons.search, size: 25.sp),
         ),
         BlocBuilder<NotificationBloc, NotificationState>(
           builder: (context, state) {
@@ -206,12 +208,14 @@ class _HomeScreenState extends State<HomeScreen> {
             }
             return Stack(
               children: [
-                IconButton(
-                  onPressed: () {
+                CustomIconButton(
+                  height: 40.h,
+                  width: 40.w,
+                  onTap: () {
                     context.read<NotificationBloc>().add(NotificationCleared());
                     NavigatorService.pushNamed(AppRoutes.notificationScreen);
                   },
-                  icon: Icon(Icons.notifications, size: 25.sp),
+                  child: Icon(Icons.notifications, size: 25.sp),
                 ),
                 if (hasNew)
                   Positioned(
@@ -468,13 +472,13 @@ class _HomeScreenState extends State<HomeScreen> {
             _buildStatusModelView(
                 context,
                 'PENDING',
-                Colors.grey.shade600,
+                Colors.grey.shade400,
                 getQuantityOfTaskHaveStatus(
                     state.listStatusSummary, 'PENDING')),
             _buildStatusModelView(
                 context,
                 'IN_PROGRESS',
-                Colors.blue.shade600,
+                Colors.blue.shade400,
                 getQuantityOfTaskHaveStatus(
                     state.listStatusSummary, 'IN_PROGRESS')),
           ],
@@ -486,13 +490,13 @@ class _HomeScreenState extends State<HomeScreen> {
             _buildStatusModelView(
                 context,
                 'CANCELLED',
-                Colors.orange.shade600,
+                Colors.orange.shade400,
                 getQuantityOfTaskHaveStatus(
                     state.listStatusSummary, 'CANCELLED')),
             _buildStatusModelView(
                 context,
                 'COMPLETED',
-                Colors.green.shade600,
+                Colors.green.shade400,
                 getQuantityOfTaskHaveStatus(
                     state.listStatusSummary, 'COMPLETED')),
           ],
@@ -610,8 +614,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadiusStyle.circleBorder10,
-          color: Theme.of(context).colorScheme.onPrimary),
-      padding: EdgeInsets.symmetric(vertical: 10.w, horizontal: 10.h),
+          color: Theme.of(context).colorScheme.primaryContainer),
+      padding: EdgeInsets.symmetric(vertical: 5.w, horizontal: 5.h),
       child: GestureDetector(
         onTap: onTap,
         child: Row(
